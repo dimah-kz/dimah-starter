@@ -9,6 +9,7 @@ Explore `@repo/auth` and sibling actions in `apps/web`.
 | Auth instance + plugins | `packages/auth/src/auth.ts`                    |
 | Org / admin permissions | `packages/auth/src/*-access.ts`                |
 | Auth API errors         | `@better-auth/i18n` + `getAuthApiErrorMessage` |
+| Role CSV parse          | `@repo/auth/role-string` (`parseRoleString`)   |
 | Redirect helpers        | `apps/web/src/app/(auth)/lib/auth-redirect.ts` |
 | Auth schema             | `packages/db` — generated from the CLI         |
 

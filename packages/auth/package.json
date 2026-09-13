@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./admin-access": "./src/admin-access.ts",
-    "./organization-access": "./src/organization-access.ts"
+    "./organization-access": "./src/organization-access.ts",
+    "./role-string": "./src/role-string.ts"
   },
   "scripts": {
     "auth:generate": "auth generate --config ./src/auth.ts --output ../db/src/schema/auth.schema.ts -y",

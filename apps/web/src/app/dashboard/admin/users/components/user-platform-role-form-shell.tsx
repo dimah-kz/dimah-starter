@@ -10,7 +10,7 @@ import { Button } from "@repo/ui/components/button"
 import { Checkbox } from "@repo/ui/components/checkbox"
 import { Label } from "@repo/ui/components/label"
 import { adminPluginRoles, type PlatformRole } from "@repo/auth/admin-access"
-import { parseRoleString } from "@/lib/role-string"
+import { parseRoleString } from "@repo/auth/role-string"
 import { toast } from "@repo/ui/components/toast"
 import { useTranslations } from "next-intl"
 

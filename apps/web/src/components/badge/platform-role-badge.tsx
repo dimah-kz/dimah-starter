@@ -1,8 +1,8 @@
 "use client"
 
+import { parseRoleString } from "@repo/auth/role-string"
 import { usePlatformRoleBadgeConfig } from "@/components/badge/badge-config"
 import { LabeledBadge } from "@/components/badge/labeled-badge"
-import { parseRoleString } from "@/lib/role-string"
 
 function PlatformRoleBadgeItem({ role }: { role: string }) {
   const config = usePlatformRoleBadgeConfig(role)

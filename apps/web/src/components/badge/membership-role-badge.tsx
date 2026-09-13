@@ -1,8 +1,8 @@
 "use client"
 
+import { parseRoleString } from "@repo/auth/role-string"
 import { useMembershipRoleBadgeConfig } from "@/components/badge/badge-config"
 import { LabeledBadge } from "@/components/badge/labeled-badge"
-import { parseRoleString } from "@/lib/role-string"
 
 function MembershipRoleBadgeItem({ role }: { role: string }) {
   const config = useMembershipRoleBadgeConfig(role)

@@ -11,7 +11,7 @@ import { Label } from "@repo/ui/components/label"
 import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
 import type { OrganizationMemberItem } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
 import type { MembershipRole } from "@repo/auth/organization-access"
-import { parseRoleString } from "@/lib/role-string"
+import { parseRoleString } from "@repo/auth/role-string"
 import { toast } from "@repo/ui/components/toast"
 import { useTranslations } from "next-intl"
 
