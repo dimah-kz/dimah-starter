@@ -1,7 +1,7 @@
 "use client"
 
-import { OrganizationLogoField } from "@/app/dashboard/(organization)/manage/components/organization-logo-field"
-import type { OrganizationBranding } from "@/app/dashboard/(organization)/manage/lib/get-active-organization-branding"
+import { OrganizationLogoField } from "@/app/dashboard/(organization)/manage/settings/components/organization-logo-field"
+import type { OrganizationBranding } from "@/app/dashboard/(organization)/manage/settings/lib/get-active-organization-branding"
 import {
   Field,
   FieldDescription,

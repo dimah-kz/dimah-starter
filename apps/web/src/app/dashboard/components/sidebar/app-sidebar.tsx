@@ -10,7 +10,7 @@ import {
   type NavUserProfile,
 } from "@/app/dashboard/components/sidebar/nav-user"
 import { OrganizationSwitcher } from "@/app/dashboard/components/sidebar/organization-switcher"
-import { useSidebarSide } from "@/app/dashboard/lib/sidebar-side"
+import { useSidebarSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import {
   Sidebar,
   SidebarContent,

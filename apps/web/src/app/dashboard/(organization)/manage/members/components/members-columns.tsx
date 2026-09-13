@@ -11,7 +11,7 @@ import {
 } from "@repo/ui/components/dimah/identity"
 import type { OrganizationMemberItem } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
 import { MemberRowActionsMenu } from "@/app/dashboard/(organization)/manage/members/components/member-row-actions-menu"
-import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
+import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/members/lib/member-role-options"
 import { MembershipRoleBadge } from "@/components/badge/membership-role-badge"
 import type { ListColumn } from "@/components/list"
 

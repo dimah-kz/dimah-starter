@@ -3,9 +3,9 @@
 import * as React from "react"
 import Link from "next/link"
 import { logoutAction } from "@/app/action/dashboard/components/logout-action"
-import { NavUserLocaleMenu } from "@/components/locale-switcher"
-import { ThemeSwitchItem } from "@/components/theme-switch-item"
-import { useSidebarFlyoutSide } from "@/app/dashboard/lib/sidebar-side"
+import { NavUserLocaleMenu } from "@/components/locale/locale-switcher"
+import { ThemeSwitchItem } from "@/components/theme/theme-switch-item"
+import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import {
   Identity,
   IdentityAvatar,

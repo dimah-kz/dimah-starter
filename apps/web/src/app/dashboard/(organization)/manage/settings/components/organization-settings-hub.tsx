@@ -6,10 +6,10 @@ import { ChevronRightIcon, Trash2Icon } from "lucide-react"
 import { deleteOrganizationAction } from "@/app/action/dashboard/(organization)/manage/delete-organization-action"
 import { updateOrganizationNameAction } from "@/app/action/dashboard/(organization)/manage/update-organization-name-action"
 import { OrganizationProfileFormFields } from "@/app/dashboard/(organization)/manage/settings/components/organization-profile-form-fields"
-import type { OrganizationBranding } from "@/app/dashboard/(organization)/manage/lib/get-active-organization-branding"
+import type { OrganizationBranding } from "@/app/dashboard/(organization)/manage/settings/lib/get-active-organization-branding"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { ResponsiveFormOverlay } from "@/components/responsive-form-overlay"
-import { SettingsSection } from "@/components/settings-section"
+import { ResponsiveFormOverlay } from "@/components/form/responsive-form-overlay"
+import { SettingsSection } from "@/components/settings/settings-section"
 import {
   AlertDialog,
   AlertDialogAction,

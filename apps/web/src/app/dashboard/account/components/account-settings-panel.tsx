@@ -10,7 +10,7 @@ import { AccountProfileFormFields } from "@/app/dashboard/account/components/acc
 import { AccountSessionsContent } from "@/app/dashboard/account/components/account-sessions-content"
 import type { AccountPanel } from "@/app/dashboard/account/lib/account-panel"
 import type { AccountSession } from "@/app/dashboard/account/lib/get-account-sessions"
-import { ResponsiveFormOverlay } from "@/components/responsive-form-overlay"
+import { ResponsiveFormOverlay } from "@/components/form/responsive-form-overlay"
 import { toast } from "@repo/ui/components/toast"
 import { Button } from "@repo/ui/components/button"
 import { useTranslations } from "next-intl"

@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { NavUserLocaleMenu } from "@/components/locale-switcher"
-import { ThemeSwitchItem } from "@/components/theme-switch-item"
+import { NavUserLocaleMenu } from "@/components/locale/locale-switcher"
+import { ThemeSwitchItem } from "@/components/theme/theme-switch-item"
 import { Button } from "@repo/ui/components/button"
 import {
   DropdownMenu,

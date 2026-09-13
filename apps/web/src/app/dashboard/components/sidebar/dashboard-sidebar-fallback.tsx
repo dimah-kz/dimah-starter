@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar"
-import { useSidebarSide } from "@/app/dashboard/lib/sidebar-side"
+import { useSidebarSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import { Skeleton } from "@repo/ui/components/skeleton"
 
 function SidebarRowSkeleton({ lines = 1 }: { lines?: 1 | 2 }) {

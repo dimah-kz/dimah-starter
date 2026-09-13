@@ -2,7 +2,7 @@
 
 import { removeAccountAvatarAction } from "@/app/action/dashboard/account/remove-account-avatar-action"
 import { setAccountAvatarAction } from "@/app/action/dashboard/account/set-account-avatar-action"
-import { AvatarUploadField } from "@/components/avatar-upload-field"
+import { AvatarUploadField } from "@/components/form/avatar-upload-field"
 import { useTranslations } from "next-intl"
 
 type AccountAvatarFieldProps = {

@@ -1,5 +1,5 @@
 import { cn } from "cn"
-import { LoadingFallbackShell } from "@/components/loading-fallback"
+import { LoadingFallbackShell } from "@/components/fallback/loading-fallback"
 
 type DashboardPageShellProps = {
   children: React.ReactNode

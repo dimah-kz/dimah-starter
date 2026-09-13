@@ -6,8 +6,8 @@ import { AccountSettingsPanel } from "@/app/dashboard/account/components/account
 import { useTranslations } from "next-intl"
 import { accountHubSections } from "@/app/dashboard/account/lib/account-settings-items"
 import type { AccountPanel } from "@/app/dashboard/account/lib/account-panel"
-import { SettingsNavItem } from "@/components/settings-nav-item"
-import { SettingsSection } from "@/components/settings-section"
+import { SettingsNavItem } from "@/components/settings/settings-nav-item"
+import { SettingsSection } from "@/components/settings/settings-section"
 import {
   Identity,
   IdentityAvatar,

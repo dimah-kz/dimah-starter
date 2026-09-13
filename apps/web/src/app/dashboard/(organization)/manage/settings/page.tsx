@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
-import { getActiveOrganizationBranding } from "@/app/dashboard/(organization)/manage/lib/get-active-organization-branding"
+import { getActiveOrganizationBranding } from "@/app/dashboard/(organization)/manage/settings/lib/get-active-organization-branding"
 import { OrganizationSettingsHub } from "@/app/dashboard/(organization)/manage/settings/components/organization-settings-hub"
 import { DashboardPageFallback } from "@/app/dashboard/components/layout/dashboard-page-shell"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"

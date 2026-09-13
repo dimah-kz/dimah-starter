@@ -2,7 +2,7 @@
 
 import { removeOrganizationLogoAction } from "@/app/action/dashboard/(organization)/manage/remove-organization-logo-action"
 import { setOrganizationLogoAction } from "@/app/action/dashboard/(organization)/manage/set-organization-logo-action"
-import { AvatarUploadField } from "@/components/avatar-upload-field"
+import { AvatarUploadField } from "@/components/form/avatar-upload-field"
 import { useTranslations } from "next-intl"
 
 type OrganizationLogoFieldProps = {

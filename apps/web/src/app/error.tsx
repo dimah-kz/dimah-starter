@@ -1,6 +1,6 @@
 "use client"
 
-import { SegmentErrorFallback } from "@/components/segment-error-fallback"
+import { SegmentErrorFallback } from "@/components/fallback/segment-error-fallback"
 import { useTranslations } from "next-intl"
 
 type ErrorPageProps = {

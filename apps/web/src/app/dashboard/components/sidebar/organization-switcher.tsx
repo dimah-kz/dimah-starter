@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { setActiveOrganizationAction } from "@/app/action/dashboard/components/set-active-organization-action"
 import { CreateOrganizationFormShell } from "@/app/dashboard/components/sidebar/create-organization-form-shell"
 import type { NavUserProfile } from "@/app/dashboard/components/sidebar/nav-user"
-import { LoadingFallbackShell } from "@/components/loading-fallback"
+import { LoadingFallbackShell } from "@/components/fallback/loading-fallback"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +29,7 @@ import {
   IdentityTitle,
 } from "@repo/ui/components/dimah/identity"
 import { IconTile } from "@repo/ui/components/reui/icon-tile"
-import { useSidebarFlyoutSide } from "@/app/dashboard/lib/sidebar-side"
+import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import { Input } from "@repo/ui/components/input"
 import { cn } from "cn"
 import {
