@@ -2,8 +2,14 @@ import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { buttonVariants } from "@repo/ui/components/button"
+import { Button } from "@repo/ui/components/button"
+import { LayoutDashboardIcon, LogInIcon } from "lucide-react"
 import { cn } from "cn"
+
+const enterClassName =
+  "animate-in fade-in-0 slide-in-from-bottom-3 fill-mode-both duration-500 ease-out motion-reduce:animate-none"
+
+const ctaClassName = "h-9 gap-2 px-4 text-sm"
 
 export default async function Home() {
   const t = await getTranslations("common")
@@ -11,26 +17,52 @@ export default async function Home() {
   const tDashboard = await getTranslations("dashboard")
 
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-16 text-center">
-      <div className="flex max-w-md flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("appTitle")}
+    <main className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-16 text-center">
+      <div className="flex max-w-lg flex-col gap-3">
+        <h1
+          className={cn(
+            "text-3xl font-semibold tracking-tight text-balance",
+            enterClassName
+          )}
+        >
+          {t("home.title")}
         </h1>
-        <p className="text-sm text-muted-foreground">{t("home.lede")}</p>
+        <p
+          className={cn(
+            "text-sm text-pretty text-muted-foreground",
+            enterClassName,
+            "delay-150"
+          )}
+        >
+          {t("home.lede")}
+        </p>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Link
-          href={authRoutes.login()}
-          className={cn(buttonVariants({ size: "lg" }))}
+      <div
+        className={cn(
+          "flex flex-wrap items-center justify-center gap-3",
+          enterClassName,
+          "delay-300"
+        )}
+      >
+        <Button
+          size="lg"
+          className={ctaClassName}
+          nativeButton={false}
+          render={<Link href={authRoutes.login()} />}
         >
+          <LogInIcon data-icon="inline-start" className="rtl:-scale-x-100" />
           {tAuth("login.title")}
-        </Link>
-        <Link
-          href={dashboardRoutes.home()}
-          className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          className={ctaClassName}
+          nativeButton={false}
+          render={<Link href={dashboardRoutes.home()} />}
         >
+          <LayoutDashboardIcon data-icon="inline-start" />
           {tDashboard("nav.sidebar.dashboard")}
-        </Link>
+        </Button>
       </div>
     </main>
   )

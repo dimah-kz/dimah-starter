@@ -1,10 +1,11 @@
 {
-  "appTitle": "Better Dashboard",
-  "appDescription": "Server-first Turborepo starter for multi-tenant SaaS — Next.js dashboard, Better Auth, Postgres, and object storage.",
+  "appTitle": "Dimah Starter",
+  "appDescription": "A server-first starter for multi-tenant SaaS — dashboard, authentication, organizations, and file storage.",
   "home": {
-    "lede": "Server-first Turborepo starter for multi-tenant SaaS. Dashboard, auth, storage — session and writes on the server, no client data SDK in the UI."
+    "title": "Dimah Starter",
+    "lede": "A server-first starter for multi-tenant SaaS with a dashboard, auth, organizations, file storage, and RTL layout ready out of the box."
   },
-  "metadataTitleTemplate": "%s · Better Dashboard",
+  "metadataTitleTemplate": "%s · Dimah Starter",
   "tryAgain": "Try again",
   "signOut": "Sign out",
   "signingOut": "Signing out...",
