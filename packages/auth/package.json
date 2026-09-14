@@ -10,7 +10,7 @@
     "./role-string": "./src/role-string.ts"
   },
   "scripts": {
-    "auth:generate": "auth generate --config ./src/auth.ts --output ../db/src/schema/auth.schema.ts -y",
+    "auth:generate": "auth generate --config ./src/auth.ts --output ../db/src/schema/auth.schema.ts -y && pnpm -w exec prettier --write packages/db/src/schema/auth.schema.ts",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
