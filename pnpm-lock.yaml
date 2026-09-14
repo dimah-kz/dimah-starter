@@ -250,11 +250,11 @@ importers:
   apps/web:
     dependencies:
       '@dimah-s3/react':
-        specifier: 1.5.6
-        version: 1.5.6(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
+        specifier: 1.5.7
+        version: 1.5.7(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
       '@dimah-s3/server':
-        specifier: 1.5.6
-        version: 1.5.6(@aws-sdk/client-s3@3.1131.0)
+        specifier: 1.5.7
+        version: 1.5.7(@aws-sdk/client-s3@3.1131.0)
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -400,8 +400,8 @@ importers:
   packages/db:
     dependencies:
       '@dimah-s3/db':
-        specifier: 1.5.6
-        version: 1.5.6(@aws-sdk/client-s3@3.1131.0)(@dimah-s3/server@1.5.6(@aws-sdk/client-s3@3.1131.0))(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))
+        specifier: 1.5.7
+        version: 1.5.7(@aws-sdk/client-s3@3.1131.0)(@dimah-s3/server@1.5.7(@aws-sdk/client-s3@3.1131.0))(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))
       '@paralleldrive/cuid2':
         specifier: ^3.3.0
         version: 3.3.0
@@ -461,17 +461,17 @@ importers:
         specifier: ^3.1131.0
         version: 3.1131.0
       '@dimah-s3/core':
-        specifier: 1.5.6
-        version: 1.5.6
+        specifier: 1.5.7
+        version: 1.5.7
       '@dimah-s3/db':
-        specifier: 1.5.6
-        version: 1.5.6(@aws-sdk/client-s3@3.1131.0)(@dimah-s3/server@1.5.6(@aws-sdk/client-s3@3.1131.0))(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))
+        specifier: 1.5.7
+        version: 1.5.7(@aws-sdk/client-s3@3.1131.0)(@dimah-s3/server@1.5.7(@aws-sdk/client-s3@3.1131.0))(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))
       '@dimah-s3/react':
-        specifier: 1.5.6
-        version: 1.5.6(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
+        specifier: 1.5.7
+        version: 1.5.7(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
       '@dimah-s3/server':
-        specifier: 1.5.6
-        version: 1.5.6(@aws-sdk/client-s3@3.1131.0)
+        specifier: 1.5.7
+        version: 1.5.7(@aws-sdk/client-s3@3.1131.0)
       '@repo/auth':
         specifier: workspace:*
         version: link:../auth
@@ -507,8 +507,8 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@dimah-s3/ui':
-        specifier: 1.5.6
-        version: 1.5.6(@base-ui/react@1.8.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(class-variance-authority@0.7.1)(cn@0.3.0)(lucide-react@1.45.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 1.5.7
+        version: 1.5.7(@base-ui/react@1.8.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(class-variance-authority@0.7.1)(cn@0.3.0)(lucide-react@1.45.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@shadcn/react':
         specifier: ^0.3.1
         version: 0.3.1(@types/react@19.3.0)(react@19.3.0)
@@ -562,8 +562,8 @@ importers:
         version: 4.6.4
     devDependencies:
       '@clack/prompts':
-        specifier: ^1.8.0
-        version: 1.8.0
+        specifier: ^1.8.1
+        version: 1.8.1
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
@@ -997,6 +997,9 @@ packages:
   '@better-fetch/fetch@1.3.1':
     resolution: {integrity: sha512-ABkD1WhyfPZprKRQI3bhATjeiFuNWC9PXhfGWqL+sg/gKrM977oFrYkdb4msM3hgUGonr7KlOsOFT5TU2rht9g==}
 
+  '@better-fetch/fetch@1.3.2':
+    resolution: {integrity: sha512-Gs7n99b5tqUC6cQAPbV0uED3IraHB6xQbHLQ/C3l7ZFafHScOx9pQ+DYmP5blbLFShVWLqxNUlI9wi4xU/X+ow==}
+
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
 
@@ -1018,25 +1021,25 @@ packages:
   '@chevrotain/utils@12.0.0':
     resolution: {integrity: sha512-lB59uJoaGIfOOL9knQqQRfhl9g7x8/wqFkp13zTdkRu1huG9kg6IJs1O8hqj9rs6h7orGxHJUKb+mX3rPbWGhA==}
 
-  '@clack/core@1.5.0':
-    resolution: {integrity: sha512-zNikCcd8BbcEvzzG1sbXFrRHFk5kHPrpwZwksPvf9qyQO1Teb7JaXaOAxXZei9nZLDW0gaZawiuTCji88bTBhw==}
+  '@clack/core@1.5.1':
+    resolution: {integrity: sha512-iHTrHA8MtVuLl2TfZySmcKv1qO2PoyC9Z7pfSDozEuV5vtY3/wcOPKJXlqJ5Oq2Cx5DDGQGAMVx6HZfRRoVEbQ==}
     engines: {node: '>= 20.12.0'}
 
-  '@clack/prompts@1.8.0':
-    resolution: {integrity: sha512-PXzLZ8N34rxmuo4dJg3xtOXhcBse94qGjDqsteoEYrFrrZ5FSjIGwMAuOcv64ln8rHVBBD06XeVGr+/JX+plcA==}
+  '@clack/prompts@1.8.1':
+    resolution: {integrity: sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ==}
     engines: {node: '>= 20.12.0'}
 
   '@date-fns/tz@1.5.0':
     resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
 
-  '@dimah-s3/core@1.5.6':
-    resolution: {integrity: sha512-D1eWYm04ZGfUf27Z6Rt1GmJcgo+unnvKZyp9PhUsr6OW8iTIzA29/WHcR7KFte/seOOY05R1iA5qUZm0/jq21Q==}
+  '@dimah-s3/core@1.5.7':
+    resolution: {integrity: sha512-vFt5zMyA8lStsROEMptdYjwzDgb3MXDy/vgKO2p3FxVGv/TmZqz+JXr31jZh6kzRBTC1aX2u2UYif2p0ztFTCQ==}
 
-  '@dimah-s3/db@1.5.6':
-    resolution: {integrity: sha512-kHi9zm3gmwYfXRvVGVhZ0PZmj2yi0ZIQ17rhN6npzC5BsftH+mLBZ6BwNQVD+dMjWxiAaLDertUf4TLJK9jrRQ==}
+  '@dimah-s3/db@1.5.7':
+    resolution: {integrity: sha512-OZLL5gABa6DAqV2okeIw1QuvVUyxpiV9Aozl+p1aLBwLBygiQIZlTIJwQ0/FuJLgP6lu1/V/35tL8VRliaqnEw==}
     peerDependencies:
       '@aws-sdk/client-s3': '>=3'
-      '@dimah-s3/server': 1.5.6
+      '@dimah-s3/server': 1.5.7
       drizzle-orm: ^0.44.0 || ^0.45.0 || >=1.0.0-rc.1 <2.0.0
     peerDependenciesMeta:
       '@aws-sdk/client-s3':
@@ -1044,19 +1047,19 @@ packages:
       drizzle-orm:
         optional: true
 
-  '@dimah-s3/react@1.5.6':
-    resolution: {integrity: sha512-vkTVCxDlBAhsST8YVptaKG529ElbA0Uf3iK4uySZCe0B2kXDr/4m87rQ+VNgRZUYKRfcqboVgMCpZp17IOf9xw==}
+  '@dimah-s3/react@1.5.7':
+    resolution: {integrity: sha512-Y15lYtLtqSFCdYPxjwwieVilrSHVyMGo6kx2d+f6p4J2w2jdevnX90c60JwH5EZvSc0XXqraWz+0DKD3X3a4IA==}
     peerDependencies:
       '@fuma-translate/react': ^1.0.2
       react: '>=18'
 
-  '@dimah-s3/server@1.5.6':
-    resolution: {integrity: sha512-dywTo/vj1CiaRHWaO67JmZqDqyEbTnQ4hKKTwbA9DTPEOqp/mEllYfyjWaktjJfRhi5O+0v8ZOpdHGY0m2c78w==}
+  '@dimah-s3/server@1.5.7':
+    resolution: {integrity: sha512-RA7ZyrAHLRnsgTnYYqtPEGCaweIAZVotQBKDNFN+vg6bdY7Rzlt0oXfSh8creR0c0WPfXYEFdlJalWzcz0UPTw==}
     peerDependencies:
       '@aws-sdk/client-s3': '>=3'
 
-  '@dimah-s3/ui@1.5.6':
-    resolution: {integrity: sha512-l/6UEP4xX0ahkArncCI5hC0tQMJoaGSLtS26fDtiqlTkNFYZKtUt22YpdmGFf8IvRVoSjiPXpPVKBZjZ3kxz3Q==}
+  '@dimah-s3/ui@1.5.7':
+    resolution: {integrity: sha512-VCF50jumWFwoI9GZCFdXxqTM0kUbt5Qzty2Ijz9fT11x3bJzjzDxYJMPUlUdXolvDwB0bm/0zEsRKNGgJLmitg==}
     peerDependencies:
       '@base-ui/react': '>=1.0.0'
       '@fuma-translate/react': ^1.0.2
@@ -3514,8 +3517,8 @@ packages:
     resolution: {integrity: sha512-Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg==}
     engines: {node: '>= 0.8'}
 
-  enhanced-resolve@5.25.0:
-    resolution: {integrity: sha512-ghq3mhs649mvbarTCAlZn2wRhbfHmzAFiKxoWA14B3VtqnxtZt+wz8BroKXU0tF3GiJsnUldjVncQGZ8qk4rdA==}
+  enhanced-resolve@5.25.1:
+    resolution: {integrity: sha512-nGXts5znJzmWPu+mIE9izCOzdg63oJca2mDzGWWTth7sr4aCToKcoyFVBQwN75Ij5Pf6p510EwkTqViTRzDV+w==}
     engines: {node: '>=10.13.0'}
 
   enquirer@2.4.1:
@@ -5982,6 +5985,8 @@ snapshots:
 
   '@better-fetch/fetch@1.3.1': {}
 
+  '@better-fetch/fetch@1.3.2': {}
+
   '@cacheable/memory@2.2.0':
     dependencies:
       '@cacheable/utils': 2.5.0
@@ -6009,30 +6014,30 @@ snapshots:
 
   '@chevrotain/utils@12.0.0': {}
 
-  '@clack/core@1.5.0':
+  '@clack/core@1.5.1':
     dependencies:
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
 
-  '@clack/prompts@1.8.0':
+  '@clack/prompts@1.8.1':
     dependencies:
-      '@clack/core': 1.5.0
+      '@clack/core': 1.5.1
       fast-string-width: 3.0.2
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
 
   '@date-fns/tz@1.5.0': {}
 
-  '@dimah-s3/core@1.5.6':
+  '@dimah-s3/core@1.5.7':
     dependencies:
-      '@better-fetch/fetch': 1.3.1
+      '@better-fetch/fetch': 1.3.2
       better-call: 1.4.0(zod@4.6.4)
       zod: 4.6.4
 
-  '@dimah-s3/db@1.5.6(@aws-sdk/client-s3@3.1131.0)(@dimah-s3/server@1.5.6(@aws-sdk/client-s3@3.1131.0))(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))':
+  '@dimah-s3/db@1.5.7(@aws-sdk/client-s3@3.1131.0)(@dimah-s3/server@1.5.7(@aws-sdk/client-s3@3.1131.0))(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))':
     dependencies:
-      '@dimah-s3/core': 1.5.6
-      '@dimah-s3/server': 1.5.6(@aws-sdk/client-s3@3.1131.0)
+      '@dimah-s3/core': 1.5.7
+      '@dimah-s3/server': 1.5.7(@aws-sdk/client-s3@3.1131.0)
       '@paralleldrive/cuid2': 3.3.0
       fumadb: 0.6.0(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0))
       zod: 4.6.4
@@ -6045,9 +6050,9 @@ snapshots:
       - prisma
       - typeorm
 
-  '@dimah-s3/react@1.5.6(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)':
+  '@dimah-s3/react@1.5.7(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)':
     dependencies:
-      '@dimah-s3/core': 1.5.6
+      '@dimah-s3/core': 1.5.7
       '@fuma-translate/react': 1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       immer: 11.1.18
       react: 19.3.0
@@ -6055,20 +6060,20 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@dimah-s3/server@1.5.6(@aws-sdk/client-s3@3.1131.0)':
+  '@dimah-s3/server@1.5.7(@aws-sdk/client-s3@3.1131.0)':
     dependencies:
       '@aws-sdk/client-s3': 3.1131.0
       '@aws-sdk/s3-presigned-post': 3.1131.0
       '@aws-sdk/s3-request-presigner': 3.1131.0
-      '@dimah-s3/core': 1.5.6
+      '@dimah-s3/core': 1.5.7
       better-call: 1.4.0(zod@4.6.4)
       zod: 4.6.4
 
-  '@dimah-s3/ui@1.5.6(@base-ui/react@1.8.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(class-variance-authority@0.7.1)(cn@0.3.0)(lucide-react@1.45.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@dimah-s3/ui@1.5.7(@base-ui/react@1.8.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(class-variance-authority@0.7.1)(cn@0.3.0)(lucide-react@1.45.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@base-ui/react': 1.8.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@dimah-s3/core': 1.5.6
-      '@dimah-s3/react': 1.5.6(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
+      '@dimah-s3/core': 1.5.7
+      '@dimah-s3/react': 1.5.7(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
       '@fuma-translate/react': 1.0.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       class-variance-authority: 0.7.1
       cn: 0.3.0
@@ -7109,7 +7114,7 @@ snapshots:
   '@tailwindcss/node@4.3.3':
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      enhanced-resolve: 5.25.0
+      enhanced-resolve: 5.25.1
       jiti: 2.7.0
       lightningcss: 1.32.0
       magic-string: 0.30.21
@@ -7537,7 +7542,7 @@ snapshots:
       '@better-auth/core': 1.7.4(@better-auth/utils@0.4.2)(@better-fetch/fetch@1.3.1)(better-call@1.4.0(zod@4.6.4))(jose@6.2.12)(kysely@0.29.5)(nanostores@1.5.3)
       '@better-auth/telemetry': 1.7.4(@better-auth/core@1.7.4(@better-auth/utils@0.4.2)(@better-fetch/fetch@1.3.1)(better-call@1.4.0(zod@4.6.4))(jose@6.2.12)(kysely@0.29.5)(nanostores@1.5.3))(@better-auth/utils@0.4.2)(@better-fetch/fetch@1.3.1)
       '@better-auth/utils': 0.4.2
-      '@clack/prompts': 1.8.0
+      '@clack/prompts': 1.8.1
       '@mrleebo/prisma-ast': 0.16.0
       better-auth: 1.7.4(drizzle-kit@1.0.0-rc.4)(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0)(zod@4.6.4))(next@16.3.5(@babel/core@7.29.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(pg@8.23.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       c12: 4.0.0-rc.1(dotenv@17.4.2)(jiti@2.7.0)
@@ -7631,7 +7636,7 @@ snapshots:
   better-call@1.4.0(zod@4.6.4):
     dependencies:
       '@better-auth/utils': 0.5.0
-      '@better-fetch/fetch': 1.3.1
+      '@better-fetch/fetch': 1.3.2
       rou3: 0.9.2
       set-cookie-parser: 3.1.2
     optionalDependencies:
@@ -8007,7 +8012,7 @@ snapshots:
 
   encodeurl@2.0.0: {}
 
-  enhanced-resolve@5.25.0:
+  enhanced-resolve@5.25.1:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.3
@@ -8493,7 +8498,7 @@ snapshots:
 
   fumadb@0.6.0(drizzle-orm@1.0.0-rc.4(@types/pg@8.23.1)(pg@8.23.0)):
     dependencies:
-      '@clack/prompts': 1.8.0
+      '@clack/prompts': 1.8.1
       '@paralleldrive/cuid2': 3.3.0
       commander: 15.0.0
       kysely: 0.29.5
