@@ -15,7 +15,7 @@
     "@orpc/client": "2.0.0-beta.32",
     "@orpc/server": "2.0.0-beta.32",
     "@repo/auth": "workspace:*",
-    "zod": "^4.6.2"
+    "zod": "^4.6.4"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
