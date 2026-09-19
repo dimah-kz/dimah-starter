@@ -16,8 +16,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@dimah-s3/react": "1.5.7",
-    "@dimah-s3/server": "1.5.7",
+    "@dimah-s3/react": "1.5.9",
+    "@dimah-s3/server": "1.5.9",
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
@@ -26,10 +26,10 @@
     "@repo/ui": "workspace:*",
     "cn": "^0.3.0",
     "country-flag-icons": "1.6.20",
-    "dotenv": "^17.4.2",
-    "lucide-react": "^1.45.0",
+    "dotenv": "^18.0.0",
+    "lucide-react": "^1.47.0",
     "next": "16.3.5",
-    "next-intl": "^4.14.4",
+    "next-intl": "^4.14.5",
     "next-themes": "^0.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"
@@ -38,7 +38,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "1.0.0",
