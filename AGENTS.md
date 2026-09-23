@@ -27,6 +27,7 @@ Explore the codebase for layout, packages, and routes. Open [docs/agents/](docs/
 - Same-user writes: `updateTag` in the mutating action.
 - Do not hand-edit `@repo/ui` shadcn/ReUI components for durable fixes — regen via `pnpm ui:sync`. Dimah items: edit `packages/ui/src/components/dimah` in place.
 - **Do not add new features outside `apps/web` + core packages.**
+- UI: `@shadcn/lint` runs inside `pnpm lint` (`shadcn/*`). Fix those errors. Appearance stays on the component (`variant` / `size`); `className` is for layout.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
