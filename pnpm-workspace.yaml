@@ -1,18 +1,18 @@
 catalog:
   typescript: ^7.0.2
-  eslint: ^10.10.0
+  eslint: ^10.11.0
   prettier: ^3.9.8
   prettier-plugin-packagejson: ^3.0.2
   prettier-plugin-tailwindcss: ^0.8.1
-  turbo: ^2.10.13
+  turbo: ^2.11.3
   "@eslint/js": ^10.0.1
-  "@next/eslint-plugin-next": ^16.3.5
+  "@next/eslint-plugin-next": ^16.3.6
   eslint-config-prettier: ^10.1.8
   eslint-plugin-react: ^7.37.5
   eslint-plugin-react-hooks: ^7.1.1
-  eslint-plugin-turbo: ^2.10.13
+  eslint-plugin-turbo: ^2.11.3
   globals: ^17.12.0
-  typescript-eslint: ^8.70.0
+  typescript-eslint: ^8.70.1
 
 # typescript-eslint has no TypeScript 7.0 compiler API. Keep `tsc` on 7;
 # point only eslint's typescript peer at the TS 6 compatibility package.
