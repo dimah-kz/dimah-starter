@@ -10,7 +10,7 @@ alwaysApply: false
 
 **shadcn + ReUI** in `@repo/ui` (`packages/ui`) — **never hand-edit** for durable fixes; regen via `pnpm ui:sync` (`sync:shadcn` then `sync:reui`). Durable ReUI overrides live in `packages/ui/scripts/reui/patches/`. **Dimah** (`@repo/ui/components/dimah`) is first-party — edit in place. App behavior in `src/app/**` or `src/components/` (outside package UI).
 
-**Defaults first** — use components with their built-in styles; `className` only when that call site truly needs customization (not to repeat radius, padding, etc. the primitive already provides). `@shadcn/lint` enforces this (`shadcn/*` in `pnpm lint`). Fix those errors.
+**Defaults first** — use components with their built-in styles; `className` only when that call site truly needs customization (not to repeat radius, padding, etc. the primitive already provides).
 
 Reuse UI up the tree; hoist to highest relevant scope — [architecture.md § Placement](docs/agents/architecture.md#placement).
 

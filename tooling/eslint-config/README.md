@@ -1,8 +1,6 @@
 # @repo/eslint-config
 
-Shared ESLint presets: `base`, `react`, `next-js`, and `design-system` (plus shared `ignores`).
-
-`design-system` is `@shadcn/lint`. `next-js` includes it. `@repo/ui` includes it and turns appearance rules off under `src/components`, where primitives own their styles.
+Shared ESLint presets: `base`, `react`, and `next-js` (plus shared `ignores`).
 
 Apps and packages extend the matching export instead of defining their own lint rules from scratch.
 
