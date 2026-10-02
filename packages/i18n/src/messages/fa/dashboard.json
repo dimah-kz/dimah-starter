@@ -33,7 +33,6 @@
     "settings": "تنظیمات"
   },
   "organizationManage": {
-    "title": "مدیریت سازمان",
     "avatar": {
       "upload": "آپلود لوگو",
       "remove": "حذف لوگو",
@@ -81,9 +80,6 @@
     "saveRole": "ذخیره نقش",
     "roleUpdated": "نقش عضو به‌روزرسانی شد.",
     "roleUpdateFailed": "به‌روزرسانی نقش عضو ممکن نشد."
-  },
-  "adminPage": {
-    "title": "مدیریت پلتفرم"
   },
   "accountSettings": {
     "back": "بازگشت",

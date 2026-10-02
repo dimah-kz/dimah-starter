@@ -6,17 +6,17 @@ Dashboard UI lives in the app, not in core packages. Mirror a sibling under `app
 
 ## SSOT
 
-| What           | Where                                                                                   |
-| -------------- | --------------------------------------------------------------------------------------- |
-| URLs           | `dashboard/lib/dashboard-routes.ts`                                                     |
-| Breadcrumbs    | `dashboardRouteSegments` + `dashboard.breadcrumbSegments` in i18n                       |
-| Nav / tab copy | `@repo/i18n` `dashboard.json`                                                           |
-| Cache tags     | `dashboard/lib/cache-tags.ts`                                                           |
-| Tab registry   | `*-slices.ts` / `*-tabs.ts` beside that area (`icon`, `labelKey`, `pathSuffix`, `href`) |
+| What           | Where                                                                     |
+| -------------- | ------------------------------------------------------------------------- |
+| URLs           | `dashboard/lib/dashboard-routes.ts`                                       |
+| Breadcrumbs    | `dashboardRouteSegments` + `dashboard.breadcrumbSegments` in i18n         |
+| Nav / tab copy | `@repo/i18n` `dashboard.json`                                             |
+| Cache tags     | `dashboard/lib/cache-tags.ts`                                             |
+| Tab registry   | `*-slices.ts` / `*-tabs.ts` beside that area (`icon`, `labelKey`, `href`) |
 
 No hardcoded paths or chrome strings.
 
-Sidebar drill-down for admin/manage comes from those registries in `sidebar-nav-sections.ts`.
+Sidebar drill-down for admin/manage comes from those registries in `sidebar-nav-sections.ts`. Do not repeat that nav, or a section title such as organization management, on the page.
 
 ## New feature
 

@@ -1,16 +1,13 @@
 import { Suspense } from "react"
 import { redirect } from "next/navigation"
-import { organizationManageTabs } from "@/app/dashboard/(organization)/manage/lib/organization-manage-tabs"
 import {
   DashboardPageFallback,
   DashboardPageShell,
 } from "@/app/dashboard/components/layout/dashboard-page-shell"
-import { DashboardSubnav } from "@/app/dashboard/components/layout/dashboard-subnav"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { resolveDashboardActiveOrganizationId } from "@/app/dashboard/lib/dashboard-session"
 import { headers } from "next/headers"
 import { auth } from "@repo/auth"
-import { getTranslations } from "next-intl/server"
 
 type OrganizationManageLayoutProps = {
   children: React.ReactNode
@@ -49,23 +46,5 @@ async function OrganizationManageLayoutContent({
     redirect(dashboardRoutes.home())
   }
 
-  const t = await getTranslations("dashboard")
-
-  return (
-    <DashboardPageShell>
-      <header className="space-y-4">
-        <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
-          {t("organizationManage.title")}
-        </h1>
-        <DashboardSubnav
-          tabs={organizationManageTabs.map(({ icon: Icon, ...tab }) => ({
-            ...tab,
-            icon: <Icon aria-hidden />,
-          }))}
-          defaultTabKey={organizationManageTabs[0].key}
-        />
-      </header>
-      {children}
-    </DashboardPageShell>
-  )
+  return <DashboardPageShell>{children}</DashboardPageShell>
 }

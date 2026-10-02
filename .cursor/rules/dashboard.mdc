@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Dashboard segment
 
-**SSOT:** `dashboard-routes.ts`, `cache-tags.ts` (inside the app). Dashboard copy: `@repo/i18n` `dashboard.json`. **Mirror** a sibling feature when adding routes.
+**SSOT:** `dashboard-routes.ts`, `cache-tags.ts` (inside the app). Dashboard copy: `@repo/i18n` `dashboard.json`. **Mirror** a sibling feature when adding routes. Admin and organization manage nav lives in the sidebar only — no in-page subnav or shared section title.
 
 **Writes:** `action/dashboard/…` → `auth.api`. **Reads:** `get-*.ts` + `'use cache'` + tags.
 

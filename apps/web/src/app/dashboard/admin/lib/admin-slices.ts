@@ -1,25 +1,20 @@
-import {
-  dashboardRouteSegments,
-  dashboardRoutes,
-} from "@/app/dashboard/lib/dashboard-routes"
+import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { Building2Icon, UserCogIcon } from "lucide-react"
 
 /**
- * Platform admin tabs registered for navigation and trim docs.
+ * Platform admin destinations. Sidebar drill-down reads this list.
  */
 export const adminSlices = [
   {
     key: "users",
     labelKey: "adminTabs.users",
     icon: UserCogIcon,
-    pathSuffix: `/${dashboardRouteSegments.users}`,
     href: dashboardRoutes.adminUsers(),
   },
   {
     key: "organizations",
     labelKey: "adminTabs.organizations",
     icon: Building2Icon,
-    pathSuffix: `/${dashboardRouteSegments.organizations}`,
     href: dashboardRoutes.adminOrganizations(),
   },
 ] as const

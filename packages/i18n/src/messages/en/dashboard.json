@@ -33,7 +33,6 @@
     "settings": "Settings"
   },
   "organizationManage": {
-    "title": "Organization management",
     "avatar": {
       "upload": "Upload logo",
       "remove": "Remove logo",
@@ -81,9 +80,6 @@
     "saveRole": "Save role",
     "roleUpdated": "Member role updated.",
     "roleUpdateFailed": "Could not update the member role."
-  },
-  "adminPage": {
-    "title": "Platform administration"
   },
   "accountSettings": {
     "back": "Back",
