@@ -33,7 +33,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card"
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select"
 import type { Locale } from "@repo/i18n"
 import { toast } from "@repo/ui/components/toast"
 import { useLocale, useTranslations } from "next-intl"
@@ -137,23 +143,26 @@ export function MembersTable({
               placeholder={tTables("search.members")}
               onCommit={list.setQuery}
             />
-            <ToggleGroup
-              value={[filter]}
+            <Select
+              items={memberFilterOptions}
+              value={filter}
               onValueChange={(next) => {
-                const selected = next[0]
-                if (selected) {
-                  list.setFilter(selected as MemberTableFilter)
+                if (next) {
+                  list.setFilter(next)
                 }
               }}
-              size="sm"
-              className="shrink-0"
             >
-              {memberFilterOptions.map((option) => (
-                <ToggleGroupItem key={option.value} value={option.value}>
-                  {option.label}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+              <SelectTrigger className="w-full shrink-0 sm:w-fit">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent align="end">
+                {memberFilterOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </CardAction>
         </CardHeader>
         <CardContent>
