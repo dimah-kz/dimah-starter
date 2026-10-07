@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Caching
 
-Next API: read `apps/web` → `node_modules/next/dist/docs/` first — never web-search ([nextjs.md](docs/agents/nextjs.md)). Tags only via segment `cache-tags.ts`. **Cache Components** is on.
+Next API: read `apps/web` → `node_modules/next/dist/docs/` first — never web-search ([nextjs.md](docs/agents/nextjs.md)). Tags only via segment `cache-tags.ts`. **Cache Components** and **Partial Prefetching** are on. `params` / `searchParams` stay inside Suspense.
 
 **Read:** `'use cache'` + `cacheTag` + `cacheLife`. **Write (actor must see fresh UI):** `updateTag` in the **same** action after successful **`auth.api`** / **`createRouterClient`** — not bare `revalidateTag(tag)`.
 

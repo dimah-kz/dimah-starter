@@ -7,7 +7,7 @@ alwaysApply: true
 
 Explore the codebase for layout, packages, and routes. Open [docs/agents/](docs/agents/) only when **adding or changing** a feature.
 
-**Next.js:** **Cache Components** is on (`cacheComponents: true`). Training data is outdated. Before any Next API or pattern, **Read** docs under `apps/web` → `node_modules/next/dist/docs/`. **Never web-search** Next.js. Managed warning + resolve path: [apps/web/AGENTS.md](apps/web/AGENTS.md). Topic index: [nextjs.md](docs/agents/nextjs.md).
+**Next.js:** **Cache Components** and **Partial Prefetching** are on (`cacheComponents` + `partialPrefetching` in `apps/web/next.config.ts`). Training data is outdated. Before any Next API or pattern, **Read** docs under `apps/web` → `node_modules/next/dist/docs/`. **Never web-search** Next.js. Managed warning + resolve path: [apps/web/AGENTS.md](apps/web/AGENTS.md). Topic index: [nextjs.md](docs/agents/nextjs.md).
 
 ## Workflow
 
@@ -30,7 +30,7 @@ Explore the codebase for layout, packages, and routes. Open [docs/agents/](docs/
 
 <!-- BEGIN:nextjs-agent-rules -->
 
-# This is NOT the Next.js you know
+## This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 

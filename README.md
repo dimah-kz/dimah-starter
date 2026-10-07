@@ -17,7 +17,7 @@ The product surface is server-first, not just login: session in RSC, lists from 
 
 ## Cache Components
 
-`apps/web` runs with Next.js **Cache Components enabled** (`cacheComponents: true` in `next.config.ts`). That is a Next.js 16 setting, not an extra library.
+`apps/web` runs the Next.js 16.4 Cache Components model (`cacheComponents: true` and `partialPrefetching: true` in `next.config.ts`). That is framework config, not an extra library.
 
 - Cached reads: `'use cache'` + `cacheTag` + `cacheLife` in `get-*.ts`
 - Same-user writes: `updateTag` in the mutating Server Action

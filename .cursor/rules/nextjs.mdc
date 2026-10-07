@@ -4,7 +4,9 @@ globs: apps/**/next.config.ts,apps/**/**/cache-tags.ts,apps/**/src/app/**/lib/ge
 alwaysApply: false
 ---
 
-# Next.js 16+ (this repo)
+# Next.js 16.4 (this repo)
+
+**Cache Components** and **Partial Prefetching** are on. Dashboard routes stay request-time — do not set `ensureStatic = "navigation"` on a layout that reads the session.
 
 Training-data Next is **wrong** for this version.
 

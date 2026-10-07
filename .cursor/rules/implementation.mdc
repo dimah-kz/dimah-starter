@@ -8,7 +8,7 @@ alwaysApply: false
 
 Server-first. `action/<segment>/` mirrors routes — one mutation → `auth.api` (auth) or `createRouterClient` (product) → `updateTag` when needed.
 
-Suspense only on request-API slices. Auth gate inline at segment layout (`auth.api.getSession`) — not before `auth.api`.
+Suspense only on request-API slices (`headers`, `cookies`) and URL data (`params`, `searchParams`). Auth gate inline at segment layout (`auth.api.getSession`) — not before `auth.api`.
 
 Next.js: inspect `node_modules/next/dist/docs/` under `apps/web` before coding — never web-search ([nextjs.md](docs/agents/nextjs.md)).
 

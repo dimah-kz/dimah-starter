@@ -6,7 +6,7 @@ Server Components by default. `"use client"` only for interactivity.
 
 Mutations: `app/action/<segment>/` mirrors the route — validate → `auth.api` or `createRouterClient` → `updateTag` if the actor must see the change. [api.md](./api.md)
 
-Suspense only around slices that call request APIs (`headers`, `cookies`). Cached shells stay outside.
+Suspense only around slices that call request APIs (`headers`, `cookies`) or read URL data (`params`, `searchParams`). Cached shells stay outside.
 
 Next.js APIs: read `apps/web/node_modules/next/dist/docs/` first — [nextjs.md](./nextjs.md). Never web-search.
 

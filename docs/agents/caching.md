@@ -2,7 +2,7 @@
 
 > Rule: `.cursor/rules/caching.mdc`
 
-Applies to Next.js apps (`apps/web`). This app has **Cache Components** on (`cacheComponents: true`).
+Applies to Next.js apps (`apps/web`). This app has **Cache Components** and **Partial Prefetching** on (`cacheComponents` and `partialPrefetching`).
 
 Read Next in-repo docs first — [nextjs.md](./nextjs.md). Never web-search.
 
