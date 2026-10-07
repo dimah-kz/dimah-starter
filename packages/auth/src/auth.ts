@@ -29,22 +29,6 @@ const isProduction = process.env.NODE_ENV === "production"
 const resetPasswordTokenExpiresIn = 60 * 60
 const invitationExpiresIn = 60 * 60 * 48
 
-function runAuthBackgroundTask(promise: Promise<unknown>) {
-  try {
-    after(() => promise)
-  } catch {
-    void promise
-  }
-}
-
-function localeFromRequest(request?: Request) {
-  if (!request) {
-    return defaultLocale
-  }
-
-  return resolveLocaleFromHeaders(request.headers)
-}
-
 export const auth = betterAuth({
   advanced: {
     database: {
@@ -160,3 +144,19 @@ export const auth = betterAuth({
 
 /** Non-null session payload from `auth.api.getSession` / `$Infer.Session`. */
 export type Session = typeof auth.$Infer.Session
+
+function runAuthBackgroundTask(promise: Promise<unknown>) {
+  try {
+    after(() => promise)
+  } catch {
+    void promise
+  }
+}
+
+function localeFromRequest(request?: Request) {
+  if (!request) {
+    return defaultLocale
+  }
+
+  return resolveLocaleFromHeaders(request.headers)
+}

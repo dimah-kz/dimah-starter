@@ -28,9 +28,6 @@ export function ForgotPasswordForm({ redirectTo }: ForgotPasswordFormProps) {
   return (
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="redirectTo" value={redirectTo} />
-      <p className="text-center text-sm text-muted-foreground">
-        {t("description")}
-      </p>
       {state.formError ? (
         <Alert variant="destructive">
           <AlertDescription>{state.formError}</AlertDescription>
