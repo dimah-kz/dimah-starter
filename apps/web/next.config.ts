@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
     "@repo/ui",
     "@repo/api",
     "@repo/auth",
+    "@repo/email",
     "@repo/db",
     "@repo/i18n",
     "@repo/storage",

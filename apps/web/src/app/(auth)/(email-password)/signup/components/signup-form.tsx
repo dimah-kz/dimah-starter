@@ -13,6 +13,7 @@ import {
 import { Alert, AlertDescription } from "@repo/ui/components/alert"
 import { FormSubmitButton } from "@/components/form/form-submit-button"
 import { PasswordInput } from "@/components/form/password-input"
+import { passwordLimits } from "@repo/auth/password-limits"
 import { useTranslations } from "next-intl"
 
 type SignUpFormProps = {
@@ -78,6 +79,8 @@ export function SignUpForm({ redirectTo }: SignUpFormProps) {
             id="password"
             name="password"
             autoComplete="new-password"
+            minLength={passwordLimits.minLength}
+            maxLength={passwordLimits.maxLength}
             required
           />
         </Field>

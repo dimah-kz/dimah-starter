@@ -8,7 +8,7 @@ import { ResponsiveFormOverlay } from "@/components/form/responsive-form-overlay
 import { Button } from "@repo/ui/components/button"
 import { Checkbox } from "@repo/ui/components/checkbox"
 import { Label } from "@repo/ui/components/label"
-import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/members/lib/member-role-options"
+import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
 import type { OrganizationMemberItem } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
 import type { MembershipRole } from "@repo/auth/organization-access"
 import { parseRoleString } from "@repo/auth/role-string"

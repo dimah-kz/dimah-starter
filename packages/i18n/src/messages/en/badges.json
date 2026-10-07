@@ -12,5 +12,12 @@
   "userAccountStatus": {
     "active": "Active",
     "banned": "Banned"
+  },
+  "invitationStatus": {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Declined",
+    "canceled": "Canceled",
+    "expired": "Expired"
   }
 }

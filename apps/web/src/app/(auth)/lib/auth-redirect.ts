@@ -12,3 +12,11 @@ export function normalizeAuthRedirectTarget(
 
   return value
 }
+
+export function withAuthRedirect(path: string, redirectTo: string) {
+  if (redirectTo === DEFAULT_AUTH_REDIRECT) {
+    return path
+  }
+
+  return `${path}?${new URLSearchParams({ redirect: redirectTo }).toString()}`
+}

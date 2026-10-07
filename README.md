@@ -34,6 +34,7 @@ dimah-starter/
 │   ├── auth/                # Better Auth server
 │   ├── db/                  # Drizzle schema, client, migrations
 │   ├── storage/             # dimah-s3 storage
+│   ├── email/               # Resend transactional email
 │   ├── i18n/                # UI messages & locale
 │   └── ui/                  # shadcn / ReUI / Dimah
 ├── tooling/
@@ -50,7 +51,7 @@ Node ≥ 22 · pnpm 12 · PostgreSQL · dimah-s3 storage (S3-compatible bucket, 
 
 ```bash
 pnpm install
-cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, S3_*
+cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, S3_*, RESEND_*, EMAIL_FROM
 pnpm --filter @repo/db db:migrate
 pnpm dev                     # web + db
 ```
@@ -65,15 +66,16 @@ pnpm dev                     # web + db
 
 ## Included vs add when you need it
 
-Ships with email/password sign-in and sign-up, organizations, members, platform admin, and S3 uploads.
+Ships with email/password sign-in and sign-up, email verification, password reset, organizations, members, invitations, platform admin, and S3 uploads.
 
-Not in the UI (add from this template when the product needs them): password reset, email verification, OAuth, org invitations. The Better Auth `invitation` table is generated with the rest of the schema. Product oRPC is a `health.ping` stub in `@repo/api` — add procedures there, then call them from Server Actions with `createRouterClient`.
+Not in the UI yet: OAuth. Product oRPC is a `health.ping` stub in `@repo/api` — add procedures there, then call them from Server Actions with `createRouterClient`.
 
 ## Production
 
 - **Trusted origins** — `http://localhost:3000` is trusted only outside production. Set `BETTER_AUTH_URL` to the public origin.
 - **Postgres on serverless** — use a **pooled** `DATABASE_URL` (Neon pooler, PgBouncer, Supabase pooler). Direct `5432` will exhaust connections under bursty functions.
 - **Session cookie cache** — `getSession` may use a cookie for up to **5 minutes**. After a ban or role change, the affected user can still look signed-in until that cache expires.
-- **Auth rate limit** — counters live in Postgres so they survive serverless. That limiter applies to Better Auth HTTP routes (`/api/auth` if you mount it), not Server Actions.
+- **Auth rate limit** — counters live in Postgres so they survive serverless. That limiter applies to Better Auth HTTP routes (`/api/auth`), not Server Actions. Email verification and password-reset links use those routes.
+- **Email** — set `RESEND_API_KEY` and `EMAIL_FROM` in production. Without a key, development prints the message (including the link) to the server log.
 
 Conventions: [`AGENTS.md`](./AGENTS.md). MIT — see [LICENSE](./LICENSE).

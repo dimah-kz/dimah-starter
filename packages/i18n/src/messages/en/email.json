@@ -1,0 +1,38 @@
+{
+  "layout": {
+    "fallback": "If the button does not work, open this link:"
+  },
+  "verify": {
+    "subject": "Verify your email",
+    "preview": "Confirm your email address for {app}",
+    "heading": "Verify your email",
+    "body": "Confirm {email} to finish signing up for {app}.",
+    "action": "Verify email",
+    "footer": "If you did not create an account, you can ignore this email."
+  },
+  "reset": {
+    "subject": "Reset your password",
+    "preview": "Password reset request for {app}",
+    "heading": "Reset your password",
+    "body": "Choose a new password for your {app} account.",
+    "action": "Choose a new password",
+    "footer": "If you did not ask for this, you can ignore this email."
+  },
+  "invitation": {
+    "subject": "Join {organization}",
+    "preview": "{inviter} invited you to {organization}",
+    "heading": "You are invited",
+    "body": "{inviter} invited you to join {organization} as {role}.",
+    "expires": "This invitation expires {expires}.",
+    "action": "Accept invitation",
+    "footer": "If you were not expecting this invitation, you can ignore this email."
+  },
+  "signUpAttempt": {
+    "subject": "Sign-up attempt",
+    "preview": "Someone tried to create an account with your email",
+    "heading": "Sign-up attempt",
+    "body": "Someone tried to create an account using {email}. If this was you, sign in instead.",
+    "action": "Sign in",
+    "footer": "If this was not you, you can ignore this email."
+  }
+}

@@ -12,5 +12,12 @@
   "userAccountStatus": {
     "active": "فعال",
     "banned": "مسدود"
+  },
+  "invitationStatus": {
+    "pending": "در انتظار",
+    "accepted": "پذیرفته‌شده",
+    "rejected": "رد شده",
+    "canceled": "لغو شده",
+    "expired": "منقضی"
   }
 }

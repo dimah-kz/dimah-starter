@@ -6,6 +6,8 @@ export const dashboardCacheTags = {
   userProfileById: (userId: string) => `dashboard:user-profile:${userId}`,
   organizationMembersById: (organizationId: string) =>
     `dashboard:org:${organizationId}:members`,
+  organizationInvitationsById: (organizationId: string) =>
+    `dashboard:org:${organizationId}:invitations`,
   organizationBrandingById: (organizationId: string) =>
     `dashboard:org:${organizationId}:branding`,
 } as const

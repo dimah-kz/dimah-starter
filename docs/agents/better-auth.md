@@ -29,6 +29,8 @@ Teams stay off until you enable them in `organization()`.
 
 **Cookie cache** — 5 minutes. After a ban or role change, the actor may still look signed-in until that cache expires.
 
+**Email** — `@repo/email` (Resend). `auth.ts` sends verification, password reset, duplicate sign-up notice, and organization invitation mail. `requireEmailVerification` blocks email/password sign-in until the link is opened. Password reset revokes other sessions. Invitation links go to `/accept-invitation/[id]`; accepting requires a verified session (`requireEmailVerificationOnInvitation`). Mounted handler: `app/api/auth/[...all]` — that is the Better Auth HTTP surface for those links, not a product write route. In development, missing `RESEND_API_KEY` logs the message instead of sending.
+
 ## Mutations (in an app)
 
 1. One Server Action under `app/action/…` mirroring the route.

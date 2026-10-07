@@ -30,6 +30,7 @@
   },
   "manageTabs": {
     "members": "اعضا",
+    "invitations": "دعوت‌ها",
     "settings": "تنظیمات"
   },
   "organizationManage": {
@@ -81,6 +82,25 @@
     "roleUpdated": "نقش عضو به‌روزرسانی شد.",
     "roleUpdateFailed": "به‌روزرسانی نقش عضو ممکن نشد."
   },
+  "invitationManage": {
+    "invite": "دعوت جدید",
+    "inviteTitle": "دعوت جدید",
+    "inviteDescription": "یک ایمیل با پیوند پیوستن به این سازمان فرستاده می‌شود.",
+    "email": "ایمیل",
+    "emailPlaceholder": "example@email.com",
+    "role": "نقش",
+    "send": "ارسال دعوت",
+    "sending": "در حال ارسال…",
+    "sent": "دعوت ارسال شد.",
+    "sendFailed": "ارسال دعوت ممکن نشد.",
+    "cancel": "لغو دعوت",
+    "cancelTitle": "لغو دعوت",
+    "cancelDescription": "دعوت {email} دیگر معتبر نخواهد بود.",
+    "cancelConfirm": "لغو دعوت",
+    "canceled": "دعوت لغو شد.",
+    "cancelFailed": "لغو دعوت ممکن نشد.",
+    "rowActions": "عملیات {email}"
+  },
   "accountSettings": {
     "back": "بازگشت",
     "sections": {
@@ -119,6 +139,7 @@
     "organizations": "سازمان‌ها",
     "manage": "مدیریت",
     "members": "اعضا",
+    "invitations": "دعوت‌ها",
     "settings": "تنظیمات"
   }
 }

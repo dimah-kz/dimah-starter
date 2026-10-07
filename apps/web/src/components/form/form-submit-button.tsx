@@ -10,6 +10,7 @@ type FormSubmitButtonProps = {
   loadingText: string
   className?: string
   disabled?: boolean
+  variant?: React.ComponentProps<typeof Button>["variant"]
 }
 
 export function FormSubmitButton({
@@ -17,6 +18,7 @@ export function FormSubmitButton({
   loadingText,
   className,
   disabled,
+  variant,
 }: FormSubmitButtonProps) {
   const { pending } = useFormStatus()
   const isDisabled = pending || disabled
@@ -24,6 +26,7 @@ export function FormSubmitButton({
   return (
     <Button
       type="submit"
+      variant={variant}
       className={cn("w-full", className)}
       disabled={isDisabled}
       aria-busy={pending}

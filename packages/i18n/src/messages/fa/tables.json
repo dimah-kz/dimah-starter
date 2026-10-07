@@ -5,12 +5,17 @@
     "users": "کاربران",
     "banned": "مسدود",
     "managers": "مدیران",
-    "members": "اعضا"
+    "members": "اعضا",
+    "pending": "در انتظار",
+    "accepted": "پذیرفته‌شده",
+    "rejected": "رد شده",
+    "canceled": "لغو شده"
   },
   "search": {
     "users": "جستجو با نام یا ایمیل…",
     "members": "جستجو با نام یا ایمیل…",
-    "organizations": "جستجو با نام یا شناسه…"
+    "organizations": "جستجو با نام یا شناسه…",
+    "invitations": "جستجو با ایمیل…"
   },
   "columns": {
     "user": "کاربر",
@@ -21,17 +26,21 @@
     "organization": "سازمان",
     "slug": "شناسه",
     "members": "اعضا",
-    "created": "ایجاد"
+    "created": "ایجاد",
+    "email": "ایمیل",
+    "expires": "انقضا"
   },
   "empty": {
     "users": "کاربری یافت نشد.",
     "members": "عضوی یافت نشد.",
     "organizations": "سازمانی یافت نشد.",
+    "invitations": "دعوتی یافت نشد.",
     "results": "نتیجه‌ای نیست."
   },
   "count": {
     "users": "کاربر",
     "members": "عضو",
-    "organizations": "سازمان"
+    "organizations": "سازمان",
+    "invitations": "دعوت"
   }
 }

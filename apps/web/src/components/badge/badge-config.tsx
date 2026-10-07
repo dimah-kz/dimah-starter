@@ -1,6 +1,16 @@
 "use client"
 
-import { CrownIcon, ShieldAlertIcon, ShieldIcon, UserIcon } from "lucide-react"
+import {
+  BanIcon,
+  CircleCheckIcon,
+  CircleXIcon,
+  ClockIcon,
+  CrownIcon,
+  ShieldAlertIcon,
+  ShieldIcon,
+  TimerOffIcon,
+  UserIcon,
+} from "lucide-react"
 import {
   type LabeledBadgeConfig,
   type LabeledBadgeVariant,
@@ -51,6 +61,37 @@ function membershipRoleIcon(role: MembershipRole) {
 
 function userAccountStatusIcon(status: UserAccountStatus) {
   return status === "banned" ? <ShieldAlertIcon /> : <UserIcon />
+}
+
+const invitationStatuses = [
+  "pending",
+  "accepted",
+  "rejected",
+  "canceled",
+  "expired",
+] as const
+
+type InvitationStatus = (typeof invitationStatuses)[number]
+
+const invitationStatusVariants: Record<InvitationStatus, LabeledBadgeVariant> =
+  {
+    pending: "info-light",
+    accepted: "success-light",
+    rejected: "destructive-light",
+    canceled: "outline",
+    expired: "warning-light",
+  }
+
+function isInvitationStatus(value: string): value is InvitationStatus {
+  return (invitationStatuses as readonly string[]).includes(value)
+}
+
+function invitationStatusIcon(status: InvitationStatus) {
+  if (status === "accepted") return <CircleCheckIcon />
+  if (status === "rejected") return <CircleXIcon />
+  if (status === "canceled") return <BanIcon />
+  if (status === "expired") return <TimerOffIcon />
+  return <ClockIcon />
 }
 
 function isPlatformRole(value: string): value is PlatformRole {
@@ -109,4 +150,25 @@ export function useUserAccountStatusBadgeConfig(
     userAccountStatusVariants[status],
     userAccountStatusIcon(status)
   )
+}
+
+export function useInvitationStatusBadgeConfig(
+  status: string
+): LabeledBadgeConfig {
+  const t = useTranslations("badges")
+  const normalizedValue = status.trim()
+
+  if (isInvitationStatus(normalizedValue)) {
+    return item(
+      t(`invitationStatus.${normalizedValue}`),
+      invitationStatusVariants[normalizedValue],
+      invitationStatusIcon(normalizedValue)
+    )
+  }
+
+  return {
+    label: normalizedValue || t("fallback"),
+    variant: "outline",
+    icon: <ClockIcon />,
+  }
 }

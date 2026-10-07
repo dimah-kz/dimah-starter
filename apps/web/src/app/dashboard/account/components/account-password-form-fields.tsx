@@ -1,6 +1,7 @@
 "use client"
 
 import { PasswordInput } from "@/components/form/password-input"
+import { passwordLimits } from "@repo/auth/password-limits"
 import { Field, FieldGroup, FieldLabel } from "@repo/ui/components/field"
 import { useTranslations } from "next-intl"
 
@@ -32,6 +33,8 @@ export function AccountPasswordFormFields({
           id={`${formId}-newPassword`}
           name="newPassword"
           autoComplete="new-password"
+          minLength={passwordLimits.minLength}
+          maxLength={passwordLimits.maxLength}
           required
         />
       </Field>
@@ -43,6 +46,8 @@ export function AccountPasswordFormFields({
           id={`${formId}-confirmPassword`}
           name="confirmPassword"
           autoComplete="new-password"
+          minLength={passwordLimits.minLength}
+          maxLength={passwordLimits.maxLength}
           required
         />
       </Field>

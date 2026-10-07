@@ -30,6 +30,7 @@
   },
   "manageTabs": {
     "members": "Members",
+    "invitations": "Invitations",
     "settings": "Settings"
   },
   "organizationManage": {
@@ -81,6 +82,25 @@
     "roleUpdated": "Member role updated.",
     "roleUpdateFailed": "Could not update the member role."
   },
+  "invitationManage": {
+    "invite": "New invitation",
+    "inviteTitle": "New invitation",
+    "inviteDescription": "They will get an email with a link to join this organization.",
+    "email": "Email",
+    "emailPlaceholder": "example@email.com",
+    "role": "Role",
+    "send": "Send invitation",
+    "sending": "Sending…",
+    "sent": "Invitation sent.",
+    "sendFailed": "Could not send the invitation.",
+    "cancel": "Cancel invitation",
+    "cancelTitle": "Cancel invitation",
+    "cancelDescription": "The invitation for {email} will no longer be valid.",
+    "cancelConfirm": "Cancel invitation",
+    "canceled": "Invitation canceled.",
+    "cancelFailed": "Could not cancel the invitation.",
+    "rowActions": "Actions for {email}"
+  },
   "accountSettings": {
     "back": "Back",
     "sections": {
@@ -119,6 +139,7 @@
     "organizations": "Organizations",
     "manage": "Manage",
     "members": "Members",
+    "invitations": "Invitations",
     "settings": "Settings"
   }
 }

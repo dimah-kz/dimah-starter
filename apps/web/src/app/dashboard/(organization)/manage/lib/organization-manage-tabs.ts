@@ -1,5 +1,5 @@
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { SettingsIcon, UsersIcon } from "lucide-react"
+import { MailIcon, SettingsIcon, UsersIcon } from "lucide-react"
 
 /** Add a row when you add a manage route under `dashboard/manage/<segment>/`. */
 export const organizationManageTabs = [
@@ -8,6 +8,12 @@ export const organizationManageTabs = [
     labelKey: "manageTabs.members",
     icon: UsersIcon,
     href: dashboardRoutes.organizationMembers(),
+  },
+  {
+    key: "invitations",
+    labelKey: "manageTabs.invitations",
+    icon: MailIcon,
+    href: dashboardRoutes.organizationInvitations(),
   },
   {
     key: "settings",

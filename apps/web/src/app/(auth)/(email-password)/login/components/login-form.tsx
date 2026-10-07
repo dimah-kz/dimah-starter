@@ -3,7 +3,9 @@
 import { useActionState } from "react"
 import { MailIcon } from "lucide-react"
 import { signInWithEmailAction } from "@/app/action/auth/sign-in-with-email-action"
+import { AuthCrossLink } from "@/app/(auth)/components/auth-cross-link"
 import { AUTH_FORM_INITIAL_STATE } from "@/app/(auth)/lib/auth-form-state"
+import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { Field, FieldGroup, FieldLabel } from "@repo/ui/components/field"
 import {
   InputGroup,
@@ -19,11 +21,13 @@ import { useTranslations } from "next-intl"
 type LoginFormProps = {
   redirectTo: string
   lastLoginMethod?: string | null
+  passwordReset?: boolean
 }
 
 export function LoginForm({
   redirectTo,
   lastLoginMethod = null,
+  passwordReset = false,
 }: LoginFormProps) {
   const t = useTranslations("auth.login")
   const tSocial = useTranslations("auth.social")
@@ -38,6 +42,11 @@ export function LoginForm({
       {state.formError ? (
         <Alert variant="destructive">
           <AlertDescription>{state.formError}</AlertDescription>
+        </Alert>
+      ) : null}
+      {passwordReset && !state.formError ? (
+        <Alert>
+          <AlertDescription>{t("passwordReset")}</AlertDescription>
         </Alert>
       ) : null}
       <FieldGroup>
@@ -70,6 +79,14 @@ export function LoginForm({
           />
         </Field>
       </FieldGroup>
+      <div className="flex justify-end">
+        <AuthCrossLink
+          className="text-sm font-medium text-primary"
+          target={authRoutes.forgotPassword()}
+        >
+          {t("forgotPassword")}
+        </AuthCrossLink>
+      </div>
       <div className="relative">
         <FormSubmitButton
           idleText={t("submit")}

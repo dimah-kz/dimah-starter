@@ -10,7 +10,7 @@ import {
 } from "@/app/dashboard/lib/dashboard-session"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { ListSkeleton } from "@/components/list"
-import { getActorOrganizationRole } from "@/app/dashboard/(organization)/manage/members/lib/get-actor-organization-role"
+import { getActorOrganizationRole } from "@/app/dashboard/(organization)/manage/lib/get-actor-organization-role"
 import { redirect } from "next/navigation"
 
 type OrganizationMembersPageProps = {

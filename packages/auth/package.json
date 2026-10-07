@@ -7,6 +7,9 @@
     ".": "./src/index.ts",
     "./admin-access": "./src/admin-access.ts",
     "./organization-access": "./src/organization-access.ts",
+    "./app-origin": "./src/app-origin.ts",
+    "./password-limits": "./src/password-limits.ts",
+    "./paths": "./src/paths.ts",
     "./role-string": "./src/role-string.ts"
   },
   "scripts": {
@@ -18,9 +21,11 @@
     "@better-auth/drizzle-adapter": "1.7.7",
     "@better-auth/i18n": "1.7.7",
     "@repo/db": "workspace:*",
+    "@repo/email": "workspace:*",
     "@repo/i18n": "workspace:*",
     "better-auth": "1.7.7",
-    "drizzle-orm": "rc"
+    "drizzle-orm": "rc",
+    "next": "16.4.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

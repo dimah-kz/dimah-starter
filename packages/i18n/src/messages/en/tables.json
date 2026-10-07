@@ -5,12 +5,17 @@
     "users": "Users",
     "banned": "Banned",
     "managers": "Managers",
-    "members": "Members"
+    "members": "Members",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Declined",
+    "canceled": "Canceled"
   },
   "search": {
     "users": "Search by name or email…",
     "members": "Search by name or email…",
-    "organizations": "Search by name or slug…"
+    "organizations": "Search by name or slug…",
+    "invitations": "Search by email…"
   },
   "columns": {
     "user": "User",
@@ -21,17 +26,21 @@
     "organization": "Organization",
     "slug": "Slug",
     "members": "Members",
-    "created": "Created"
+    "created": "Created",
+    "email": "Email",
+    "expires": "Expires"
   },
   "empty": {
     "users": "No users found.",
     "members": "No members found.",
     "organizations": "No organizations found.",
+    "invitations": "No invitations found.",
     "results": "No results."
   },
   "count": {
     "users": "users",
     "members": "members",
-    "organizations": "organizations"
+    "organizations": "organizations",
+    "invitations": "invitations"
   }
 }
