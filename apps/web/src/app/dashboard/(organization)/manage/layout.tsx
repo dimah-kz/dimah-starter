@@ -5,8 +5,10 @@ import {
   DashboardPageShell,
 } from "@/app/dashboard/components/layout/dashboard-page-shell"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { resolveDashboardActiveOrganizationId } from "@/app/dashboard/lib/dashboard-session"
-import { headers } from "next/headers"
+import {
+  dashboardAuthHeaders,
+  resolveDashboardActiveOrganizationId,
+} from "@/app/dashboard/lib/dashboard-session"
 import { auth } from "@repo/auth"
 
 type OrganizationManageLayoutProps = {
@@ -35,7 +37,7 @@ async function OrganizationManageLayoutContent({
   }
 
   const { success } = await auth.api.hasPermission({
-    headers: await headers(),
+    headers: await dashboardAuthHeaders(),
     body: {
       organizationId,
       permissions: { member: ["update"] },

@@ -1,4 +1,5 @@
 import { cache } from "react"
+import { io } from "next/cache"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
@@ -6,9 +7,18 @@ import { normalizeAuthRedirectTarget } from "@/app/(auth)/lib/auth-redirect"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { auth } from "@repo/auth"
 
+/**
+ * Better Auth checks expiry with `Date.now()`. Partial Prefetching rejects that
+ * clock read until the Dynamic stage, so render-time auth waits on `io()` first.
+ */
+export async function dashboardAuthHeaders() {
+  await io()
+  return headers()
+}
+
 /** Request-scoped session read. Not Next `'use cache'` — never store session in the data cache. */
 const getDashboardSession = cache(async () => {
-  return auth.api.getSession({ headers: await headers() })
+  return auth.api.getSession({ headers: await dashboardAuthHeaders() })
 })
 
 /** Redirects unauthenticated visitors to login; returns the session otherwise. */
@@ -27,13 +37,13 @@ export async function requireDashboardSession() {
 
 /** Organizations the signed-in user belongs to (for switcher / nav). */
 export const listDashboardOrganizations = cache(async () => {
-  return auth.api.listOrganizations({ headers: await headers() })
+  return auth.api.listOrganizations({ headers: await dashboardAuthHeaders() })
 })
 
 /** Set session active org via Better Auth — authorization enforced by the API. */
 export async function setDashboardActiveOrganization(organizationId: string) {
   await auth.api.setActiveOrganization({
-    headers: await headers(),
+    headers: await dashboardAuthHeaders(),
     body: { organizationId },
   })
 }
@@ -41,7 +51,7 @@ export async function setDashboardActiveOrganization(organizationId: string) {
 /** Unset active org — personal account context. */
 export async function clearDashboardActiveOrganization() {
   await auth.api.setActiveOrganization({
-    headers: await headers(),
+    headers: await dashboardAuthHeaders(),
     body: { organizationId: null },
   })
 }

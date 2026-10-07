@@ -1,4 +1,4 @@
-import { headers } from "next/headers"
+import { dashboardAuthHeaders } from "@/app/dashboard/lib/dashboard-session"
 import { getLocale, getTranslations } from "next-intl/server"
 import {
   dateTimeOptions,
@@ -41,7 +41,7 @@ const OS_PATTERNS: Array<[RegExp, string]> = [
 export async function getAccountSessions(
   currentSessionId: string
 ): Promise<AccountSession[]> {
-  const requestHeaders = await headers()
+  const requestHeaders = await dashboardAuthHeaders()
   const [sessions, localeValue, t] = await Promise.all([
     auth.api.listSessions({ headers: requestHeaders }),
     getLocale(),

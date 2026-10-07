@@ -12,12 +12,14 @@ Next.js APIs: read `apps/web/node_modules/next/dist/docs/` first — [nextjs.md]
 
 ## Session {#auth--session}
 
-| Helper                 | When                                           |
-| ---------------------- | ---------------------------------------------- |
-| `auth.api.getSession`  | Read / route gate — `headers: await headers()` |
-| `auth.api` + `headers` | Mutations and permission checks                |
+| Helper                 | When                                                        |
+| ---------------------- | ----------------------------------------------------------- |
+| `auth.api.getSession`  | Read / route gate — `headers: await dashboardAuthHeaders()` |
+| `auth.api` + `headers` | Mutations — `headers: await headers()`                      |
 
 Never put session in `'use cache'`. `React.cache()` around `getSession` is request-scoped memoization and is OK. Do not gate before `auth.api`. Client components must not import `@repo/auth`.
+
+Render-time `auth.api` uses `dashboardAuthHeaders()` (`await io()` then `headers()`). Better Auth reads `Date.now()` for expiry, and Partial Prefetching rejects that clock read before the Dynamic stage. Server Actions stay on `headers()`.
 
 Server Components may render a Context imported from a `'use client'` module (no empty Provider wrapper). Do not invent a Context only to use that API.
 

@@ -4,8 +4,8 @@ import {
   DashboardPageFallback,
   DashboardPageShell,
 } from "@/app/dashboard/components/layout/dashboard-page-shell"
+import { dashboardAuthHeaders } from "@/app/dashboard/lib/dashboard-session"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { headers } from "next/headers"
 import { auth } from "@repo/auth"
 
 type AdminLayoutProps = {
@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
 async function AdminLayoutContent({ children }: AdminLayoutProps) {
   const { success } = await auth.api.userHasPermission({
-    headers: await headers(),
+    headers: await dashboardAuthHeaders(),
     body: { permissions: { user: ["list"] } },
   })
 

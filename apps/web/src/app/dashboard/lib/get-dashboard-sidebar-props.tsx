@@ -13,10 +13,10 @@ import {
   type SidebarNavSection,
 } from "@/app/dashboard/lib/sidebar-nav-sections"
 import {
+  dashboardAuthHeaders,
   listDashboardOrganizations,
   resolveDashboardActiveOrganizationId,
 } from "@/app/dashboard/lib/dashboard-session"
-import { headers } from "next/headers"
 import { auth } from "@repo/auth"
 
 export type DashboardSidebarProps = {
@@ -113,7 +113,7 @@ export async function getDashboardSidebarProps(
 ): Promise<DashboardSidebarProps> {
   const activeOrganizationId = await resolveDashboardActiveOrganizationId()
   const isPersonalAccount = activeOrganizationId === null
-  const requestHeaders = await headers()
+  const requestHeaders = await dashboardAuthHeaders()
 
   const [organizations, canManageActiveOrganization, adminPermission] =
     await Promise.all([

@@ -4,8 +4,10 @@ import { getActiveOrganizationBranding } from "@/app/dashboard/(organization)/ma
 import { OrganizationSettingsHub } from "@/app/dashboard/(organization)/manage/settings/components/organization-settings-hub"
 import { DashboardPageFallback } from "@/app/dashboard/components/layout/dashboard-page-shell"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { resolveDashboardActiveOrganizationId } from "@/app/dashboard/lib/dashboard-session"
-import { headers } from "next/headers"
+import {
+  dashboardAuthHeaders,
+  resolveDashboardActiveOrganizationId,
+} from "@/app/dashboard/lib/dashboard-session"
 import { auth } from "@repo/auth"
 
 export default function OrganizationSettingsPage() {
@@ -29,7 +31,7 @@ async function OrganizationSettingsPageContent() {
     notFound()
   }
 
-  const requestHeaders = await headers()
+  const requestHeaders = await dashboardAuthHeaders()
   const [{ success: canEdit }, { success: canDelete }] = await Promise.all([
     auth.api.hasPermission({
       headers: requestHeaders,

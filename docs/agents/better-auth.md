@@ -46,6 +46,6 @@ Never: direct deletes on auth member/invite tables, `dashboard-access.ts`, dupli
 
 ## Session
 
-`auth.api.getSession({ headers: await headers() })` for reads and layout gates. Never `'use cache'` on session. Client components must not import `@repo/auth`.
+`auth.api.getSession({ headers: await dashboardAuthHeaders() })` for reads and layout gates. `dashboardAuthHeaders()` waits on `io()` first so Better Auth's expiry `Date.now()` runs in the Dynamic stage. Server Actions keep `headers: await headers()`. Never `'use cache'` on session. Client components must not import `@repo/auth`.
 
 Auth client config for a future mobile/extension app lives in that app — not in core packages.
