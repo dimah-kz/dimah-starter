@@ -4,6 +4,7 @@ import {
   DashboardPageFallback,
   DashboardPageShell,
 } from "@/app/dashboard/components/layout/dashboard-page-shell"
+import { DashboardSectionHeading } from "@/app/dashboard/components/layout/dashboard-section-heading"
 import { dashboardAuthHeaders } from "@/app/dashboard/lib/dashboard-session"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { auth } from "@repo/auth"
@@ -30,5 +31,10 @@ async function AdminLayoutContent({ children }: AdminLayoutProps) {
     redirect(dashboardRoutes.home())
   }
 
-  return <DashboardPageShell>{children}</DashboardPageShell>
+  return (
+    <DashboardPageShell>
+      <DashboardSectionHeading />
+      {children}
+    </DashboardPageShell>
+  )
 }
