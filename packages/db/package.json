@@ -21,7 +21,7 @@
   "dependencies": {
     "@dimah-s3/db": "1.5.10",
     "@paralleldrive/cuid2": "^3.3.0",
-    "dotenv": "^18.0.6",
+    "dotenv": "^18.0.7",
     "drizzle-orm": "rc",
     "fumadb": "0.6.0",
     "pg": "^8.23.1"
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.5",
     "@types/pg": "^8.23.1",
     "drizzle-kit": "rc",
     "eslint": "catalog:",
