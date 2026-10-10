@@ -30,12 +30,14 @@ async function LoginPageContent({ searchParams }: LoginPageProps) {
   const lastLoginMethod =
     cookieStore.get(LAST_LOGIN_METHOD_COOKIE)?.value ?? null
   const passwordReset = params.notice === "password-reset"
+  const oauthError = typeof params.error === "string" ? params.error : null
 
   return (
     <LoginForm
       redirectTo={redirectTo}
       lastLoginMethod={lastLoginMethod}
       passwordReset={passwordReset}
+      oauthError={oauthError}
     />
   )
 }

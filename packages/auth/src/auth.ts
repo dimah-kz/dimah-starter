@@ -28,6 +28,8 @@ const isProduction = process.env.NODE_ENV === "production"
 
 const resetPasswordTokenExpiresIn = 60 * 60
 const invitationExpiresIn = 60 * 60 * 48
+const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim()
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim()
 
 export const auth = betterAuth({
   advanced: {
@@ -103,6 +105,15 @@ export const auth = betterAuth({
       id,
     }),
   },
+  socialProviders:
+    googleClientId && googleClientSecret
+      ? {
+          google: {
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
+          },
+        }
+      : undefined,
   plugins: [
     admin({
       ac: adminPluginAc as AccessControl,

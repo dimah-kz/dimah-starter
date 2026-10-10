@@ -51,7 +51,7 @@ Node ≥ 22 · pnpm 12 · PostgreSQL · dimah-s3 storage (S3-compatible bucket, 
 
 ```bash
 pnpm install
-cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, S3_*, RESEND_*, EMAIL_FROM
+cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, optional GOOGLE_*, S3_*, RESEND_*, EMAIL_FROM
 pnpm --filter @repo/db db:migrate
 pnpm dev                     # web + db
 ```

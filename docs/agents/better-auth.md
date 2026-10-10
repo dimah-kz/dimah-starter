@@ -23,6 +23,8 @@ Teams stay off until you enable them in `organization()`.
 
 `lastLoginMethod({ storeInDatabase: true })` — cookie for the login UI; `session.user.lastLoginMethod` from the DB. No auth client in core.
 
+**Google** — `socialProviders.google` when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. The auth action calls `auth.api.signInSocial` (`disableRedirect`) and redirects to the returned URL. Callback: `/api/auth/callback/google`. A verified Google email links to an existing user (Better Auth default). The button stays visible when the env vars are empty and the action explains that sign-in isn't configured.
+
 **Trusted origins** — `localhost` is not trusted in production. Set `BETTER_AUTH_URL`.
 
 **Rate limit** — `storage: "database"` (`auth.rate_limit`). Applies to Better Auth **HTTP** routes, not `auth.api` Server Actions. Enable it so `/api/auth` (if you add it) works on serverless.
