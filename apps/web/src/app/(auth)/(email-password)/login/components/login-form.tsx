@@ -85,7 +85,7 @@ export function LoginForm({
         </FieldGroup>
         <div className="flex justify-end">
           <AuthCrossLink
-            className="text-sm font-medium text-primary"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
             target={authRoutes.forgotPassword()}
           >
             {t("forgotPassword")}
