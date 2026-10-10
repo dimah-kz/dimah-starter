@@ -35,7 +35,7 @@ export function GoogleSignIn({
   const formError = state.formError ?? callbackError
 
   return (
-    <div className="flex flex-col gap-3 pt-1">
+    <div className="flex flex-col gap-4 pt-1">
       <Marker variant="separator">
         <MarkerContent>{t("continueWith")}</MarkerContent>
       </Marker>
