@@ -1,12 +1,15 @@
+import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { AuthSettingsMenu } from "@/app/(auth)/components/auth-settings-menu"
-import { IconStack } from "@repo/ui/components/reui/icon-stack"
-import { ImageIcon } from "lucide-react"
+import { BrandMark } from "@/components/brand-mark"
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const t = await getTranslations("common")
+
   return (
     <div className="grid min-h-svh w-full md:grid-cols-2">
       <div className="relative flex min-h-svh flex-col overflow-hidden border-border md:border-e">
@@ -16,7 +19,16 @@ export default function AuthLayout({
         </div>
 
         <div className="relative z-10 flex min-h-svh flex-col bg-card/80 backdrop-blur-xl dark:bg-card/60">
-          <div className="flex p-4 md:p-6">
+          <div className="flex items-center justify-between gap-3 p-4 md:p-6">
+            <Link
+              href="/"
+              className="inline-flex min-w-0 items-center gap-2.5 rounded-lg text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <BrandMark className="size-8" />
+              <span className="truncate text-sm font-semibold tracking-tight">
+                {t("appTitle")}
+              </span>
+            </Link>
             <AuthSettingsMenu />
           </div>
           <div className="flex flex-1 flex-col items-center justify-center px-6 pb-10 md:px-12 lg:px-16">
@@ -29,12 +41,7 @@ export default function AuthLayout({
         className="relative hidden min-h-svh items-center justify-center bg-muted/60 md:flex dark:bg-muted/25"
         aria-hidden="true"
       >
-        <IconStack className="h-40 w-36 text-muted-foreground">
-          <ImageIcon
-            className="size-8 text-muted-foreground/70"
-            strokeWidth={1.5}
-          />
-        </IconStack>
+        <BrandMark className="size-24" />
       </div>
     </div>
   )

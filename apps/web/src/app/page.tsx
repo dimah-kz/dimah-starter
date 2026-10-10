@@ -2,6 +2,7 @@ import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
+import { BrandMark } from "@/components/brand-mark"
 import { Button } from "@repo/ui/components/button"
 import { LayoutDashboardIcon, LogInIcon } from "lucide-react"
 import { cn } from "cn"
@@ -18,24 +19,27 @@ export default async function Home() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-16 text-center">
-      <div className="flex max-w-lg flex-col gap-3">
-        <h1
-          className={cn(
-            "text-3xl font-semibold tracking-tight text-balance",
-            enterClassName
-          )}
-        >
-          {t("home.title")}
-        </h1>
-        <p
-          className={cn(
-            "text-sm text-pretty text-muted-foreground",
-            enterClassName,
-            "delay-150"
-          )}
-        >
-          {t("home.lede")}
-        </p>
+      <div className="flex max-w-lg flex-col items-center gap-5">
+        <BrandMark className={cn("size-12", enterClassName)} />
+        <div className="flex flex-col gap-3">
+          <h1
+            className={cn(
+              "text-3xl font-semibold tracking-tight text-balance",
+              enterClassName
+            )}
+          >
+            {t("home.title")}
+          </h1>
+          <p
+            className={cn(
+              "text-sm text-pretty text-muted-foreground",
+              enterClassName,
+              "delay-150"
+            )}
+          >
+            {t("home.lede")}
+          </p>
+        </div>
       </div>
       <div
         className={cn(
