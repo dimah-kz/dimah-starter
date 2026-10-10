@@ -1,7 +1,9 @@
+import Image from "next/image"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { AuthSettingsMenu } from "@/app/(auth)/components/auth-settings-menu"
 import { BrandMark } from "@/components/brand-mark"
+import authPanel from "./auth-panel.jpg"
 
 export default async function AuthLayout({
   children,
@@ -38,10 +40,18 @@ export default async function AuthLayout({
       </div>
 
       <div
-        className="relative hidden min-h-svh items-center justify-center bg-muted/60 md:flex dark:bg-muted/25"
+        className="relative hidden min-h-svh overflow-hidden bg-muted md:block"
         aria-hidden="true"
       >
-        <BrandMark className="size-24" />
+        <Image
+          src={authPanel}
+          alt=""
+          fill
+          preload
+          sizes="50vw"
+          placeholder="blur"
+          className="object-cover dark:brightness-[0.82]"
+        />
       </div>
     </div>
   )
