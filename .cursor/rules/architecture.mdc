@@ -14,7 +14,7 @@ alwaysApply: false
 
 **SSOT:** `*-routes.ts`, `cache-tags.ts` per segment. **No** `dashboard-access.ts` or custom RBAC modules.
 
-**Before new code:** search upward; inline by default; one call site (~10–20 lines) → no new file/module — [architecture.md § Placement](docs/agents/architecture.md#placement), [§ Do not over-extract](docs/agents/architecture.md#do-not-over-extract).
+**Before new code:** search upward; inline by default; one call site (~10–20 lines) → no new file/module — [architecture.md § Placement](docs/agents/architecture.md#placement), [§ Do not over-extract](docs/agents/architecture.md#do-not-over-extract). Product procedures are the exception: one file under `packages/api/src/routers/<domain>/`.
 
 **Naming:** `toX` / `fromX` / `parseX`; no package-name prefix — [architecture.md § Naming](docs/agents/architecture.md#naming).
 

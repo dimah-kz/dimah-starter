@@ -68,7 +68,7 @@ pnpm dev                     # web + db
 
 Ships with email/password sign-in and sign-up, email verification, password reset, organizations, members, invitations, platform admin, and S3 uploads.
 
-Not in the UI yet: OAuth. Product oRPC is a `health.ping` stub in `@repo/api` — add procedures there, then call them from Server Actions with `createRouterClient`.
+Not in the UI yet: OAuth. Product oRPC is a `health.ping` stub in `@repo/api` (`src/routers/health/`) — add procedures there, then call them from Server Actions with `createRouterClient`.
 
 ## Production
 

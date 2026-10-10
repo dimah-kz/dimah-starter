@@ -16,6 +16,7 @@ A **new file** only when something is reused in 2+ places, or it is segment SSOT
 
 - App: beside `page.tsx` → parent `components/` → segment `lib/` or `components/` → `src/components/` → `@repo/ui/components/*`
 - Package: beside the caller → package `src/` → an export already on `index.ts`
+- Product procedures: `packages/api/src/routers/<domain>/<procedure>.ts` — one file per procedure, even when short. [api.md](./api.md)
 
 **Deps:** sub-feature → segment `lib/` → `src/lib` / `src/components`. No cross-sibling feature imports. Apps import `@repo/*`. Packages never import apps.
 

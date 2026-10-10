@@ -2,7 +2,22 @@
 
 oRPC v2 for **product** domain only. Auth stays on `auth.api`. Live router: [`packages/api/src`](../../packages/api/src).
 
-Add the procedure in `@repo/api` (import from `base.ts`). Do not compose `pub` / `authed` in an app. Do not wrap Better Auth.
+## Layout
+
+`src/router.ts` only composes domains. A domain is a folder; a procedure is a file in that folder. Copy `routers/health/`.
+
+```
+src/
+  base.ts                 pub, authed
+  router.ts               { health, … }
+  routers/<domain>/
+    index.ts              { ping, … }
+    <procedure>.ts
+```
+
+New procedure: add `<procedure>.ts` in that domain and export it from the domain `index.ts`. New domain: add a folder and one key on `router.ts`. Build from `pub` / `authed` in `base.ts`. Do not compose them in an app. Do not wrap Better Auth.
+
+A helper used by one procedure stays in that file. Something shared by one domain stays in that folder. Do not import another domain's procedures.
 
 | Builder  | When                                               |
 | -------- | -------------------------------------------------- |

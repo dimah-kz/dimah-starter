@@ -1,12 +1,5 @@
-import * as z from "zod"
-import { pub } from "./base"
-
-const ping = pub
-  .output(z.object({ ok: z.literal(true) }))
-  .handler(async () => ({ ok: true as const }))
+import { health } from "./routers/health"
 
 export const router = {
-  health: {
-    ping,
-  },
+  health,
 }

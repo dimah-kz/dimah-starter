@@ -1,0 +1,11 @@
+---
+description: Product oRPC layout in @repo/api; open api.md for detail
+globs: packages/api/**/*
+alwaysApply: false
+---
+
+# Product API
+
+Procedures live in `src/routers/<domain>/`, one procedure per file. `src/router.ts` only composes those domain routers. Build with `pub` or `authed` from `base.ts`.
+
+**Detail (Read):** [docs/agents/api.md](docs/agents/api.md).
