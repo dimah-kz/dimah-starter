@@ -5,14 +5,23 @@ import { AuthSettingsMenu } from "@/app/(auth)/components/auth-settings-menu"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { BrandMark } from "@/components/brand-mark"
 import { Button } from "@repo/ui/components/button"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
+import { IconTile } from "@repo/ui/components/reui/icon-tile"
+import {
+  ArrowRightIcon,
+  Building2Icon,
+  CloudUploadIcon,
+  KeyRoundIcon,
+  ShieldIcon,
+} from "lucide-react"
 
 const githubUrl = "https://github.com/dimah-kz/dimah-starter"
-const nextUrl = "https://nextjs.org"
-const betterAuthUrl = "https://www.better-auth.com"
-const storageUrl = "https://dimah-s3.vercel.app"
 
-const featureKeys = ["server", "writes", "chrome"] as const
+const features = [
+  { key: "auth", icon: KeyRoundIcon },
+  { key: "organizations", icon: Building2Icon },
+  { key: "admin", icon: ShieldIcon },
+  { key: "storage", icon: CloudUploadIcon },
+] as const
 
 const ctaClassName = "h-10 gap-2 px-4 text-sm"
 
@@ -26,176 +35,99 @@ function GitHubIcon() {
 
 function HeadlineAccent({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-block bg-linear-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text pe-1 text-transparent">
+    <span className="bg-linear-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text pe-1 text-transparent rtl:bg-linear-to-l">
       {children}
     </span>
   )
 }
 
-function ProductLink({
-  href,
-  newTabLabel,
-  children,
-}: {
-  href: string
-  newTabLabel: string
-  children: ReactNode
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="underline decoration-foreground/25 underline-offset-4 transition-colors hover:decoration-foreground"
-    >
-      {children}
-      <span className="sr-only"> {newTabLabel}</span>
-    </a>
-  )
-}
-
 export default async function Home() {
   const t = await getTranslations("common")
-  const tDashboard = await getTranslations("dashboard")
   const newTabLabel = t("home.opensInNewTab")
 
   return (
-    <div className="relative flex min-h-svh flex-1 flex-col">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-128 bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--foreground)_7%,transparent),transparent_70%)]"
-      />
-
+    <div className="flex min-h-svh flex-1 flex-col">
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-5">
         <Link
           href="/"
           className="inline-flex min-w-0 items-center gap-2.5 rounded-md text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <BrandMark className="size-7" />
-          <span className="truncate text-sm font-semibold tracking-[-0.02em]">
+          <BrandMark />
+          <span className="truncate text-sm font-semibold tracking-tight">
             {t("appTitle")}
           </span>
         </Link>
         <AuthSettingsMenu
           showHome={false}
-          className="bg-transparent backdrop-blur-none"
+          className="bg-transparent backdrop-blur-none dark:bg-transparent"
         />
       </header>
 
-      <section
-        aria-labelledby="hero-heading"
-        className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center-safe px-6 py-16 sm:py-20"
-      >
-        <div className="grid w-full gap-14 lg:grid-cols-[max-content_minmax(0,1fr)] lg:items-start lg:gap-x-20">
-          <div className="max-w-lg">
-            <h1
-              id="hero-heading"
-              className="text-[2.75rem] leading-[1.05] font-medium tracking-[-0.03em] sm:text-6xl lg:text-[4.15rem]"
-            >
-              {t.rich("home.headline", {
-                line: (chunks) => <span className="block">{chunks}</span>,
-                accent: (chunks) => <HeadlineAccent>{chunks}</HeadlineAccent>,
-              })}
-            </h1>
-            <p className="mt-6 max-w-lg text-base leading-7 text-pretty text-muted-foreground">
-              {t.rich("home.lede", {
-                next: (chunks) => (
-                  <ProductLink href={nextUrl} newTabLabel={newTabLabel}>
-                    {chunks}
-                  </ProductLink>
-                ),
-                auth: (chunks) => (
-                  <ProductLink href={betterAuthUrl} newTabLabel={newTabLabel}>
-                    {chunks}
-                  </ProductLink>
-                ),
-                storage: (chunks) => (
-                  <ProductLink href={storageUrl} newTabLabel={newTabLabel}>
-                    {chunks}
-                  </ProductLink>
-                ),
-              })}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-2.5">
-              <Button
-                nativeButton={false}
-                className={ctaClassName}
-                render={<Link href={dashboardRoutes.home()} />}
-              >
-                {tDashboard("nav.sidebar.dashboard")}
-                <ArrowRight
-                  aria-hidden
-                  strokeWidth={1.75}
-                  className="size-4 transition-transform duration-200 group-hover/button:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/button:-translate-x-0.5"
-                />
-              </Button>
-              <Button
-                variant="outline"
-                nativeButton={false}
-                className={ctaClassName}
-                render={<a href={githubUrl} target="_blank" rel="noreferrer" />}
-              >
-                <GitHubIcon />
-                {t("home.viewOnGitHub")}
-                <ArrowUpRight
-                  aria-hidden
-                  strokeWidth={1.75}
-                  className="size-3.5 text-muted-foreground transition-transform duration-200 group-hover/button:translate-x-px group-hover/button:-translate-y-px rtl:-scale-x-100 rtl:group-hover/button:-translate-x-px"
-                />
-                <span className="sr-only">{newTabLabel}</span>
-              </Button>
-            </div>
-          </div>
-
-          <ul className="divide-y divide-border border-t border-border lg:border-s lg:border-t-0 lg:ps-14">
-            {featureKeys.map((key, index) => (
-              <li
-                key={key}
-                className="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-4 py-5 first:pt-6 last:pb-0 lg:py-6 lg:first:pt-0"
-              >
-                <span
-                  aria-hidden
-                  className="pt-1 font-mono text-[11px] tracking-[0.16em] text-muted-foreground tabular-nums"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h2 className="text-[15px] font-medium tracking-[-0.02em]">
-                    {t(`home.features.${key}.title`)}
-                  </h2>
-                  <p className="mt-1.5 max-w-md text-sm leading-6 text-pretty text-muted-foreground">
-                    {t(`home.features.${key}.description`)}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <footer className="border-t border-border">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-5 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>{t("home.license")}</p>
-          <nav
-            aria-label={t("home.footerNav")}
-            className="flex items-center gap-5"
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center-safe px-6 py-16 sm:py-24">
+        <h1 className="max-w-3xl text-center text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl sm:leading-[1.1]">
+          {t.rich("home.headline", {
+            accent: (chunks) => <HeadlineAccent>{chunks}</HeadlineAccent>,
+          })}
+        </h1>
+        <p className="mt-6 max-w-2xl text-center text-base leading-7 text-balance text-muted-foreground sm:text-lg sm:leading-8">
+          {t.rich("home.lede", {
+            line: (chunks) => <span className="sm:block">{chunks}</span>,
+          })}
+        </p>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Button
+            nativeButton={false}
+            className={ctaClassName}
+            render={<Link href={dashboardRoutes.home()} />}
           >
-            <Link
-              href={dashboardRoutes.home()}
-              className="transition-colors hover:text-foreground"
-            >
-              {tDashboard("nav.sidebar.dashboard")}
-            </Link>
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="transition-colors hover:text-foreground"
-            >
-              {t("home.github")}
-              <span className="sr-only"> {newTabLabel}</span>
-            </a>
-          </nav>
+            {t("home.openDashboard")}
+            <ArrowRightIcon
+              aria-hidden
+              strokeWidth={1.75}
+              className="size-4 transition-transform duration-200 group-hover/button:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/button:-translate-x-0.5"
+            />
+          </Button>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            className={ctaClassName}
+            render={<a href={githubUrl} target="_blank" rel="noreferrer" />}
+          >
+            <GitHubIcon />
+            {t("home.viewOnGitHub")}
+            <span className="sr-only"> {newTabLabel}</span>
+          </Button>
+        </div>
+
+        <ul className="mt-16 grid w-full gap-px overflow-hidden rounded-xl border bg-border sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map(({ key, icon: Icon }) => (
+            <li key={key} className="bg-background p-6">
+              <IconTile size="sm">
+                <Icon aria-hidden />
+              </IconTile>
+              <h2 className="mt-4 text-sm font-medium">
+                {t(`home.features.${key}.title`)}
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-pretty text-muted-foreground">
+                {t(`home.features.${key}.description`)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </main>
+
+      <footer className="border-t">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-5 text-[13px] text-muted-foreground">
+          <p>{t("home.license")}</p>
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            {t("home.github")}
+            <span className="sr-only"> {newTabLabel}</span>
+          </a>
         </div>
       </footer>
     </div>

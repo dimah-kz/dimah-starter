@@ -2,25 +2,29 @@
   "appTitle": "Dimah Starter",
   "appDescription": "A server-first starter for multi-tenant SaaS — dashboard, authentication, organizations, and file storage.",
   "home": {
-    "headline": "<line>A server-first</line><line><accent>starter</accent></line>",
-    "lede": "Multi-tenant from the start: a <next>Next.js</next> dashboard, <auth>Better Auth</auth>, Postgres, and <storage>dimah-s3</storage>.",
+    "headline": "A server-first <accent>starter</accent> for multi-tenant SaaS",
+    "lede": "<line>Start from a working app, not a blank page.</line> <line>Next.js, Better Auth, and Postgres, with i18n and RTL built in.</line>",
+    "openDashboard": "Open dashboard",
+    "viewOnGitHub": "View on GitHub",
     "features": {
-      "server": {
-        "title": "Session stays on the server",
-        "description": "The dashboard reads the session in React Server Components. The UI does not call an auth client."
+      "auth": {
+        "title": "Authentication",
+        "description": "Email or Google login, email verification, and password reset."
       },
-      "writes": {
-        "title": "Writes are Server Actions",
-        "description": "Auth, organizations, and uploads change on the server, then refresh the tagged cache."
+      "organizations": {
+        "title": "Organizations",
+        "description": "Invite members by email and give each one a role."
       },
-      "chrome": {
-        "title": "Your chrome, your copy",
-        "description": "The sidebar, org switcher, and menus belong to the app. Messages and RTL live in the i18n package."
+      "admin": {
+        "title": "Admin panel",
+        "description": "Manage users, bans, and platform roles in one place."
+      },
+      "storage": {
+        "title": "File uploads",
+        "description": "Avatars and logos on any S3-compatible bucket with dimah-s3."
       }
     },
-    "viewOnGitHub": "View on GitHub",
     "github": "GitHub",
-    "footerNav": "Footer",
     "license": "Released under the MIT License.",
     "opensInNewTab": "(opens in a new tab)"
   },

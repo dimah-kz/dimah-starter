@@ -26,7 +26,7 @@ export default async function AuthLayout({
               href="/"
               className="inline-flex min-w-0 items-center gap-2.5 rounded-lg text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <BrandMark className="size-8" />
+              <BrandMark />
               <span className="truncate text-sm font-semibold tracking-tight">
                 {t("appTitle")}
               </span>
