@@ -34,6 +34,9 @@ export const s3 = dimahS3({
   routes: {
     avatars: route({
       upload: {
+        //R2 does not support POST requests, so we use PUT instead.
+        method: "PUT",
+
         replace: "overwrite",
         fileTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
         maxFileSize: 2 * 1024 * 1024,
