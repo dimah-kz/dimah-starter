@@ -12,10 +12,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu"
+import { cn } from "cn"
 import { HomeIcon, SettingsIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 
-export function AuthSettingsMenu() {
+type AuthSettingsMenuProps = {
+  className?: string
+  showHome?: boolean
+}
+
+export function AuthSettingsMenu({
+  className,
+  showHome = true,
+}: AuthSettingsMenuProps) {
   const t = useTranslations("common")
 
   return (
@@ -25,7 +34,10 @@ export function AuthSettingsMenu() {
           <Button
             variant="outline"
             size="icon"
-            className="border-0 bg-card/60 shadow-none ring-0 backdrop-blur-xl"
+            className={cn(
+              "border-0 bg-card/60 shadow-none ring-0 backdrop-blur-xl",
+              className
+            )}
             aria-label={t("settings")}
           />
         }
@@ -37,11 +49,15 @@ export function AuthSettingsMenu() {
         <DropdownMenuGroup>
           <NavUserLocaleMenu />
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem render={<Link href="/" />}>
-          <HomeIcon />
-          {t("goHome")}
-        </DropdownMenuItem>
+        {showHome ? (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem render={<Link href="/" />}>
+              <HomeIcon />
+              {t("goHome")}
+            </DropdownMenuItem>
+          </>
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   )

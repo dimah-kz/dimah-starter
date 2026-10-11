@@ -2,8 +2,27 @@
   "appTitle": "Dimah Starter",
   "appDescription": "A server-first starter for multi-tenant SaaS — dashboard, authentication, organizations, and file storage.",
   "home": {
-    "title": "Dimah Starter",
-    "lede": "A server-first starter for multi-tenant SaaS with a dashboard, auth, organizations, file storage, and RTL layout ready out of the box."
+    "headline": "<line>A server-first</line><line><accent>starter</accent></line>",
+    "lede": "Multi-tenant from the start: a <next>Next.js</next> dashboard, <auth>Better Auth</auth>, Postgres, and <storage>dimah-s3</storage>.",
+    "features": {
+      "server": {
+        "title": "Session stays on the server",
+        "description": "The dashboard reads the session in React Server Components. The UI does not call an auth client."
+      },
+      "writes": {
+        "title": "Writes are Server Actions",
+        "description": "Auth, organizations, and uploads change on the server, then refresh the tagged cache."
+      },
+      "chrome": {
+        "title": "Your chrome, your copy",
+        "description": "The sidebar, org switcher, and menus belong to the app. Messages and RTL live in the i18n package."
+      }
+    },
+    "viewOnGitHub": "View on GitHub",
+    "github": "GitHub",
+    "footerNav": "Footer",
+    "license": "Released under the MIT License.",
+    "opensInNewTab": "(opens in a new tab)"
   },
   "metadataTitleTemplate": "%s · Dimah Starter",
   "tryAgain": "Try again",
