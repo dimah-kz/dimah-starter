@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useSyncExternalStore } from "react"
 import { UserIcon, XIcon } from "lucide-react"
 import { useFormatDimahError, useUpload } from "@dimah-s3/react"
 import type { OwnerKind } from "@repo/storage/keys"
@@ -21,6 +20,23 @@ export type AvatarUploadLabels = {
 
 type SetAvatarResult = { error: string } | { imageUrl: string }
 type RemoveAvatarResult = { error: string } | { success: true }
+
+const avatarPreview = new Map<string, string | null>()
+const avatarPreviewListeners = new Set<() => void>()
+
+function subscribeAvatarPreview(onStoreChange: () => void) {
+  avatarPreviewListeners.add(onStoreChange)
+  return () => avatarPreviewListeners.delete(onStoreChange)
+}
+
+function publishAvatarPreview(key: string, image: string | null) {
+  avatarPreview.set(key, image)
+  for (const onStoreChange of avatarPreviewListeners) onStoreChange()
+}
+
+function getServerAvatarPreview() {
+  return undefined
+}
 
 type AvatarUploadFieldProps = {
   ownerKind: OwnerKind
@@ -43,14 +59,15 @@ export function AvatarUploadField({
   className,
   compact = false,
 }: AvatarUploadFieldProps) {
-  const router = useRouter()
   const formatError = useFormatDimahError()
-  const [preview, setPreview] = useState(image)
+  const previewKey = `${ownerKind}:${name}`
+  const remembered = useSyncExternalStore(
+    subscribeAvatarPreview,
+    () => avatarPreview.get(previewKey),
+    getServerAvatarPreview
+  )
+  const preview = remembered !== undefined ? remembered : image
   const [removing, setRemoving] = useState(false)
-
-  useEffect(() => {
-    setPreview(image)
-  }, [image])
 
   const {
     phase,
@@ -72,8 +89,7 @@ export function AvatarUploadField({
         toast.add({ title: outcome.error, type: "error" })
         return
       }
-      setPreview(outcome.imageUrl)
-      router.refresh()
+      publishAvatarPreview(previewKey, outcome.imageUrl)
       toast.add({ title: labels.updated, type: "success" })
     },
     onError: (error) => {
@@ -96,8 +112,7 @@ export function AvatarUploadField({
         toast.add({ title: outcome.error, type: "error" })
         return
       }
-      setPreview(null)
-      router.refresh()
+      publishAvatarPreview(previewKey, null)
       toast.add({ title: labels.removed, type: "success" })
     } finally {
       setRemoving(false)
