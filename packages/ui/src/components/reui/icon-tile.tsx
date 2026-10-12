@@ -27,7 +27,7 @@ import { cn } from "cn"
 const iconTileVariants = cva(
   [
     "relative inline-flex shrink-0 items-center justify-center align-middle",
-    "size-(--icon-tile-size) rounded-(--icon-tile-radius)",
+    "size-(--icon-tile-size) rounded-[var(--icon-tile-radius,min(var(--radius-md),calc(var(--icon-tile-size)/3)))]",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-(--icon-tile-icon-size)",
   ],
   {
@@ -46,7 +46,7 @@ const iconTileVariants = cva(
         soft: [
           "isolate bg-current/10 p-(--icon-tile-inset) text-primary",
           "after:absolute after:inset-(--icon-tile-inset) after:-z-10",
-          "after:rounded-[calc(var(--icon-tile-radius)-var(--icon-tile-inset))]",
+          "after:rounded-[calc(var(--icon-tile-radius,min(var(--radius-md),calc(var(--icon-tile-size)/3)))-var(--icon-tile-inset))]",
           "after:border after:border-current/20 after:bg-current/5",
         ],
         /** Filled tone with a contrasting glyph. Retint with `bg-*` + a text color. */
@@ -55,7 +55,7 @@ const iconTileVariants = cva(
         frame: [
           "isolate border border-border bg-muted/50 p-(--icon-tile-inset)",
           "after:absolute after:inset-(--icon-tile-inset) after:-z-10",
-          "after:rounded-[calc(var(--icon-tile-radius)-var(--icon-tile-inset))]",
+          "after:rounded-[calc(var(--icon-tile-radius,min(var(--radius-md),calc(var(--icon-tile-size)/3)))-var(--icon-tile-inset))]",
           "after:border after:border-border after:bg-card after:shadow-xs",
         ],
       },
@@ -69,9 +69,10 @@ const iconTileVariants = cva(
       },
       /**
        * `default`: active style radius. `full`: circular.
-       * The plain value is the fallback outside a style scope; the `style-*`
-       * tokens win by specificity inside one, and survive the registry
-       * transform as the single resolved value per generated style.
+       * No bare rung beside the ladder: the registry transform writes the
+       * installed style's rung bare, and a second bare rung would leave class
+       * order to pick the winner. The no-style fallback lives in the var()
+       * that reads the radius instead.
        *
        * Each style token is clamped to a fraction of the tile. A flat radius
        * is a circle once it reaches half the box, so the soft styles used to
