@@ -18,19 +18,19 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "1.7.7",
-    "@better-auth/i18n": "1.7.7",
+    "@better-auth/drizzle-adapter": "1.7.8",
+    "@better-auth/i18n": "1.7.8",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
     "@repo/i18n": "workspace:*",
-    "better-auth": "1.7.7",
+    "better-auth": "1.7.8",
     "drizzle-orm": "rc",
-    "next": "16.4.0"
+    "next": "16.4.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "auth": "1.7.7",
+    "auth": "1.7.8",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }
