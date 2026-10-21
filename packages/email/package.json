@@ -13,7 +13,7 @@
   "dependencies": {
     "@react-email/components": "^1.0.12",
     "@repo/i18n": "workspace:*",
-    "resend": "^6.33.0"
+    "resend": "^6.34.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
