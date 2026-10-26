@@ -8,7 +8,7 @@ oRPC v2 for **product** domain only. Auth stays on `auth.api`. Live router: [`pa
 
 ```
 src/
-  base.ts                 pub, authed
+  base.ts                 pub, authed, createContext
   router.ts               { health, … }
   routers/<domain>/
     index.ts              { ping, … }
@@ -19,18 +19,19 @@ New procedure: add `<procedure>.ts` in that domain and export it from the domain
 
 A helper used by one procedure stays in that file. Something shared by one domain stays in that folder. Do not import another domain's procedures.
 
-| Builder  | When                                               |
-| -------- | -------------------------------------------------- |
-| `pub`    | No session (`health.ping`)                         |
-| `authed` | Needs `context.session` from `auth.api.getSession` |
+| Builder  | When                                                                                       |
+| -------- | ------------------------------------------------------------------------------------------ |
+| `pub`    | Session optional (`health.ping`). Call `await context.getSession()` only when you need it. |
+| `authed` | Requires `context.session`. A missing session throws `UNAUTHORIZED`.                       |
 
-Permissions stay on `auth.api`.
+`createContext(headers)` memoizes `auth.api.getSession` on that object. Reuse one context for every procedure in the request so the lookup runs once. Permissions stay on `auth.api`.
 
-| Caller                  | How                                                                                               |
-| ----------------------- | ------------------------------------------------------------------------------------------------- |
-| Web Server Action / RSC | `createRouterClient(router, { context: { headers: await headers() } })` — in-process              |
-| Mobile / HTTP           | `createORPCClient({ origin })` from `@repo/api/client` — never import `@repo/api` (pulls auth/db) |
-| `'use cache'`           | Do not call `headers()` inside the cache function. Pass ids, or query the db in the app           |
+| Caller           | How                                                                                                         |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| Server Action    | `createRouterClient(router, { context: createContext(await headers()) })` — in-process                      |
+| Server Component | Same client, but `createContext(await dashboardAuthHeaders())` so the expiry `Date.now()` runs after `io()` |
+| Mobile / HTTP    | `createORPCClient({ origin })` from `@repo/api/client` — never import `@repo/api` (pulls auth/db)           |
+| `'use cache'`    | Do not call `headers()` or `getSession` inside the cache function. Pass ids, or query the db in the app     |
 
 Web mutations stay in `app/action/<segment>/`. Next cache APIs never belong in `@repo/api`.
 
