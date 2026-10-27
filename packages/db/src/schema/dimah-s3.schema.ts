@@ -10,7 +10,7 @@ import {
   bigint,
   index,
   json,
-  pgSchema,
+  snakeCase,
   text,
   timestamp,
   uniqueIndex,
@@ -18,34 +18,34 @@ import {
 } from "drizzle-orm/pg-core"
 
 /** PostgreSQL schema for dimah-s3 tables (not `public`). */
-export const storagePg = pgSchema("storage")
+export const storagePg = snakeCase.schema("storage")
 
 export const storageObject = storagePg.table(
   "storage_object",
   {
-    id: varchar("id", { length: 255 })
+    id: varchar({ length: 255 })
       .primaryKey()
       .notNull()
       .$defaultFn(() => createId()),
-    scope: text("scope").notNull(),
-    bucket: text("bucket").notNull(),
-    key: text("key").notNull(),
+    scope: text().notNull(),
+    bucket: text().notNull(),
+    key: text().notNull(),
     /** Named dimah-s3 route that created the object. */
-    route: text("route").notNull().default("avatars"),
-    contentType: text("content_type"),
-    size: bigint("size", { mode: "bigint" }),
-    eTag: text("e_tag"),
-    filename: text("filename"),
-    status: text("status").notNull(),
-    metadata: json("metadata"),
-    acl: text("acl"),
-    uploadId: text("upload_id"),
-    declaredSize: bigint("declared_size", { mode: "bigint" }),
-    confirmedAt: timestamp("confirmed_at"),
-    expiresAt: timestamp("expires_at"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-    deletedAt: timestamp("deleted_at"),
+    route: text().notNull().default("avatars"),
+    contentType: text(),
+    size: bigint({ mode: "bigint" }),
+    eTag: text(),
+    filename: text(),
+    status: text().notNull(),
+    metadata: json(),
+    acl: text(),
+    uploadId: text(),
+    declaredSize: bigint({ mode: "bigint" }),
+    confirmedAt: timestamp(),
+    expiresAt: timestamp(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+    deletedAt: timestamp(),
   },
   (table) => [
     uniqueIndex("storage_object_bucket_key_uk").on(table.bucket, table.key),
@@ -69,8 +69,8 @@ export const storageObject = storagePg.table(
 export const private_dimah_s3_settings = storagePg.table(
   "private_dimah_s3_settings",
   {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    version: varchar("version", { length: 255 }).notNull().default("1.0.0"),
+    id: varchar({ length: 255 }).primaryKey().notNull(),
+    version: varchar({ length: 255 }).notNull().default("1.0.0"),
   }
 )
 

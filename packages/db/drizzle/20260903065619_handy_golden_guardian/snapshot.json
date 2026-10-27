@@ -1,8 +1,516 @@
 {
-  "version": "8",
+  "type": "base",
+  "version": "9",
   "dialect": "postgres",
   "id": "348e5982-501e-42eb-9918-9f1af46eb9b0",
   "prevIds": ["00000000-0000-0000-0000-000000000000"],
+  "footprints": [
+    {
+      "statementType": "create_schema",
+      "statementTarget": ["schema", "auth"],
+      "writes": ["s|sch|auth", "n|sch|auth", "e|sch|auth"]
+    },
+    {
+      "statementType": "create_schema",
+      "statementTarget": ["schema", "storage"],
+      "writes": ["s|sch|storage", "n|sch|storage", "e|sch|storage"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "account"],
+      "writes": [
+        "s|tbl|auth.account",
+        "n|tbl|auth.account",
+        "e|tbl|auth.account",
+        "n|rel|auth.account",
+        "n|type|auth.account",
+        "n|rel|auth.account_pkey"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "invitation"],
+      "writes": [
+        "s|tbl|auth.invitation",
+        "n|tbl|auth.invitation",
+        "e|tbl|auth.invitation",
+        "n|rel|auth.invitation",
+        "n|type|auth.invitation",
+        "n|rel|auth.invitation_pkey"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "member"],
+      "writes": [
+        "s|tbl|auth.member",
+        "n|tbl|auth.member",
+        "e|tbl|auth.member",
+        "n|rel|auth.member",
+        "n|type|auth.member",
+        "n|rel|auth.member_pkey"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "organization"],
+      "writes": [
+        "s|tbl|auth.organization",
+        "n|tbl|auth.organization",
+        "e|tbl|auth.organization",
+        "n|rel|auth.organization",
+        "n|type|auth.organization",
+        "n|rel|auth.organization_pkey",
+        "n|rel|auth.organization_slug_key"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "rate_limit"],
+      "writes": [
+        "s|tbl|auth.rate_limit",
+        "n|tbl|auth.rate_limit",
+        "e|tbl|auth.rate_limit",
+        "n|rel|auth.rate_limit",
+        "n|type|auth.rate_limit",
+        "n|rel|auth.rate_limit_pkey",
+        "n|rel|auth.rate_limit_key_key"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "session"],
+      "writes": [
+        "s|tbl|auth.session",
+        "n|tbl|auth.session",
+        "e|tbl|auth.session",
+        "n|rel|auth.session",
+        "n|type|auth.session",
+        "n|rel|auth.session_pkey",
+        "n|rel|auth.session_token_key"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "user"],
+      "writes": [
+        "s|tbl|auth.user",
+        "n|tbl|auth.user",
+        "e|tbl|auth.user",
+        "n|rel|auth.user",
+        "n|type|auth.user",
+        "n|rel|auth.user_pkey",
+        "n|rel|auth.user_email_key"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "auth", "verification"],
+      "writes": [
+        "s|tbl|auth.verification",
+        "n|tbl|auth.verification",
+        "e|tbl|auth.verification",
+        "n|rel|auth.verification",
+        "n|type|auth.verification",
+        "n|rel|auth.verification_pkey"
+      ],
+      "reads": ["n|sch|auth"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "storage", "private_dimah_s3_settings"],
+      "writes": [
+        "s|tbl|storage.private_dimah_s3_settings",
+        "n|tbl|storage.private_dimah_s3_settings",
+        "e|tbl|storage.private_dimah_s3_settings",
+        "n|rel|storage.private_dimah_s3_settings",
+        "n|type|storage.private_dimah_s3_settings",
+        "n|rel|storage.private_dimah_s3_settings_pkey"
+      ],
+      "reads": ["n|sch|storage"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "storage", "storage_object"],
+      "writes": [
+        "s|tbl|storage.storage_object",
+        "n|tbl|storage.storage_object",
+        "e|tbl|storage.storage_object",
+        "n|rel|storage.storage_object",
+        "n|type|storage.storage_object",
+        "n|rel|storage.storage_object_pkey"
+      ],
+      "reads": ["n|sch|storage"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "account",
+        "account_issuer_accountId_uidx"
+      ],
+      "writes": [
+        "s|idx|auth.account_issuer_accountId_uidx",
+        "n|idx|auth.account_issuer_accountId_uidx",
+        "e|idx|auth.account_issuer_accountId_uidx",
+        "n|rel|auth.account_issuer_accountId_uidx"
+      ],
+      "reads": [
+        "n|tbl|auth.account",
+        "n|sch|auth",
+        "n|col|auth.account.issuer",
+        "n|col|auth.account.account_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "auth", "account", "account_userId_idx"],
+      "writes": [
+        "s|idx|auth.account_userId_idx",
+        "n|idx|auth.account_userId_idx",
+        "e|idx|auth.account_userId_idx",
+        "n|rel|auth.account_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.account",
+        "n|sch|auth",
+        "n|col|auth.account.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "invitation",
+        "invitation_organizationId_idx"
+      ],
+      "writes": [
+        "s|idx|auth.invitation_organizationId_idx",
+        "n|idx|auth.invitation_organizationId_idx",
+        "e|idx|auth.invitation_organizationId_idx",
+        "n|rel|auth.invitation_organizationId_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.invitation",
+        "n|sch|auth",
+        "n|col|auth.invitation.organization_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "invitation",
+        "invitation_email_idx"
+      ],
+      "writes": [
+        "s|idx|auth.invitation_email_idx",
+        "n|idx|auth.invitation_email_idx",
+        "e|idx|auth.invitation_email_idx",
+        "n|rel|auth.invitation_email_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.invitation",
+        "n|sch|auth",
+        "n|col|auth.invitation.email"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "member",
+        "member_organizationId_idx"
+      ],
+      "writes": [
+        "s|idx|auth.member_organizationId_idx",
+        "n|idx|auth.member_organizationId_idx",
+        "e|idx|auth.member_organizationId_idx",
+        "n|rel|auth.member_organizationId_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.member",
+        "n|sch|auth",
+        "n|col|auth.member.organization_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "auth", "member", "member_userId_idx"],
+      "writes": [
+        "s|idx|auth.member_userId_idx",
+        "n|idx|auth.member_userId_idx",
+        "e|idx|auth.member_userId_idx",
+        "n|rel|auth.member_userId_idx"
+      ],
+      "reads": ["n|tbl|auth.member", "n|sch|auth", "n|col|auth.member.user_id"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "organization",
+        "organization_slug_uidx"
+      ],
+      "writes": [
+        "s|idx|auth.organization_slug_uidx",
+        "n|idx|auth.organization_slug_uidx",
+        "e|idx|auth.organization_slug_uidx",
+        "n|rel|auth.organization_slug_uidx"
+      ],
+      "reads": [
+        "n|tbl|auth.organization",
+        "n|sch|auth",
+        "n|col|auth.organization.slug"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "auth", "session", "session_userId_idx"],
+      "writes": [
+        "s|idx|auth.session_userId_idx",
+        "n|idx|auth.session_userId_idx",
+        "e|idx|auth.session_userId_idx",
+        "n|rel|auth.session_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.session",
+        "n|sch|auth",
+        "n|col|auth.session.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "verification",
+        "verification_identifier_idx"
+      ],
+      "writes": [
+        "s|idx|auth.verification_identifier_idx",
+        "n|idx|auth.verification_identifier_idx",
+        "e|idx|auth.verification_identifier_idx",
+        "n|rel|auth.verification_identifier_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.verification",
+        "n|sch|auth",
+        "n|col|auth.verification.identifier"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "storage",
+        "storage_object",
+        "storage_object_bucket_key_uk"
+      ],
+      "writes": [
+        "s|idx|storage.storage_object_bucket_key_uk",
+        "n|idx|storage.storage_object_bucket_key_uk",
+        "e|idx|storage.storage_object_bucket_key_uk",
+        "n|rel|storage.storage_object_bucket_key_uk"
+      ],
+      "reads": [
+        "n|tbl|storage.storage_object",
+        "n|sch|storage",
+        "n|col|storage.storage_object.bucket",
+        "n|col|storage.storage_object.key"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "storage",
+        "storage_object",
+        "storage_object_scope_status_created_idx"
+      ],
+      "writes": [
+        "s|idx|storage.storage_object_scope_status_created_idx",
+        "n|idx|storage.storage_object_scope_status_created_idx",
+        "e|idx|storage.storage_object_scope_status_created_idx",
+        "n|rel|storage.storage_object_scope_status_created_idx"
+      ],
+      "reads": [
+        "n|tbl|storage.storage_object",
+        "n|sch|storage",
+        "n|col|storage.storage_object.scope",
+        "n|col|storage.storage_object.status",
+        "n|col|storage.storage_object.created_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "storage",
+        "storage_object",
+        "storage_object_status_expires_idx"
+      ],
+      "writes": [
+        "s|idx|storage.storage_object_status_expires_idx",
+        "n|idx|storage.storage_object_status_expires_idx",
+        "e|idx|storage.storage_object_status_expires_idx",
+        "n|rel|storage.storage_object_status_expires_idx"
+      ],
+      "reads": [
+        "n|tbl|storage.storage_object",
+        "n|sch|storage",
+        "n|col|storage.storage_object.status",
+        "n|col|storage.storage_object.expires_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "storage",
+        "storage_object",
+        "storage_object_status_created_idx"
+      ],
+      "writes": [
+        "s|idx|storage.storage_object_status_created_idx",
+        "n|idx|storage.storage_object_status_created_idx",
+        "e|idx|storage.storage_object_status_created_idx",
+        "n|rel|storage.storage_object_status_created_idx"
+      ],
+      "reads": [
+        "n|tbl|storage.storage_object",
+        "n|sch|storage",
+        "n|col|storage.storage_object.status",
+        "n|col|storage.storage_object.created_at"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "auth", "account"],
+      "writes": [
+        "s|fk|auth.account.account_user_id_user_id_fkey",
+        "n|fk|auth.account.account_user_id_user_id_fkey",
+        "e|fk|auth.account.account_user_id_user_id_fkey",
+        "n|con|auth.account.account_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.account",
+        "n|sch|auth",
+        "n|tbl|auth.user",
+        "n|sch|auth",
+        "n|col|auth.account.user_id",
+        "n|col|auth.user.id",
+        "e|uniqueness|auth.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "auth", "invitation"],
+      "writes": [
+        "s|fk|auth.invitation.invitation_organization_id_organization_id_fkey",
+        "n|fk|auth.invitation.invitation_organization_id_organization_id_fkey",
+        "e|fk|auth.invitation.invitation_organization_id_organization_id_fkey",
+        "n|con|auth.invitation.invitation_organization_id_organization_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.invitation",
+        "n|sch|auth",
+        "n|tbl|auth.organization",
+        "n|sch|auth",
+        "n|col|auth.invitation.organization_id",
+        "n|col|auth.organization.id",
+        "e|uniqueness|auth.organization.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "auth", "invitation"],
+      "writes": [
+        "s|fk|auth.invitation.invitation_inviter_id_user_id_fkey",
+        "n|fk|auth.invitation.invitation_inviter_id_user_id_fkey",
+        "e|fk|auth.invitation.invitation_inviter_id_user_id_fkey",
+        "n|con|auth.invitation.invitation_inviter_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.invitation",
+        "n|sch|auth",
+        "n|tbl|auth.user",
+        "n|sch|auth",
+        "n|col|auth.invitation.inviter_id",
+        "n|col|auth.user.id",
+        "e|uniqueness|auth.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "auth", "member"],
+      "writes": [
+        "s|fk|auth.member.member_organization_id_organization_id_fkey",
+        "n|fk|auth.member.member_organization_id_organization_id_fkey",
+        "e|fk|auth.member.member_organization_id_organization_id_fkey",
+        "n|con|auth.member.member_organization_id_organization_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.member",
+        "n|sch|auth",
+        "n|tbl|auth.organization",
+        "n|sch|auth",
+        "n|col|auth.member.organization_id",
+        "n|col|auth.organization.id",
+        "e|uniqueness|auth.organization.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "auth", "member"],
+      "writes": [
+        "s|fk|auth.member.member_user_id_user_id_fkey",
+        "n|fk|auth.member.member_user_id_user_id_fkey",
+        "e|fk|auth.member.member_user_id_user_id_fkey",
+        "n|con|auth.member.member_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.member",
+        "n|sch|auth",
+        "n|tbl|auth.user",
+        "n|sch|auth",
+        "n|col|auth.member.user_id",
+        "n|col|auth.user.id",
+        "e|uniqueness|auth.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "auth", "session"],
+      "writes": [
+        "s|fk|auth.session.session_user_id_user_id_fkey",
+        "n|fk|auth.session.session_user_id_user_id_fkey",
+        "e|fk|auth.session.session_user_id_user_id_fkey",
+        "n|con|auth.session.session_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.session",
+        "n|sch|auth",
+        "n|tbl|auth.user",
+        "n|sch|auth",
+        "n|col|auth.session.user_id",
+        "n|col|auth.user.id",
+        "e|uniqueness|auth.user.id"
+      ]
+    }
+  ],
   "ddl": [
     {
       "name": "auth",
@@ -13,79 +521,69 @@
       "entityType": "schemas"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "account",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "invitation",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "member",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "organization",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "rate_limit",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "session",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "user",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "auth",
       "name": "verification",
-      "entityType": "tables",
-      "schema": "auth"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "isRlsEnabled": false,
+      "schema": "storage",
       "name": "private_dimah_s3_settings",
-      "entityType": "tables",
-      "schema": "storage"
-    },
-    {
       "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "storage",
       "name": "storage_object",
-      "entityType": "tables",
-      "schema": "storage"
+      "isRlsEnabled": false,
+      "entityType": "tables"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "account",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -93,12 +591,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "issuer",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -106,12 +604,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "account_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -119,12 +617,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "provider_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -132,25 +630,25 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "user_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "access_token",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -158,12 +656,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "refresh_token",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -171,25 +669,25 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "id_token",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
-      "type": "timestamp",
+      "type": "text",
       "typeSchema": null,
       "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "access_token_expires_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "timestamp",
       "typeSchema": null,
       "notNull": false,
@@ -197,25 +695,25 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "refresh_token_expires_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
-      "type": "text",
+      "type": "timestamp",
       "typeSchema": null,
       "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
       "name": "scope",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -223,12 +721,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "password",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "account",
+      "name": "password",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
+      "name": "created_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -236,12 +747,12 @@
       "default": "now()",
       "generated": null,
       "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "account",
+      "name": "updated_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -249,25 +760,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "account"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "invitation",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -275,12 +773,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "invitation",
       "name": "organization_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -288,12 +786,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "email",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "role",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -301,12 +812,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "role",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "status",
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -314,12 +825,12 @@
       "default": "'pending'",
       "generated": null,
       "identity": null,
-      "name": "status",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "expires_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -327,12 +838,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "expires_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "created_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -340,25 +851,12 @@
       "default": "now()",
       "generated": null,
       "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "invitation",
       "name": "inviter_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "invitation"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -366,12 +864,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "member",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "member"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -379,12 +877,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "member",
       "name": "organization_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "member"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -392,12 +890,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "user_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "member"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "member",
+      "name": "user_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "member",
+      "name": "role",
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -405,12 +916,12 @@
       "default": "'member'",
       "generated": null,
       "identity": null,
-      "name": "role",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "member"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "member",
+      "name": "created_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -418,25 +929,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "member"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "organization",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "organization"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -444,12 +942,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "organization",
       "name": "name",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "organization"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -457,12 +955,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "slug",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "organization"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "organization",
+      "name": "slug",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "organization",
+      "name": "logo",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -470,12 +981,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "logo",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "organization"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "organization",
+      "name": "created_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -483,12 +994,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "organization"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "organization",
+      "name": "metadata",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -496,25 +1007,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "metadata",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "organization"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "rate_limit",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "rate_limit"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -522,12 +1020,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "key",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "rate_limit"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "rate_limit",
+      "name": "key",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "rate_limit",
+      "name": "count",
       "type": "integer",
       "typeSchema": null,
       "notNull": true,
@@ -535,12 +1046,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "count",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "rate_limit"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "rate_limit",
+      "name": "last_request",
       "type": "bigint",
       "typeSchema": null,
       "notNull": true,
@@ -548,12 +1059,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "last_request",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "rate_limit"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "session",
+      "name": "id",
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -561,12 +1072,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "session",
+      "name": "expires_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -574,25 +1085,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "expires_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "session",
       "name": "token",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "session",
+      "name": "created_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -600,12 +1111,12 @@
       "default": "now()",
       "generated": null,
       "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "session",
+      "name": "updated_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -613,25 +1124,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "session",
       "name": "ip_address",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -639,38 +1137,38 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "session",
       "name": "user_agent",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
-    },
-    {
       "type": "text",
       "typeSchema": null,
-      "notNull": true,
+      "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "session",
       "name": "user_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
-    },
-    {
       "type": "text",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "session",
       "name": "impersonated_by",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -678,25 +1176,25 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "session",
       "name": "active_organization_id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "session"
-    },
-    {
       "type": "text",
       "typeSchema": null,
-      "notNull": true,
+      "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -704,12 +1202,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
       "name": "name",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -717,64 +1215,38 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
       "name": "email",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
-      "type": "boolean",
+      "type": "text",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": "false",
+      "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
       "name": "email_verified",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
-      "type": "text",
+      "type": "boolean",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
-      "default": null,
+      "default": "false",
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
       "name": "image",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -782,12 +1254,51 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "role",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "user",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
+      "name": "banned",
       "type": "boolean",
       "typeSchema": null,
       "notNull": false,
@@ -795,38 +1306,38 @@
       "default": "false",
       "generated": null,
       "identity": null,
-      "name": "banned",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "user",
       "name": "ban_reason",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
-    },
-    {
-      "type": "timestamp",
+      "type": "text",
       "typeSchema": null,
       "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "user",
       "name": "ban_expires",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "user",
+      "name": "last_login_method",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -834,25 +1345,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "last_login_method",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "user"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "verification",
       "name": "id",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "verification"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -860,12 +1358,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "verification",
       "name": "identifier",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "verification"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -873,12 +1371,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "value",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "verification"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "verification",
+      "name": "value",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "verification",
+      "name": "expires_at",
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -886,25 +1397,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "expires_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "verification"
+      "entityType": "columns"
     },
     {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
+      "schema": "auth",
+      "table": "verification",
       "name": "created_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "verification"
-    },
-    {
       "type": "timestamp",
       "typeSchema": null,
       "notNull": true,
@@ -912,12 +1410,25 @@
       "default": "now()",
       "generated": null,
       "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "auth",
-      "table": "verification"
+      "entityType": "columns"
     },
     {
+      "schema": "auth",
+      "table": "verification",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "private_dimah_s3_settings",
+      "name": "id",
       "type": "varchar(255)",
       "typeSchema": null,
       "notNull": true,
@@ -925,12 +1436,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "private_dimah_s3_settings"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "private_dimah_s3_settings",
+      "name": "version",
       "type": "varchar(255)",
       "typeSchema": null,
       "notNull": true,
@@ -938,12 +1449,12 @@
       "default": "'1.0.0'",
       "generated": null,
       "identity": null,
-      "name": "version",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "private_dimah_s3_settings"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "id",
       "type": "varchar(255)",
       "typeSchema": null,
       "notNull": true,
@@ -951,25 +1462,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "storage",
+      "table": "storage_object",
       "name": "scope",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -977,12 +1475,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
       "name": "bucket",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -990,12 +1488,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "key",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "key",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "route",
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -1003,12 +1514,12 @@
       "default": "'avatars'",
       "generated": null,
       "identity": null,
-      "name": "route",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "content_type",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1016,12 +1527,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "content_type",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "size",
       "type": "bigint",
       "typeSchema": null,
       "notNull": false,
@@ -1029,25 +1540,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "size",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "storage",
+      "table": "storage_object",
       "name": "e_tag",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1055,12 +1553,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "filename",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "filename",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "status",
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -1068,12 +1579,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "status",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "metadata",
       "type": "json",
       "typeSchema": null,
       "notNull": false,
@@ -1081,25 +1592,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "metadata",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "storage",
+      "table": "storage_object",
       "name": "acl",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1107,12 +1605,25 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "upload_id",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "upload_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "declared_size",
       "type": "bigint",
       "typeSchema": null,
       "notNull": false,
@@ -1120,25 +1631,12 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "declared_size",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
+      "schema": "storage",
+      "table": "storage_object",
       "name": "confirmed_at",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
       "type": "timestamp",
       "typeSchema": null,
       "notNull": false,
@@ -1146,38 +1644,12 @@
       "default": null,
       "generated": null,
       "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
       "name": "expires_at",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
-    },
-    {
       "type": "timestamp",
       "typeSchema": null,
       "notNull": false,
@@ -1185,12 +1657,51 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "deleted_at",
-      "entityType": "columns",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "columns"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "deleted_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
+      "name": "account_issuer_accountId_uidx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1213,12 +1724,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "account_issuer_accountId_uidx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "account"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "account",
+      "name": "account_userId_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1234,12 +1745,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "account_userId_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "account"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "invitation_organizationId_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1255,12 +1766,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "invitation_organizationId_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "invitation_email_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1276,12 +1787,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "invitation_email_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "member",
+      "name": "member_organizationId_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1297,12 +1808,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "member_organizationId_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "member"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "member",
+      "name": "member_userId_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1318,12 +1829,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "member_userId_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "member"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "organization",
+      "name": "organization_slug_uidx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1339,12 +1850,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "organization_slug_uidx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "organization"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "session",
+      "name": "session_userId_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1360,12 +1871,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "session_userId_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "session"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "verification",
+      "name": "verification_identifier_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1381,12 +1892,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "verification_identifier_idx",
-      "entityType": "indexes",
-      "schema": "auth",
-      "table": "verification"
+      "entityType": "indexes"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "storage_object_bucket_key_uk",
       "nameExplicit": true,
       "columns": [
         {
@@ -1409,12 +1920,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "storage_object_bucket_key_uk",
-      "entityType": "indexes",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "indexes"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "storage_object_scope_status_created_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1444,12 +1955,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "storage_object_scope_status_created_idx",
-      "entityType": "indexes",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "indexes"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "storage_object_status_expires_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1472,12 +1983,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "storage_object_status_expires_idx",
-      "entityType": "indexes",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "indexes"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "storage_object_status_created_idx",
       "nameExplicit": true,
       "columns": [
         {
@@ -1500,12 +2011,12 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "storage_object_status_created_idx",
-      "entityType": "indexes",
-      "schema": "storage",
-      "table": "storage_object"
+      "entityType": "indexes"
     },
     {
+      "schema": "auth",
+      "table": "account",
+      "name": "account_user_id_user_id_fkey",
       "nameExplicit": false,
       "columns": ["user_id"],
       "schemaTo": "auth",
@@ -1513,12 +2024,12 @@
       "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "account_user_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "auth",
-      "table": "account"
+      "entityType": "fks"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "invitation_organization_id_organization_id_fkey",
       "nameExplicit": false,
       "columns": ["organization_id"],
       "schemaTo": "auth",
@@ -1526,12 +2037,12 @@
       "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "invitation_organization_id_organization_id_fkey",
-      "entityType": "fks",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "fks"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "invitation_inviter_id_user_id_fkey",
       "nameExplicit": false,
       "columns": ["inviter_id"],
       "schemaTo": "auth",
@@ -1539,12 +2050,12 @@
       "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "invitation_inviter_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "auth",
-      "table": "invitation"
+      "entityType": "fks"
     },
     {
+      "schema": "auth",
+      "table": "member",
+      "name": "member_organization_id_organization_id_fkey",
       "nameExplicit": false,
       "columns": ["organization_id"],
       "schemaTo": "auth",
@@ -1552,153 +2063,149 @@
       "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "member_organization_id_organization_id_fkey",
-      "entityType": "fks",
-      "schema": "auth",
-      "table": "member"
+      "entityType": "fks"
     },
     {
-      "nameExplicit": false,
-      "columns": ["user_id"],
-      "schemaTo": "auth",
-      "tableTo": "user",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "member_user_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "auth",
-      "table": "member"
-    },
-    {
-      "nameExplicit": false,
-      "columns": ["user_id"],
-      "schemaTo": "auth",
-      "tableTo": "user",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "session_user_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "auth",
-      "table": "session"
-    },
-    {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "account_pkey",
-      "schema": "auth",
-      "table": "account",
-      "entityType": "pks"
-    },
-    {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "invitation_pkey",
-      "schema": "auth",
-      "table": "invitation",
-      "entityType": "pks"
-    },
-    {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "member_pkey",
       "schema": "auth",
       "table": "member",
-      "entityType": "pks"
+      "name": "member_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": ["user_id"],
+      "schemaTo": "auth",
+      "tableTo": "user",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
     },
     {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "organization_pkey",
-      "schema": "auth",
-      "table": "organization",
-      "entityType": "pks"
-    },
-    {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "rate_limit_pkey",
-      "schema": "auth",
-      "table": "rate_limit",
-      "entityType": "pks"
-    },
-    {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "session_pkey",
       "schema": "auth",
       "table": "session",
+      "name": "session_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": ["user_id"],
+      "schemaTo": "auth",
+      "tableTo": "user",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "auth",
+      "table": "account",
+      "name": "account_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
+      "schema": "auth",
+      "table": "invitation",
+      "name": "invitation_pkey",
       "columns": ["id"],
       "nameExplicit": false,
-      "name": "user_pkey",
+      "entityType": "pks"
+    },
+    {
+      "schema": "auth",
+      "table": "member",
+      "name": "member_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "auth",
+      "table": "organization",
+      "name": "organization_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "auth",
+      "table": "rate_limit",
+      "name": "rate_limit_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "auth",
+      "table": "session",
+      "name": "session_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
       "schema": "auth",
       "table": "user",
+      "name": "user_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "verification_pkey",
       "schema": "auth",
       "table": "verification",
+      "name": "verification_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "private_dimah_s3_settings_pkey",
       "schema": "storage",
       "table": "private_dimah_s3_settings",
-      "entityType": "pks"
-    },
-    {
+      "name": "private_dimah_s3_settings_pkey",
       "columns": ["id"],
       "nameExplicit": false,
-      "name": "storage_object_pkey",
-      "schema": "storage",
-      "table": "storage_object",
       "entityType": "pks"
     },
     {
+      "schema": "storage",
+      "table": "storage_object",
+      "name": "storage_object_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "auth",
+      "table": "organization",
+      "name": "organization_slug_key",
       "nameExplicit": false,
       "columns": ["slug"],
       "nullsNotDistinct": false,
-      "name": "organization_slug_key",
-      "schema": "auth",
-      "table": "organization",
       "entityType": "uniques"
     },
     {
+      "schema": "auth",
+      "table": "rate_limit",
+      "name": "rate_limit_key_key",
       "nameExplicit": false,
       "columns": ["key"],
       "nullsNotDistinct": false,
-      "name": "rate_limit_key_key",
-      "schema": "auth",
-      "table": "rate_limit",
       "entityType": "uniques"
     },
     {
+      "schema": "auth",
+      "table": "session",
+      "name": "session_token_key",
       "nameExplicit": false,
       "columns": ["token"],
       "nullsNotDistinct": false,
-      "name": "session_token_key",
-      "schema": "auth",
-      "table": "session",
       "entityType": "uniques"
     },
     {
+      "schema": "auth",
+      "table": "user",
+      "name": "user_email_key",
       "nameExplicit": false,
       "columns": ["email"],
       "nullsNotDistinct": false,
-      "name": "user_email_key",
-      "schema": "auth",
-      "table": "user",
       "entityType": "uniques"
     }
-  ],
-  "renames": []
+  ]
 }
