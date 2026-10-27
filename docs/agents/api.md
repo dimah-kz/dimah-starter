@@ -24,7 +24,7 @@ A helper used by one procedure stays in that file. Something shared by one domai
 | `pub`    | Session optional (`health.ping`). Call `await context.getSession()` only when you need it. |
 | `authed` | Requires `context.session`. A missing session throws `UNAUTHORIZED`.                       |
 
-`createContext(headers)` memoizes `auth.api.getSession` on that object. Reuse one context for every procedure in the request so the lookup runs once. Permissions stay on `auth.api`.
+`createContext(headers)` memoizes `auth.api.getSession` on that object. Reuse that same object for every procedure in the request, and for the action's own session read: `const context = createContext(headers)`, then `await context.getSession()` and `createRouterClient(router, { context })`. A separate `auth.api.getSession` in that action looks the session up again. Route and layout gates stay on `auth.api.getSession`. Permissions stay on `auth.api`.
 
 | Caller           | How                                                                                                         |
 | ---------------- | ----------------------------------------------------------------------------------------------------------- |
