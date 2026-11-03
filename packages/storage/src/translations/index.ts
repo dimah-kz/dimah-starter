@@ -4,7 +4,7 @@ import { fa } from "./fa"
 
 export type { Translations }
 
-/** Fuma locale map for `s3Client.Provider` — omit `en` to use English source keys. */
+/** Fuma locale map for `s3Client.Provider`. English uses the source keys. */
 export const translationsByLocale: Record<
   Locale,
   Partial<Translations> | undefined

@@ -4,7 +4,7 @@ import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
 import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { toPublicUrl } from "@repo/storage"
+import { toOwnedImageUrl } from "@repo/storage"
 
 export async function setAccountAvatarAction(key: string) {
   const requestHeaders = await headers()
@@ -14,15 +14,21 @@ export async function setAccountAvatarAction(key: string) {
     return { error: t("unauthorized") }
   }
 
-  const prefix = `avatars/user/${session.user.id}`
-  if (key !== prefix && !key.startsWith(`${prefix}/`)) {
-    return { error: t("invalidAvatarKey") }
+  const owned = await toOwnedImageUrl({
+    route: "avatar",
+    ownerId: session.user.id,
+    key,
+  })
+  if ("error" in owned) {
+    return {
+      error: t(
+        owned.error === "unconfigured"
+          ? "storagePublicUrlMissing"
+          : "invalidAvatarKey"
+      ),
+    }
   }
-
-  const imageUrl = toPublicUrl(key)
-  if (!imageUrl) {
-    return { error: t("storagePublicUrlMissing") }
-  }
+  const imageUrl = owned.url
 
   try {
     await auth.api.updateUser({

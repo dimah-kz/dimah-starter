@@ -38,10 +38,10 @@ export async function removeOrganizationLogoAction(organizationId: string) {
 
   if (previousKey) {
     try {
-      await s3.api.delete({
-        query: { route: "avatars", key: previousKey },
-        headers: requestHeaders,
-      })
+      await s3.api.delete(
+        { route: "logo", key: previousKey },
+        { headers: requestHeaders }
+      )
     } catch {
       // Best-effort — the logo link is already cleared.
     }

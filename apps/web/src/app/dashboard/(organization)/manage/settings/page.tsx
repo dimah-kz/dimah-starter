@@ -9,6 +9,7 @@ import {
   resolveDashboardActiveOrganizationId,
 } from "@/app/dashboard/lib/dashboard-session"
 import { auth } from "@repo/auth"
+import { fromPublicUrl } from "@repo/storage"
 
 export default function OrganizationSettingsPage() {
   return (
@@ -51,7 +52,10 @@ async function OrganizationSettingsPageContent() {
 
   return (
     <OrganizationSettingsHub
-      organization={organization}
+      organization={{
+        ...organization,
+        logoKey: organization.logo ? fromPublicUrl(organization.logo) : null,
+      }}
       canEdit={canEdit}
       canDelete={canDelete}
     />

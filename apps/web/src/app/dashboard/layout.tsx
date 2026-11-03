@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import { Toaster as S3Toaster } from "@dimah-s3/ui"
 import { DashboardHeader } from "@/app/dashboard/components/header/dashboard-header"
 import { DashboardPageFallback } from "@/app/dashboard/components/layout/dashboard-page-shell"
 import { AppSidebar } from "@/app/dashboard/components/sidebar/app-sidebar"
@@ -66,6 +67,7 @@ async function DashboardShell({ children }: DashboardLayoutProps) {
         <DashboardHeader />
         {children}
       </SidebarInset>
+      <S3Toaster />
     </S3ClientProvider>
   )
 }

@@ -21,7 +21,10 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
-    "@dimah-s3/ui": "1.7.1",
+    "@dimah-s3/core": "2.0.0-beta.2",
+    "@dimah-s3/react": "2.0.0-beta.2",
+    "@dimah-s3/ui": "2.0.0-beta.2",
+    "@fuma-translate/react": "1.0.2",
     "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",

@@ -1,13 +1,12 @@
 "use client"
 
-import { useState, useSyncExternalStore } from "react"
-import { UserIcon, XIcon } from "lucide-react"
-import { useFormatDimahError, useUpload } from "@dimah-s3/react"
-import type { OwnerKind } from "@repo/storage/keys"
+import { useState } from "react"
+import { XIcon } from "lucide-react"
+import { useUpload } from "@dimah-s3/react"
+import { AvatarUpload, UploadToasts } from "@dimah-s3/ui"
+import { Avatar, AvatarImage } from "@repo/ui/components/avatar"
 import { toast } from "@repo/ui/components/toast"
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
 import { Button } from "@repo/ui/components/button"
-import { Spinner } from "@repo/ui/components/spinner"
 import { cn } from "cn"
 
 export type AvatarUploadLabels = {
@@ -15,94 +14,55 @@ export type AvatarUploadLabels = {
   remove: string
   updated: string
   removed: string
-  uploadFailed: string
 }
 
 type SetAvatarResult = { error: string } | { imageUrl: string }
 type RemoveAvatarResult = { error: string } | { success: true }
 
-const avatarPreview = new Map<string, string | null>()
-const avatarPreviewListeners = new Set<() => void>()
-
-function subscribeAvatarPreview(onStoreChange: () => void) {
-  avatarPreviewListeners.add(onStoreChange)
-  return () => avatarPreviewListeners.delete(onStoreChange)
-}
-
-function publishAvatarPreview(key: string, image: string | null) {
-  avatarPreview.set(key, image)
-  for (const onStoreChange of avatarPreviewListeners) onStoreChange()
-}
-
-function getServerAvatarPreview() {
-  return undefined
-}
-
 type AvatarUploadFieldProps = {
-  ownerKind: OwnerKind
-  name: string
+  route: "avatar" | "logo"
   image: string | null
+  objectKey: string | null
   setAction: (key: string) => Promise<SetAvatarResult>
   removeAction: () => Promise<RemoveAvatarResult>
   labels: AvatarUploadLabels
+  shape?: "circle" | "square"
   className?: string
-  compact?: boolean
 }
 
 export function AvatarUploadField({
-  ownerKind,
-  name,
+  route,
   image,
+  objectKey: initialObjectKey,
   setAction,
   removeAction,
   labels,
+  shape = "circle",
   className,
-  compact = false,
 }: AvatarUploadFieldProps) {
-  const formatError = useFormatDimahError()
-  const previewKey = `${ownerKind}:${name}`
-  const remembered = useSyncExternalStore(
-    subscribeAvatarPreview,
-    () => avatarPreview.get(previewKey),
-    getServerAvatarPreview
+  const [objectKey, setObjectKey] = useState(initialObjectKey)
+  const [externalImage, setExternalImage] = useState(
+    initialObjectKey ? null : image
   )
-  const preview = remembered !== undefined ? remembered : image
   const [removing, setRemoving] = useState(false)
 
-  const {
-    phase,
-    file,
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragReject,
-    isPending,
-  } = useUpload({
-    route: "avatars",
-    uploadOptions: { metadata: { ownerKind } },
-    disabled: Boolean(preview) || removing,
-    onSuccess: async (results) => {
-      const key = results[0]?.key
-      if (!key) return
-      const outcome = await setAction(key)
-      if ("error" in outcome) {
-        toast.add({ title: outcome.error, type: "error" })
-        return
-      }
-      publishAvatarPreview(previewKey, outcome.imageUrl)
-      toast.add({ title: labels.updated, type: "success" })
-    },
-    onError: (error) => {
-      toast.add({ title: formatError(error), type: "error" })
-    },
-    onFileReject: () => {
-      toast.add({ title: labels.uploadFailed, type: "error" })
-    },
+  const upload = useUpload({
+    route,
+    disabled: removing,
   })
 
-  const pending = isPending || removing
-  const canUpload = !preview && !pending
-  const src = preview ?? (phase === "error" ? null : file?.previewUrl)
+  const hasImage = Boolean(objectKey || externalImage)
+
+  const onChange = async (result: { key: string }) => {
+    const outcome = await setAction(result.key)
+    if ("error" in outcome) {
+      toast.add({ title: outcome.error, type: "error" })
+      return
+    }
+    setObjectKey(result.key)
+    setExternalImage(null)
+    toast.add({ title: labels.updated, type: "success" })
+  }
 
   const onRemove = async () => {
     setRemoving(true)
@@ -112,7 +72,8 @@ export function AvatarUploadField({
         toast.add({ title: outcome.error, type: "error" })
         return
       }
-      publishAvatarPreview(previewKey, null)
+      setObjectKey(null)
+      setExternalImage(null)
       toast.add({ title: labels.removed, type: "success" })
     } finally {
       setRemoving(false)
@@ -120,47 +81,36 @@ export function AvatarUploadField({
   }
 
   return (
-    <div
-      className={cn(
-        "relative shrink-0",
-        compact ? "size-16" : "size-24",
-        className
-      )}
-    >
-      <div
-        {...getRootProps({
-          role: canUpload ? "button" : undefined,
-          "aria-label": canUpload ? labels.upload : undefined,
-          "aria-busy": pending,
-          className: cn(
-            "relative size-full overflow-hidden rounded-full border border-dashed transition-colors",
-            canUpload && "cursor-pointer",
-            isDragReject
-              ? "border-destructive bg-destructive/5"
-              : isDragActive
-                ? "border-primary bg-primary/5"
-                : "border-muted-foreground/25 hover:border-muted-foreground/50",
-            pending && "pointer-events-none opacity-70"
-          ),
-        })}
-      >
-        <Avatar className="size-full after:hidden">
-          {src ? <AvatarImage src={src} alt={name} /> : null}
-          <AvatarFallback className="bg-transparent">
-            <UserIcon className="size-6 text-muted-foreground" />
-          </AvatarFallback>
+    <div className={cn("relative inline-flex", className)}>
+      {externalImage ? (
+        <Avatar
+          className={cn(
+            "pointer-events-none absolute inset-0 size-full after:hidden",
+            shape === "square" && "rounded-xl after:rounded-xl"
+          )}
+        >
+          <AvatarImage
+            src={externalImage}
+            alt=""
+            className={shape === "square" ? "rounded-xl" : undefined}
+          />
         </Avatar>
-
-        {pending ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/60">
-            <Spinner className="size-5" />
-          </div>
-        ) : null}
-
-        <input {...getInputProps()} />
-      </div>
-
-      {preview && !pending ? (
+      ) : null}
+      <AvatarUpload
+        upload={upload}
+        route={route}
+        objectKey={objectKey}
+        label={labels.upload}
+        shape={shape}
+        onChange={(result) => void onChange(result)}
+        className={
+          externalImage
+            ? "[&_button]:bg-transparent [&_button>svg]:invisible"
+            : undefined
+        }
+      />
+      <UploadToasts upload={upload} />
+      {hasImage && !upload.isPending && !removing ? (
         <Button
           type="button"
           size="icon-xs"

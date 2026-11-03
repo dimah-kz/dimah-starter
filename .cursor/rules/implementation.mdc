@@ -12,6 +12,6 @@ Suspense only on request-API slices (`headers`, `cookies`) and URL data (`params
 
 Next.js: inspect `node_modules/next/dist/docs/` under `apps/web` before coding — never web-search ([nextjs.md](docs/agents/nextjs.md)).
 
-Storage uploads: owner scope → `auth.api` → cleanup → cache invalidation — [implementation.md § Storage](docs/agents/implementation.md#storage-uploads).
+Storage uploads: named route → `auth.api` → cache invalidation — [implementation.md § Storage](docs/agents/implementation.md#storage-uploads).
 
 **Detail (Read):** [docs/agents/implementation.md](docs/agents/implementation.md).

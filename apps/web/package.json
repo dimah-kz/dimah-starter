@@ -16,8 +16,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@dimah-s3/react": "1.7.1",
-    "@dimah-s3/server": "1.7.1",
+    "@dimah-s3/core": "2.0.0-beta.2",
+    "@dimah-s3/react": "2.0.0-beta.2",
+    "@dimah-s3/server": "2.0.0-beta.2",
+    "@dimah-s3/ui": "2.0.0-beta.2",
+    "@fuma-translate/react": "1.0.2",
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",

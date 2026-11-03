@@ -17,6 +17,7 @@ type AccountProfileFormFieldsProps = {
     name: string
     email: string
     image: string | null
+    imageKey: string | null
   }
 }
 
@@ -29,7 +30,10 @@ export function AccountProfileFormFields({
   return (
     <FieldGroup>
       <Field>
-        <AccountAvatarField name={profile.name} image={profile.image} />
+        <AccountAvatarField
+          image={profile.image}
+          objectKey={profile.imageKey}
+        />
       </Field>
       <Field>
         <FieldLabel htmlFor={`${formId}-email`}>{t("email")}</FieldLabel>

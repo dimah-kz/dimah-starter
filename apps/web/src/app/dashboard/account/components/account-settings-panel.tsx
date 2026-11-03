@@ -20,6 +20,7 @@ type AccountProfile = {
   name: string
   email: string
   image: string | null
+  imageKey: string | null
 }
 
 type AccountSettingsPanelProps = {

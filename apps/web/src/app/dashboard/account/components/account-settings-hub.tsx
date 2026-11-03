@@ -23,6 +23,7 @@ type AccountSettingsHubProps = {
     name: string
     email: string
     image: string | null
+    imageKey: string | null
   }
 }
 

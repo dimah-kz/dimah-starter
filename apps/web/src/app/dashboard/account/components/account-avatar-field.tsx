@@ -6,19 +6,22 @@ import { AvatarUploadField } from "@/components/form/avatar-upload-field"
 import { useTranslations } from "next-intl"
 
 type AccountAvatarFieldProps = {
-  name: string
   image: string | null
+  objectKey: string | null
 }
 
-export function AccountAvatarField({ name, image }: AccountAvatarFieldProps) {
+export function AccountAvatarField({
+  image,
+  objectKey,
+}: AccountAvatarFieldProps) {
   const t = useTranslations("account.profile.avatar")
 
   return (
     <div className="flex justify-center">
       <AvatarUploadField
-        ownerKind="user"
-        name={name}
+        route="avatar"
         image={image}
+        objectKey={objectKey}
         setAction={setAccountAvatarAction}
         removeAction={removeAccountAvatarAction}
         labels={{
@@ -26,7 +29,6 @@ export function AccountAvatarField({ name, image }: AccountAvatarFieldProps) {
           remove: t("remove"),
           updated: t("updated"),
           removed: t("removed"),
-          uploadFailed: t("uploadFailed"),
         }}
       />
     </div>

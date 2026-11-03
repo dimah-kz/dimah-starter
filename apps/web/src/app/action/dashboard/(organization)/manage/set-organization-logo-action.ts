@@ -6,7 +6,7 @@ import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { updateTag } from "next/cache"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { toPublicUrl } from "@repo/storage"
+import { toOwnedImageUrl } from "@repo/storage"
 
 export async function setOrganizationLogoAction(
   organizationId: string,
@@ -19,15 +19,21 @@ export async function setOrganizationLogoAction(
     return { error: t("unauthorized") }
   }
 
-  const prefix = `avatars/org/${organizationId}`
-  if (key !== prefix && !key.startsWith(`${prefix}/`)) {
-    return { error: t("invalidAvatarKey") }
+  const owned = await toOwnedImageUrl({
+    route: "logo",
+    ownerId: organizationId,
+    key,
+  })
+  if ("error" in owned) {
+    return {
+      error: t(
+        owned.error === "unconfigured"
+          ? "storagePublicUrlMissing"
+          : "invalidAvatarKey"
+      ),
+    }
   }
-
-  const imageUrl = toPublicUrl(key)
-  if (!imageUrl) {
-    return { error: t("storagePublicUrlMissing") }
-  }
+  const imageUrl = owned.url
 
   try {
     await auth.api.updateOrganization({

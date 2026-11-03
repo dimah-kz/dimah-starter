@@ -1,7 +1,14 @@
 # @repo/storage
 
-[dimah-s3](https://dimah-s3.vercel.app) storage — named routes in `s3.ts`, scoped to a user or organization.
+[dimah-s3](https://v2.s3.dimah.dev) 2.0 beta. `s3.ts` wires the client, the session guard, and the database plugin. Routes are grouped like `@repo/api`: one folder per group, one file per route.
 
-To add a route: register it on `dimahS3({ routes })` and on `DimahS3Routes` in `s3-client.tsx`. Keep owner identity as `{kind}/{id}` under the route prefix so stored keys still map back to a session.
+`routes/profile/` is the signed-in user and the active organization:
 
-Needs the `S3_*` env vars from `.env.example`.
+- `avatar.ts` — `user:{id}`
+- `logo.ts` — `org:{id}`
+
+`@dimah-s3/db` tracks each object (schema 2.1.0, PostgreSQL schema `storage`). A new upload passes `previousKey` so the package deletes the previous object.
+
+To add a route, add `routes/<group>/<name>.ts`, spread the group from `routes/index.ts`, and name it on `DimahS3Routes` in `s3-client.tsx`.
+
+Needs `DIMAH_S3_SECRET` (at least 32 characters) and the `S3_*` variables from `.env.example`.

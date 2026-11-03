@@ -29,10 +29,10 @@ export async function removeAccountAvatarAction() {
 
   if (previousKey) {
     try {
-      await s3.api.delete({
-        query: { route: "avatars", key: previousKey },
-        headers: requestHeaders,
-      })
+      await s3.api.delete(
+        { route: "avatar", key: previousKey },
+        { headers: requestHeaders }
+      )
     } catch {
       // Best-effort — the profile link is already cleared.
     }

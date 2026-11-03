@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl"
 
 type OrganizationProfileFormFieldsProps = {
   formId: string
-  organization: OrganizationBranding
+  organization: OrganizationBranding & { logoKey: string | null }
   canEdit: boolean
 }
 
@@ -30,8 +30,8 @@ export function OrganizationProfileFormFields({
         <Field>
           <OrganizationLogoField
             organizationId={organization.id}
-            name={organization.name}
-            logo={organization.logo}
+            image={organization.logo}
+            objectKey={organization.logoKey}
           />
         </Field>
       ) : null}

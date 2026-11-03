@@ -29,16 +29,15 @@ Cookie cache (5 min) can lag ban/role changes — [better-auth.md](./better-auth
 
 ## Storage uploads {#storage-uploads}
 
-`@repo/storage` owns `dimahS3({ routes })`. App actions persist URLs and cache. To add a kind of file, add a named route — do not invent a key helper.
+`@repo/storage` owns `dimahS3({ routes })` on dimah-s3 2.0 beta. A route is `src/routes/<group>/<name>.ts`; the group index spreads into `routes/index.ts`, and `s3.ts` only mounts that map. `@dimah-s3/db` owns scope, rows, and replacement of the previous object. App actions persist the public URL and invalidate cache.
 
-1. Client: `useUpload({ route: "avatars", uploadOptions: { metadata: { ownerKind } } })`. Omit `accept` / `maxFileSize` (catalog).
-2. The route's `object()` scopes the key (`{kind}/{id}` under the route prefix). Constraints live on the route. Guards throw `errors.*` (better-call `APIError`). Detect with `isAPIError` / `isS3ErrorCode` — not `DimahS3Error`.
-3. Before persist, check the key sits under `avatars/{kind}/{id}`. `toPublicUrl(key)` for the stored URL.
-4. Persist via **`auth.api`** — not a direct auth-table write.
-5. On remove, `fromPublicUrl` + `s3.api.delete({ query: { route, key } })`.
-6. `updateTag` / `invalidateUserCache` — [caching.md](./caching.md).
+1. Client: `useUpload({ route: "avatar" | "logo" })` or `AvatarUpload`. Omit `accept` / `maxFileSize` — the route catalog is the limit.
+2. `avatar` is the signed-in user (`user:{id}`). `logo` is the active organization (`org:{id}`). Guards throw `s3Error`. `previousKey` deletes the previous object after confirm.
+3. Persist with `toOwnedImageUrl({ route, ownerId, key })`, then **`auth.api`**. It returns a URL only for an active row in that scope.
+4. On remove, `fromPublicUrl` + `s3.api.delete({ route, key }, { headers })`.
+5. `updateTag` / `invalidateUserCache` — [caching.md](./caching.md).
 
-Reference: `set-account-avatar-action.ts`, organization-logo siblings.
+Reference: `set-account-avatar-action.ts`, organization-logo siblings. Schema is 2.1.0 in `@repo/db` (`storage` PostgreSQL schema).
 
 ## Definition of done {#definition-of-done}
 

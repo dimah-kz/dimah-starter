@@ -1,6 +1,6 @@
 # dimah-starter
 
-A **server-first Turborepo starter** for multi-tenant SaaS — Next.js dashboard, Better Auth, Postgres, and [dimah-s3](https://dimah-s3.vercel.app) storage. Shared packages are ready for a mobile or extension app later.
+A **server-first Turborepo starter** for multi-tenant SaaS — Next.js dashboard, Better Auth, Postgres, and [dimah-s3](https://v2.s3.dimah.dev) storage. Shared packages are ready for a mobile or extension app later.
 
 The product surface is server-first, not just login: session in RSC, lists from tagged cache, writes (auth, orgs, uploads) as Server Actions. No `authClient` and no client data layer in the UI.
 
@@ -51,7 +51,7 @@ Node ≥ 22 · pnpm 12 · PostgreSQL · dimah-s3 storage (S3-compatible bucket, 
 
 ```bash
 pnpm install
-cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, optional GOOGLE_*, S3_*, RESEND_*, EMAIL_FROM
+cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, DIMAH_S3_SECRET, optional GOOGLE_*, S3_*, RESEND_*, EMAIL_FROM
 pnpm --filter @repo/db db:migrate
 pnpm dev                     # web + db
 ```

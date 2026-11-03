@@ -41,7 +41,7 @@ import { toast } from "@repo/ui/components/toast"
 import { useTranslations } from "next-intl"
 
 type OrganizationSettingsHubProps = {
-  organization: OrganizationBranding
+  organization: OrganizationBranding & { logoKey: string | null }
   canEdit: boolean
   canDelete: boolean
 }

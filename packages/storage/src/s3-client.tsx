@@ -7,7 +7,8 @@ import { translationsByLocale } from "./translations"
 
 declare module "@dimah-s3/core" {
   interface DimahS3Routes {
-    avatars: true
+    avatar: true
+    logo: true
   }
 }
 
@@ -23,7 +24,10 @@ export function S3ClientProvider({
   children: React.ReactNode
 }) {
   return (
-    <s3Client.Provider translations={translationsByLocale[locale]}>
+    <s3Client.Provider
+      translations={translationsByLocale[locale]}
+      locale={locale}
+    >
       {children}
     </s3Client.Provider>
   )
