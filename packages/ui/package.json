@@ -5,7 +5,6 @@
   "type": "module",
   "exports": {
     "./globals.css": "./src/styles/globals.css",
-    "./postcss.config": "./postcss.config.mjs",
     "./components/*": "./src/components/*.tsx",
     "./components/reui/*": "./src/components/reui/*.tsx",
     "./components/dimah/*": "./src/components/dimah/*.tsx",
@@ -21,9 +20,9 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
-    "@dimah-s3/core": "2.0.0-beta.2",
-    "@dimah-s3/react": "2.0.0-beta.2",
-    "@dimah-s3/ui": "2.0.0-beta.2",
+    "@dimah-s3/core": "2.0.0-beta.4",
+    "@dimah-s3/react": "2.0.0-beta.4",
+    "@dimah-s3/ui": "2.0.0-beta.4",
     "@fuma-translate/react": "1.0.2",
     "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
@@ -48,7 +47,6 @@
     "@clack/prompts": "^1.8.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.3.4",
     "@turbo/gen": "^2.11.10",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",

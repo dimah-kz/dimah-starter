@@ -5,7 +5,7 @@
  * `auth` and `storage` out of `public`). Diff against the package file when
  * upgrading dimah-s3.
  *
- * @see https://v2.s3.dimah.dev/docs/db/setup
+ * @see https://s3.dimah.dev/docs/db/setup
  */
 import { createId } from "@paralleldrive/cuid2"
 import { defineRelationsPart, sql } from "drizzle-orm"

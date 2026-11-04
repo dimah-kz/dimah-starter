@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackRustReactCompiler: true,
   },
+  // Tailwind via the Turbopack loader (create-next-app default). No PostCSS
+  // config: a postcss.config.mjs would compile the same CSS a second time.
+  turbopack: {
+    rules: {
+      "*.css": {
+        loaders: ["@tailwindcss/turbopack"],
+        as: "*.css",
+      },
+    },
+  },
   cacheComponents: true,
   partialPrefetching: true,
   transpilePackages: [

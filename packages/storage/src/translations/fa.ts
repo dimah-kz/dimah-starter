@@ -30,6 +30,7 @@ export const fa = {
   "Cancel(dialog button)": "لغو",
   "Cancel(download control)": "لغو",
   "Cancel(object list new folder)": "لغو",
+  "Cancel(object list rename)": "لغو",
   "Cancel(toast action)": "لغو",
   "Clear search(object list)": "پاک کردن جستجو",
   "Clear(object list selection)": "پاک کردن",
@@ -76,6 +77,7 @@ export const fa = {
   "Drop to upload(dropzone)": "برای آپلود رها کنید",
   "EB(file size unit)": "اگزابایت",
   "Each up to {size}(dropzone hint)": "هر کدام تا {size}",
+  "Enter a file name(object list rename)": "نام فایل را وارد کنید",
   "Enter a folder name(object list new folder)": "نام پوشه را وارد کنید",
   "Expires in 1 day(object list menu)": "تا ۱ روز دیگر منقضی می‌شود",
   "Expires in 1 hour(object list menu)": "تا ۱ ساعت دیگر منقضی می‌شود",
@@ -97,6 +99,7 @@ export const fa = {
   "File is empty(API error)": "فایل خالی است",
   "File is too large(API error)": "فایل خیلی بزرگ است",
   "File limit reached(API error)": "به سقف تعداد فایل رسیده‌اید",
+  "File name(object list rename)": "نام فایل",
   "File not accepted(toast)": "فایل پذیرفته نشد",
   "File not found(API error)": "فایل پیدا نشد",
   "File size exceeds {size} limit(API error)":
@@ -141,6 +144,7 @@ export const fa = {
   "Preparing…(upload status)": "در حال آماده‌سازی…",
   "Progress for {name}(progress)": "پیشرفت {name}",
   "Remove {name}(attachment action)": "برداشتن {name}",
+  "Rename(object list menu)": "تغییر نام",
   "Request format is not supported(API error)": "قالب درخواست پشتیبانی نمی‌شود",
   "Request is too large(API error)": "درخواست خیلی بزرگ است",
   "Requested range is not available(API error)": "بازه درخواستی در دسترس نیست",
@@ -226,4 +230,4 @@ export const fa = {
   "{succeeded} succeeded, {failed} failed(toast)":
     "{succeeded} موفق، {failed} ناموفق",
   "{used} of {max}(object list usage)": "{used} از {max}",
-} satisfies Partial<Translations>
+} satisfies Translations

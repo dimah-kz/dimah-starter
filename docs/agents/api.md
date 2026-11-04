@@ -35,4 +35,4 @@ A helper used by one procedure stays in that file. Something shared by one domai
 
 Web mutations stay in `app/action/<segment>/`. Next cache APIs never belong in `@repo/api`.
 
-The only product HTTP surface is `apps/web/src/app/api/rpc/[[...rest]]/route.ts`. Do not export `GET` (cookie CSRF). Client components import `@repo/api/client` only.
+The only product HTTP surface is `apps/web/src/app/api/rpc/[[...rest]]/route.ts`. Do not export `GET` (cookie CSRF). Request bodies over 1 MiB are rejected with `PAYLOAD_TOO_LARGE`. Client components import `@repo/api/client` only.

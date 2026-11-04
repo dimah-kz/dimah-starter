@@ -1,6 +1,6 @@
 # dimah-starter
 
-A **server-first Turborepo starter** for multi-tenant SaaS — Next.js dashboard, Better Auth, Postgres, and [dimah-s3](https://v2.s3.dimah.dev) storage. Shared packages are ready for a mobile or extension app later.
+A **server-first Turborepo starter** for multi-tenant SaaS — Next.js dashboard, Better Auth, Postgres, and [dimah-s3](https://s3.dimah.dev) storage. Shared packages are ready for a mobile or extension app later.
 
 The product surface is server-first, not just login: session in RSC, lists from tagged cache, writes (auth, orgs, uploads) as Server Actions. No `authClient` and no client data layer in the UI.
 

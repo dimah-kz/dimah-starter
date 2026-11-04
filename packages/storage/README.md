@@ -1,6 +1,6 @@
 # @repo/storage
 
-[dimah-s3](https://v2.s3.dimah.dev) 2.0 beta. `s3.ts` wires the client, the session guard, and the database plugin. Routes are grouped like `@repo/api`: one folder per group, one file per route.
+[dimah-s3](https://s3.dimah.dev) 2.0 beta. `s3.ts` wires the client, the session guard, and the database plugin. Routes are grouped like `@repo/api`: one folder per group, one file per route.
 
 `routes/profile/` is the signed-in user and the active organization:
 
