@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Suspense } from "react"
 import { Toaster as S3Toaster } from "@dimah-s3/ui"
 import { DashboardHeader } from "@/app/dashboard/components/header/dashboard-header"
@@ -17,6 +18,11 @@ import { getLocale } from "next-intl/server"
 
 type DashboardLayoutProps = {
   children: React.ReactNode
+}
+
+/** Private app surface — `robots.ts` also disallows crawling it. */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
 }
 
 function DashboardShellFallback() {

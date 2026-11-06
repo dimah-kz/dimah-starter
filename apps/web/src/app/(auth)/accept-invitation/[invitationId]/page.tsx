@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"
 import { io } from "next/cache"
@@ -11,6 +12,12 @@ import { getTranslations } from "next-intl/server"
 
 type AcceptInvitationPageProps = {
   params: Promise<{ invitationId: string }>
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("auth.acceptInvitation")
+
+  return { title: t("title"), robots: { index: false, follow: false } }
 }
 
 export default function AcceptInvitationPage(props: AcceptInvitationPageProps) {

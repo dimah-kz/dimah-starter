@@ -6,6 +6,7 @@ import enBadges from "./messages/en/badges.json"
 import enCommon from "./messages/en/common.json"
 import enDashboard from "./messages/en/dashboard.json"
 import enEmail from "./messages/en/email.json"
+import enMarketing from "./messages/en/marketing.json"
 import enTables from "./messages/en/tables.json"
 
 import faAccount from "./messages/fa/account.json"
@@ -14,10 +15,18 @@ import faBadges from "./messages/fa/badges.json"
 import faCommon from "./messages/fa/common.json"
 import faDashboard from "./messages/fa/dashboard.json"
 import faEmail from "./messages/fa/email.json"
+import faMarketing from "./messages/fa/marketing.json"
 import faTables from "./messages/fa/tables.json"
 
 export type MessageNamespace =
-  "common" | "auth" | "dashboard" | "account" | "badges" | "tables" | "email"
+  | "common"
+  | "auth"
+  | "dashboard"
+  | "account"
+  | "badges"
+  | "tables"
+  | "email"
+  | "marketing"
 
 export type Messages = {
   common: typeof enCommon
@@ -27,6 +36,7 @@ export type Messages = {
   badges: typeof enBadges
   tables: typeof enTables
   email: typeof enEmail
+  marketing: typeof enMarketing
 }
 
 const catalogs: Record<Locale, Messages> = {
@@ -38,6 +48,7 @@ const catalogs: Record<Locale, Messages> = {
     badges: enBadges,
     tables: enTables,
     email: enEmail,
+    marketing: enMarketing,
   },
   fa: {
     common: faCommon,
@@ -47,6 +58,7 @@ const catalogs: Record<Locale, Messages> = {
     badges: faBadges,
     tables: faTables,
     email: faEmail,
+    marketing: faMarketing,
   },
 }
 

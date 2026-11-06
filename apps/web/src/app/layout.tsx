@@ -1,9 +1,11 @@
 import "@repo/ui/globals.css"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { HtmlLocaleSync } from "@/components/locale/html-locale-sync"
 import { LoadingFallbackShell } from "@/components/fallback/loading-fallback"
+import { openGraphLocales, siteAuthor } from "@/lib/site"
+import { appOrigin } from "@repo/auth/app-origin"
 import { defaultLocale, getLocaleDirection } from "@repo/i18n"
 import { Vazirmatn } from "next/font/google"
 import { getLocale, getMessages, getTranslations } from "next-intl/server"
@@ -17,15 +19,57 @@ const vazirmatn = Vazirmatn({
   variable: "--font-sans",
 })
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+}
+
+/**
+ * Site-wide defaults. Pages add `title`, `description`, and
+ * `alternates.canonical`; private pages set `robots: { index: false }`.
+ * The share image comes from `opengraph-image.tsx`.
+ */
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("common")
+  const [t, locale] = await Promise.all([
+    getTranslations("common"),
+    getLocale(),
+  ])
+  const appTitle = t("appTitle")
 
   return {
+    metadataBase: new URL(appOrigin()),
     title: {
-      default: t("appTitle"),
+      default: appTitle,
       template: t("metadataTitleTemplate"),
     },
     description: t("appDescription"),
+    applicationName: appTitle,
+    authors: [siteAuthor],
+    creator: siteAuthor.name,
+    category: "technology",
+    openGraph: {
+      type: "website",
+      siteName: appTitle,
+      locale: openGraphLocales[locale],
+    },
+    twitter: { card: "summary_large_image" },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined,
+    },
+    formatDetection: { telephone: false, email: false, address: false },
   }
 }
 
@@ -38,7 +82,14 @@ export default function RootLayout({
     <html
       lang={defaultLocale}
       dir={getLocaleDirection(defaultLocale)}
-      className={cn("h-full", "antialiased", vazirmatn.variable, "font-sans")}
+      data-scroll-behavior="smooth"
+      className={cn(
+        "h-full",
+        "antialiased",
+        "motion-safe:scroll-smooth",
+        vazirmatn.variable,
+        "font-sans"
+      )}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">

@@ -1,33 +1,6 @@
 {
   "appTitle": "Dimah Starter",
-  "appDescription": "A server-first starter for multi-tenant SaaS — dashboard, authentication, organizations, and file storage.",
-  "home": {
-    "headline": "A server-first <accent>starter</accent> for multi-tenant SaaS",
-    "lede": "<line>Start from a working app, not a blank page.</line> <line>Next.js, Better Auth, and Postgres, with i18n and RTL built in.</line>",
-    "openDashboard": "Open dashboard",
-    "viewOnGitHub": "View on GitHub",
-    "features": {
-      "auth": {
-        "title": "Authentication",
-        "description": "Email or Google login, email verification, and password reset."
-      },
-      "organizations": {
-        "title": "Organizations",
-        "description": "Invite members by email and give each one a role."
-      },
-      "admin": {
-        "title": "Admin panel",
-        "description": "Manage users, bans, and platform roles in one place."
-      },
-      "storage": {
-        "title": "File uploads",
-        "description": "Avatars and logos on any S3-compatible bucket with dimah-s3."
-      }
-    },
-    "github": "GitHub",
-    "license": "Released under the MIT License.",
-    "opensInNewTab": "(opens in a new tab)"
-  },
+  "appDescription": "Open-source, server-first Next.js starter for multi-tenant SaaS: Better Auth, organizations, admin panel, S3 uploads, Postgres, and i18n with RTL.",
   "metadataTitleTemplate": "%s · Dimah Starter",
   "tryAgain": "Try again",
   "signOut": "Sign out",

@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@repo/ui/components/card"
 import { cn } from "cn"
+import { HomeIcon } from "lucide-react"
 
 export default async function NotFound() {
   const t = await getTranslations("common")
@@ -22,6 +23,7 @@ export default async function NotFound() {
         </CardHeader>
         <CardContent>
           <Link href="/" className={cn(buttonVariants())}>
+            <HomeIcon data-icon="inline-start" />
             {t("goHome")}
           </Link>
         </CardContent>

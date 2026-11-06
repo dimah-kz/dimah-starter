@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "label": "Main",
+    "skipToContent": "Skip to content",
+    "features": "Features",
+    "quickStart": "Quick start",
+    "dashboard": "Dashboard",
+    "github": "GitHub"
+  },
+  "home": {
+    "metaTitle": "Dimah Starter — Next.js Starter for Multi-Tenant SaaS",
+    "eyebrow": "Open source · MIT licensed",
+    "headline": "A server-first <accent>starter</accent> for multi-tenant SaaS",
+    "lede": "Start from a working app, not a blank page. Auth, organizations, admin, and file uploads on Next.js, Better Auth, and Postgres — with i18n and RTL built in.",
+    "tryDemo": "Try the live demo",
+    "useTemplate": "Use this template",
+    "demoHint": "Sign up with email or Google to explore the dashboard.",
+    "builtWith": "Built with",
+    "features": {
+      "title": "Everything a SaaS needs on day one",
+      "description": "The product surface is already built, so you can spend your time on what makes yours different.",
+      "items": {
+        "auth": {
+          "title": "Authentication",
+          "description": "Email or Google sign-in, email verification, and password reset."
+        },
+        "organizations": {
+          "title": "Organizations",
+          "description": "Invite members by email and give each one a role."
+        },
+        "admin": {
+          "title": "Admin panel",
+          "description": "Manage users, bans, and platform roles in one place."
+        },
+        "storage": {
+          "title": "File uploads",
+          "description": "Avatars and logos on any S3-compatible bucket with dimah-s3."
+        },
+        "i18n": {
+          "title": "i18n and RTL",
+          "description": "English and Persian out of the box, with right-to-left layouts."
+        },
+        "serverFirst": {
+          "title": "Server-first",
+          "description": "Session in Server Components, cached reads, and a Server Action for every write."
+        }
+      }
+    },
+    "quickStart": {
+      "title": "Up and running in minutes",
+      "description": "Install, configure, and run. The README covers deployment and every environment variable.",
+      "terminal": "Terminal",
+      "copy": "Copy commands",
+      "readDocs": "Read the docs"
+    }
+  },
+  "footer": {
+    "label": "Footer",
+    "license": "Released under the MIT License."
+  },
+  "opensInNewTab": "(opens in a new tab)"
+}

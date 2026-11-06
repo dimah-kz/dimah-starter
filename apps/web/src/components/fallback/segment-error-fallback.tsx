@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card"
+import { RotateCcwIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 type SegmentErrorFallbackProps = {
@@ -37,6 +38,7 @@ export function SegmentErrorFallback({
             <p className="text-sm text-muted-foreground">{error.message}</p>
           ) : null}
           <Button type="button" onClick={retry}>
+            <RotateCcwIcon data-icon="inline-start" />
             {t("tryAgain")}
           </Button>
         </CardContent>
