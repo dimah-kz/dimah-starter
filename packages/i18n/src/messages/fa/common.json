@@ -1,6 +1,6 @@
 {
   "appTitle": "دیماه استارتر",
-  "appDescription": "استارتر متن‌باز و سرور-اول Next.js برای SaaS چندسازمانی: Better Auth، سازمان‌ها، پنل ادمین، آپلود S3، پستگرس و چندزبانگی با راست‌چین.",
+  "appDescription": "استارتر متن‌باز Next.js 16 برای SaaS چندسازمانی، ساخته‌شده روی Cache Components: Better Auth، سازمان‌ها، پنل مدیریت، آپلود S3، Postgres و چندزبانگی با RTL.",
   "metadataTitleTemplate": "%s · دیماه استارتر",
   "tryAgain": "تلاش دوباره",
   "signOut": "خروج",

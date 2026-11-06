@@ -5,9 +5,15 @@ import { CreateOrganizationFormShell } from "@/app/dashboard/components/sidebar/
 import type { SidebarOrganizationItem } from "@/app/dashboard/components/sidebar/organization-switcher"
 import { useOrganizationSwitch } from "@/app/dashboard/components/sidebar/organization-switcher"
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
+import { Button } from "@repo/ui/components/button"
+import { IconTile } from "@repo/ui/components/reui/icon-tile"
 import { cn } from "cn"
 import { PlusIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
+
+/** Square tile on top of the outline button. */
+const tileClassName =
+  "h-auto min-h-28 flex-col gap-2.5 rounded-lg p-4 text-center whitespace-normal"
 
 type DashboardOrganizationsCardProps = {
   organizations: SidebarOrganizationItem[]
@@ -37,14 +43,15 @@ export function DashboardOrganizationsCard({
           const isActive = organization.id === activeOrganizationId
 
           return (
-            <button
+            <Button
               key={organization.id}
-              type="button"
+              variant="outline"
               disabled={isSwitching}
               onClick={() => handleSelectOrganization(organization.id)}
               aria-current={isActive ? "true" : undefined}
               className={cn(
-                "flex min-h-28 flex-col items-center justify-center gap-2.5 rounded-lg border bg-card p-4 text-center transition-colors hover:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60",
+                tileClassName,
+                "bg-card",
                 isActive &&
                   "border-primary/40 bg-primary/8 ring-1 ring-primary/15"
               )}
@@ -60,22 +67,22 @@ export function DashboardOrganizationsCard({
               <span className="line-clamp-2 w-full text-xs leading-snug font-medium">
                 {organization.name}
               </span>
-            </button>
+            </Button>
           )
         })}
-        <button
-          type="button"
+        <Button
+          variant="outline"
           disabled={isSwitching}
           onClick={() => setCreateOpen(true)}
-          className="flex min-h-28 flex-col items-center justify-center gap-2.5 rounded-lg border border-dashed p-4 text-center text-muted-foreground transition-colors hover:border-foreground/20 hover:bg-accent/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
+          className={cn(tileClassName, "border-dashed text-muted-foreground")}
         >
-          <div className="flex size-10 items-center justify-center rounded-lg border bg-background">
-            <PlusIcon className="size-5" aria-hidden />
-          </div>
+          <IconTile variant="outline">
+            <PlusIcon aria-hidden />
+          </IconTile>
           <span className="text-xs font-medium">
             {tSwitcher("createOrganization")}
           </span>
-        </button>
+        </Button>
       </div>
 
       <CreateOrganizationFormShell

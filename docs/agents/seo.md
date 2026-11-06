@@ -12,7 +12,8 @@ Public origin = `appOrigin()` from `@repo/auth/app-origin` (`BETTER_AUTH_URL`). 
 | Indexable URLs                                                     | `app/sitemap.ts`                                                   |
 | Crawl rules                                                        | `app/robots.ts` (disallows `/dashboard`, `/api/`)                  |
 | Share image / touch icon / manifest                                | `app/opengraph-image.tsx`, `app/apple-icon.tsx`, `app/manifest.ts` |
-| Structured data                                                    | JSON-LD `<script>` in `app/(marketing)/page.tsx`                   |
+| Structured data (`WebSite`, `SoftwareSourceCode`, `FAQPage`)       | JSON-LD `<script>` in `app/(marketing)/page.tsx`                   |
+| Summary for AI assistants                                          | `app/(marketing)/llms.txt/route.ts` (static `/llms.txt`)           |
 | Project links, author                                              | `lib/site.ts`                                                      |
 | Public pages shell (header, footer)                                | `app/(marketing)/layout.tsx`                                       |
 
@@ -34,6 +35,7 @@ Do **not** set `openGraph` / `twitter` objects per page: Next derives their titl
 1. `BETTER_AUTH_URL=https://your-domain` at build and runtime.
 2. Optional `GOOGLE_SITE_VERIFICATION` → `<meta name="google-site-verification">`.
 3. Search Console: verify, then submit `https://your-domain/sitemap.xml`.
-4. Check share cards and structured data: [Rich Results Test](https://search.google.com/test/rich-results), [Schema validator](https://validator.schema.org/).
+4. Rebrand `llms.txt` and the FAQ with your product's own facts — they describe this starter.
+5. Check share cards and structured data: [Rich Results Test](https://search.google.com/test/rich-results), [Schema validator](https://validator.schema.org/).
 
 Crawlers send no locale cookie, so they index the default locale (`en`). Locale lives in a cookie, not the URL, so there are no `hreflang` alternates.

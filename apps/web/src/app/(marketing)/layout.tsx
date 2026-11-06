@@ -13,6 +13,7 @@ import { ArrowUpRightIcon, LayoutDashboardIcon } from "lucide-react"
 const navItems = [
   { key: "features", href: marketingRoutes.features() },
   { key: "quickStart", href: marketingRoutes.quickStart() },
+  { key: "faq", href: marketingRoutes.faq() },
 ] as const
 
 const navLinkClassName =

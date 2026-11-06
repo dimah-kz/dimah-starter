@@ -1,6 +1,6 @@
 {
   "appTitle": "Dimah Starter",
-  "appDescription": "Open-source, server-first Next.js starter for multi-tenant SaaS: Better Auth, organizations, admin panel, S3 uploads, Postgres, and i18n with RTL.",
+  "appDescription": "Open-source Next.js 16 starter for multi-tenant SaaS, built on Cache Components: Better Auth, organizations, admin panel, S3 uploads, Postgres, and i18n + RTL.",
   "metadataTitleTemplate": "%s · Dimah Starter",
   "tryAgain": "Try again",
   "signOut": "Sign out",

@@ -30,12 +30,12 @@ import {
 import { IconTile } from "@repo/ui/components/reui/icon-tile"
 import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import { Input } from "@repo/ui/components/input"
+import { Spinner } from "@repo/ui/components/spinner"
 import { toast } from "@repo/ui/components/toast"
 import { cn } from "cn"
 import {
   CheckIcon,
   ChevronsUpDownIcon,
-  Loader2Icon,
   PlusIcon,
   SearchIcon,
 } from "lucide-react"
@@ -359,7 +359,7 @@ export function OrganizationSwitcher({
                   className={cn("ms-auto opacity-55", isSwitching && "hidden")}
                 />
                 {isSwitching ? (
-                  <Loader2Icon className="ms-auto size-4 animate-spin opacity-70" />
+                  <Spinner className="ms-auto opacity-70" />
                 ) : null}
               </Identity>
             </DropdownMenuTrigger>

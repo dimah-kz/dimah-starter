@@ -10,6 +10,13 @@ import {
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { siteAuthor, siteLinks } from "@/lib/site"
 import { appOrigin } from "@repo/auth/app-origin"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/components/accordion"
+import { Badge } from "@repo/ui/components/badge"
 import { Button } from "@repo/ui/components/button"
 import {
   CodeBlock,
@@ -25,11 +32,16 @@ import {
   BookOpenIcon,
   Building2Icon,
   CloudUploadIcon,
+  DatabaseZapIcon,
+  FileCodeIcon,
   KeyRoundIcon,
   LanguagesIcon,
+  LockKeyholeIcon,
+  RefreshCwIcon,
   ServerIcon,
   ShieldIcon,
   TerminalIcon,
+  ZapIcon,
 } from "lucide-react"
 
 const features = [
@@ -41,6 +53,15 @@ const features = [
   { key: "serverFirst", icon: ServerIcon },
 ] as const
 
+const faqKeys = [
+  "free",
+  "serverFirst",
+  "deploy",
+  "customize",
+  "aiAgents",
+  "missing",
+] as const
+
 const stack = [
   "Next.js 16",
   "React 19",
@@ -50,6 +71,33 @@ const stack = [
   "shadcn/ui",
   "Turborepo",
 ] as const
+
+const nextjsPoints = [
+  { key: "prefetch", icon: ZapIcon },
+  { key: "cache", icon: DatabaseZapIcon },
+  { key: "update", icon: RefreshCwIcon },
+  { key: "secure", icon: LockKeyholeIcon },
+] as const
+
+/** Trimmed from `get-organization-members-page.ts` and its remove action. */
+const cacheExample = `// Read — a gate per request, then a tagged cache entry
+export async function getOrganizationMembersPage(query) {
+  const { organizationId } = await requireOrganizationManager()
+  return getCachedPage(organizationId, query)
+}
+
+async function getCachedPage(organizationId, query) {
+  "use cache"
+  cacheLife("minutes")
+  cacheTag(tags.organizationMembersById(organizationId))
+  return db.select().from(member) // …
+}
+
+// Write — a Server Action; fresh UI in the same response
+export async function removeOrganizationMemberAction(input) {
+  await auth.api.removeMember({ headers: await headers(), body })
+  updateTag(tags.organizationMembersById(input.organizationId))
+}`
 
 const quickStartCommands = [
   "pnpm install",
@@ -115,11 +163,26 @@ export default async function Home() {
         name: tc("appTitle"),
         description: tc("appDescription"),
         url: `${origin}/`,
+        image: `${origin}/opengraph-image`,
         codeRepository: siteLinks.github,
         programmingLanguage: "TypeScript",
         runtimePlatform: "Node.js",
+        keywords: stack.join(", "),
         license: siteLinks.license,
+        isAccessibleForFree: true,
         author: { "@type": "Person", ...siteAuthor },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${origin}/#faq`,
+        mainEntity: faqKeys.map((key) => ({
+          "@type": "Question",
+          name: t(`faq.items.${key}.question`),
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: t(`faq.items.${key}.answer`),
+          },
+        })),
       },
     ],
   }
@@ -135,13 +198,16 @@ export default async function Home() {
 
       <section>
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-20 pb-20 text-center sm:px-6 sm:pt-28 sm:pb-24">
-          <p className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-xs font-medium text-muted-foreground">
+          <Badge
+            variant="outline"
+            className="h-auto gap-2 bg-background/70 px-3 py-1 text-xs text-muted-foreground"
+          >
             <span
               aria-hidden
               className="size-1.5 rounded-full bg-linear-to-r from-[#FF1E56] to-[#0196FF]"
             />
             {t("eyebrow")}
-          </p>
+          </Badge>
           <h1 className="mt-6 max-w-3xl text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl sm:leading-[1.1]">
             {t.rich("headline", {
               accent: (chunks) => <HeadlineAccent>{chunks}</HeadlineAccent>,
@@ -239,6 +305,56 @@ export default async function Home() {
       </section>
 
       <section
+        id={marketingSections.nextjs}
+        aria-labelledby="nextjs-title"
+        className="scroll-mt-14 border-t py-20 sm:py-28"
+      >
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">
+              {t("nextjs.eyebrow")}
+            </p>
+            <h2
+              id="nextjs-title"
+              className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+            >
+              {t("nextjs.title")}
+            </h2>
+            <p className="mt-4 text-base leading-7 text-pretty text-muted-foreground sm:text-lg">
+              {t("nextjs.description")}
+            </p>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2">
+              {nextjsPoints.map(({ key, icon: Icon }) => (
+                <li key={key} className="flex gap-3">
+                  <IconTile size="sm">
+                    <Icon aria-hidden />
+                  </IconTile>
+                  <div>
+                    <h3 className="text-sm font-medium">
+                      {t(`nextjs.points.${key}.title`)}
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-pretty text-muted-foreground">
+                      {t(`nextjs.points.${key}.description`)}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <CodeBlock className="bg-background shadow-sm">
+            <CodeBlockHeader>
+              <CodeBlockTitle>
+                <FileCodeIcon aria-hidden />
+                {t("nextjs.code")}
+              </CodeBlockTitle>
+            </CodeBlockHeader>
+            <CodeBlockContent>{cacheExample}</CodeBlockContent>
+          </CodeBlock>
+        </div>
+      </section>
+
+      <section
         id={marketingSections.quickStart}
         aria-labelledby="quick-start-title"
         className="scroll-mt-14 border-t bg-muted/30 py-20 sm:py-28"
@@ -304,6 +420,40 @@ export default async function Home() {
               {quickStartCommands}
             </CodeBlockContent>
           </CodeBlock>
+        </div>
+      </section>
+
+      <section
+        id={marketingSections.faq}
+        aria-labelledby="faq-title"
+        className="scroll-mt-14 py-20 sm:py-28"
+      >
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+          <div className="text-center">
+            <h2
+              id="faq-title"
+              className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+            >
+              {t("faq.title")}
+            </h2>
+            <p className="mt-4 text-base leading-7 text-pretty text-muted-foreground sm:text-lg">
+              {t("faq.description")}
+            </p>
+          </div>
+
+          {/* `hiddenUntilFound` keeps closed answers in the HTML for crawlers and find-in-page. */}
+          <Accordion hiddenUntilFound className="mt-12 rounded-xl sm:mt-16">
+            {faqKeys.map((key) => (
+              <AccordionItem key={key} value={key}>
+                <AccordionTrigger className="px-6 py-5 text-base hover:no-underline">
+                  {t(`faq.items.${key}.question`)}
+                </AccordionTrigger>
+                <AccordionContent className="px-4 text-sm leading-6 text-pretty text-muted-foreground">
+                  {t(`faq.items.${key}.answer`)}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
     </>

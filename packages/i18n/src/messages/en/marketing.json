@@ -4,12 +4,13 @@
     "skipToContent": "Skip to content",
     "features": "Features",
     "quickStart": "Quick start",
+    "faq": "FAQ",
     "dashboard": "Dashboard",
     "github": "GitHub"
   },
   "home": {
-    "metaTitle": "Dimah Starter — Next.js Starter for Multi-Tenant SaaS",
-    "eyebrow": "Open source · MIT licensed",
+    "metaTitle": "Dimah Starter — Next.js 16 Starter for Multi-Tenant SaaS",
+    "eyebrow": "Next.js 16 Cache Components · MIT licensed",
     "headline": "A server-first <accent>starter</accent> for multi-tenant SaaS",
     "lede": "<line>Sign-in, teams, roles, and file uploads work from the first run.</line> <line>Clone it, put your brand on it, and ship your first feature this week.</line>",
     "tryDemo": "Try the live demo",
@@ -46,12 +47,66 @@
         }
       }
     },
+    "nextjs": {
+      "eyebrow": "Next.js 16, the way it is meant to be used",
+      "title": "Built on Cache Components",
+      "description": "Pages open on an instant static shell and stream in the signed-in parts. Data stays cached until someone changes it, and then the change shows at once.",
+      "points": {
+        "prefetch": {
+          "title": "Instant navigation",
+          "description": "Partial Prefetching loads each page's shell ahead of the click; only the parts that need your session wait for the server."
+        },
+        "cache": {
+          "title": "Cached reads, tagged",
+          "description": "Lists are 'use cache' functions tagged per user or organization, so a visit does not mean a database query."
+        },
+        "update": {
+          "title": "Fresh right after a write",
+          "description": "A Server Action calls updateTag, and the person who made the change sees it in the same response, with no refetch or client cache."
+        },
+        "secure": {
+          "title": "Checks next to the data",
+          "description": "Every data read checks permissions itself, not only the layout, and sessions are never cached."
+        }
+      },
+      "code": "A real list from the dashboard"
+    },
     "quickStart": {
       "title": "Up and running in minutes",
       "description": "Install, configure, and run. The README covers deployment and every environment variable.",
       "terminal": "Terminal",
       "copy": "Copy commands",
       "readDocs": "Read the docs"
+    },
+    "faq": {
+      "title": "Questions, answered",
+      "description": "What to expect before you build your product on Dimah Starter.",
+      "items": {
+        "free": {
+          "question": "Is it free for commercial use?",
+          "answer": "Yes. It is MIT licensed: use it for client work or your own SaaS. Keep the license notice in copies of the code; nothing else is required."
+        },
+        "serverFirst": {
+          "question": "Why no client-side data library?",
+          "answer": "Server Components and Server Actions already cover reads and writes, and keep sessions, permissions, and database access on the server. The browser loads less JavaScript, and there is one source of truth."
+        },
+        "deploy": {
+          "question": "Where can I deploy it?",
+          "answer": "Anywhere that runs Next.js on Node.js: Vercel, a container, or your own server. On serverless, use a pooled PostgreSQL connection. The README has a production checklist."
+        },
+        "customize": {
+          "question": "Do I have to keep Persian or multi-tenancy?",
+          "answer": "No. Remove a locale or a dashboard area by deleting its folder and its messages; the guides list the steps. Layouts stay correct for left-to-right and right-to-left either way."
+        },
+        "aiAgents": {
+          "question": "Does it work with AI coding agents?",
+          "answer": "Yes. AGENTS.md, task guides, and Cursor rules tell Claude Code, Cursor, or Codex where each kind of code goes and which existing feature to copy."
+        },
+        "missing": {
+          "question": "What is not included?",
+          "answer": "Billing, a CMS, and analytics are left to you, so you can choose the provider that fits your product."
+        }
+      }
     }
   },
   "footer": {

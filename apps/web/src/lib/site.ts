@@ -7,6 +7,8 @@ export const siteLinks = {
   github: "https://github.com/dimah-kz/dimah-starter",
   template: "https://github.com/dimah-kz/dimah-starter/generate",
   docs: "https://github.com/dimah-kz/dimah-starter#readme",
+  /** Raw Markdown of repo files, for `llms.txt`. */
+  raw: "https://raw.githubusercontent.com/dimah-kz/dimah-starter/main",
   license: "https://opensource.org/licenses/MIT",
 } as const
 
