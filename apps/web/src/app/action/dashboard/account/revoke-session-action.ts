@@ -1,6 +1,7 @@
 "use server"
 
 import { headers } from "next/headers"
+import { refresh } from "next/cache"
 import { getTranslations } from "next-intl/server"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
@@ -13,18 +14,15 @@ export async function revokeSessionAction(
   sessionId: string
 ): Promise<RevokeSessionResult> {
   const requestHeaders = await headers()
-  const id = sessionId.trim()
 
   try {
     const [current, sessions] = await Promise.all([
       auth.api.getSession({ headers: requestHeaders }),
       auth.api.listSessions({ headers: requestHeaders }),
     ])
+    const target = sessions.find((session) => session.id === sessionId)
 
-    const target = Array.isArray(sessions)
-      ? sessions.find((session) => session.id === id)
-      : undefined
-
+    // The current device signs out from the user menu instead.
     if (!current || !target || target.id === current.session.id) {
       const t = await getTranslations("account.sessions")
       return { success: false, error: t("revokeFailed") }
@@ -38,5 +36,7 @@ export async function revokeSessionAction(
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
+  // The session list is read per request, not from a tag.
+  refresh()
   return { success: true }
 }

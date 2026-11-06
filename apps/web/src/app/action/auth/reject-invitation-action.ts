@@ -34,7 +34,7 @@ export async function rejectInvitationAction(
   } catch (error) {
     const t = await getTranslations("auth.acceptInvitation")
     return {
-      formError: getAuthApiErrorMessage(error) || t("unavailable"),
+      formError: getAuthApiErrorMessage(error) ?? t("unavailable"),
     }
   }
 

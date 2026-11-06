@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url"
 import {
   blank,
   done,
-  formatRepo,
   formatSyncSummary,
+  formatUi,
   heading,
   ok,
   parseShadcnOutput,
@@ -14,7 +14,6 @@ import {
 } from "./lib/cli.mjs"
 
 const uiRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-const repoRoot = path.resolve(uiRoot, "../..")
 
 /**
  * @param {{ skipFormat?: boolean }} [opts]
@@ -31,7 +30,7 @@ export function syncShadcn(opts = {}) {
 
   if (!opts.skipFormat) {
     blank()
-    formatRepo({ cwd: repoRoot })
+    formatUi()
   }
 
   return summary

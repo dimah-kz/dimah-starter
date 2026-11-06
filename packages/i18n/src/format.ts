@@ -1,9 +1,5 @@
 import type { Locale } from "./config"
 
-export const dateOnlyOptions: Intl.DateTimeFormatOptions = {
-  dateStyle: "medium",
-}
-
 export const dateTimeOptions: Intl.DateTimeFormatOptions = {
   dateStyle: "medium",
   timeStyle: "short",
@@ -12,7 +8,7 @@ export const dateTimeOptions: Intl.DateTimeFormatOptions = {
 export function formatDate(
   value: string | number | Date,
   locale: Locale,
-  options: Intl.DateTimeFormatOptions = dateOnlyOptions
+  options: Intl.DateTimeFormatOptions = { dateStyle: "medium" }
 ) {
   return new Intl.DateTimeFormat(locale, options).format(new Date(value))
 }

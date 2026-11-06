@@ -5,7 +5,6 @@
   "type": "module",
   "exports": {
     "./base": "./base.js",
-    "./ignores": "./ignores.js",
     "./next-js": "./next.js",
     "./react": "./react.js"
   },

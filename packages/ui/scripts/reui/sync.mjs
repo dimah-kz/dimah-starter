@@ -5,8 +5,8 @@ import {
   blank,
   classifyOverrides,
   done,
-  formatRepo,
   formatSyncSummary,
+  formatUi,
   heading,
   ok,
   parseShadcnOutput,
@@ -20,7 +20,6 @@ const uiRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../.."
 )
-const repoRoot = path.resolve(uiRoot, "../..")
 
 /**
  * @param {{ skipFormat?: boolean }} [opts]
@@ -66,7 +65,7 @@ export function syncReui(opts = {}) {
 
   if (!opts.skipFormat) {
     blank()
-    formatRepo({ cwd: repoRoot })
+    formatUi()
   }
 
   return { updated, skipped: raw.skipped, overridden, patches: patchResults }

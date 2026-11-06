@@ -1,7 +1,6 @@
 "use client"
 
 import { Fragment, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from "lucide-react"
 import { revokeSessionAction } from "@/app/action/dashboard/account/revoke-session-action"
 import type {
@@ -41,7 +40,6 @@ export function AccountSessionsContent({
   disabled = false,
 }: AccountSessionsContentProps) {
   const t = useTranslations("account.sessions")
-  const router = useRouter()
   const [pendingSessionId, setPendingSessionId] = useState<string | null>(null)
   const [isRevoking, startRevoke] = useTransition()
 
@@ -58,7 +56,6 @@ export function AccountSessionsContent({
         return
       }
       toast.add({ title: t("revoked"), type: "success" })
-      router.refresh()
     })
   }
 

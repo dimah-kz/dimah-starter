@@ -23,6 +23,32 @@ const nextConfig: NextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
+  poweredByHeader: false,
+  // Baseline hardening for every route. No script CSP: it would need nonces
+  // for Next's inline scripts (see the Content Security Policy guide).
+  headers: async () => [
+    {
+      source: "/:path*",
+      headers: [
+        { key: "X-Frame-Options", value: "DENY" },
+        { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        {
+          key: "Permissions-Policy",
+          value: "camera=(), microphone=(), geolocation=()",
+        },
+        ...(process.env.NODE_ENV === "production"
+          ? [
+              {
+                key: "Strict-Transport-Security",
+                value: "max-age=63072000; includeSubDomains",
+              },
+            ]
+          : []),
+      ],
+    },
+  ],
   transpilePackages: [
     "@repo/ui",
     "@repo/api",

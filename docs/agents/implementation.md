@@ -33,15 +33,16 @@ Cookie cache (5 min) can lag ban/role changes — [better-auth.md](./better-auth
 
 1. Client: `useUpload({ route })` or `AvatarUpload`. Route names are inferred from the server. Omit `accept` / `maxFileSize` — the route catalog is the limit.
 2. Access lives on the route: guards throw `s3Error`. `logo` lets members read and needs `organization:update` to upload or delete.
-3. Persist with `toOwnedPublicUrl({ route, ownerId, key })`, then **`auth.api`**. It returns a URL only for an active row of that owner.
-4. After the write, `deleteRouteObjects({ route, ownerId, keep: key, headers })` drops the previous object and unsaved uploads. Remove: write `""`, then the same call without `keep`. Never delete before the write.
+3. Persist with `toOwnedPublicUrl({ route, ownerId, key })`, then **`auth.api`**. It returns `{ url }` only for an active row of that owner, else `{ error }` — a `common.errors` key, so `t(owned.error)`. The owner comes from the session (user id, or the active organization for `logo`), never from the client.
+4. After the write, `after(() => deleteRouteObjects({ route, ownerId, keep: key, headers }))` drops the previous object and unsaved uploads. Remove: write `""`, then the same call without `keep`. Never delete before the write.
 5. Deleting an owner: `after(() => deleteOwnedObjects(owner, id))`.
-6. `updateTag` / `invalidateUserCache` — [caching.md](./caching.md).
+6. `updateTag` — [caching.md](./caching.md).
 
 Reference: `set-account-avatar-action.ts`, organization-logo siblings. Schema is 2.1.0 in `@repo/db` (`storage` PostgreSQL schema).
 
 ## Definition of done {#definition-of-done}
 
+- `pnpm format:check`, `pnpm lint`, `pnpm typecheck` pass (CI runs them plus `pnpm build`)
 - [Placement](./architecture.md#placement) — right app vs package
 - SSOT updated (routes, tags, labels)
 - Writes via `auth.api` or `createRouterClient`; `updateTag` when the actor must see the change

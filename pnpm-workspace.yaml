@@ -46,10 +46,6 @@ minimumReleaseAge: 0
 
 allowBuilds:
   "@parcel/watcher": true
-  "@prisma/engines": false
   "@swc/core": true
   esbuild: true
-  msw: true
-  prisma: false
   sharp: true
-  unrs-resolver: true

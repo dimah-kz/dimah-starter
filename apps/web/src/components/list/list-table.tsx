@@ -16,7 +16,7 @@ function columnChromeClass(columnId: string, isLast: boolean) {
   return cn("px-4", isLast && columnId !== "actions" && "pe-6")
 }
 
-export type ListTableProps<T> = {
+type ListTableProps<T> = {
   rows: T[]
   columns: ListColumn<T>[]
   getRowId: (row: T) => string
@@ -50,8 +50,7 @@ export function ListTable<T>({
               scope="col"
               className={cn(
                 columnChromeClass(column.id, index === columns.length - 1),
-                column.className,
-                column.headerClassName
+                column.className
               )}
             >
               {column.header}
@@ -84,8 +83,7 @@ export function ListTable<T>({
                   key={column.id}
                   className={cn(
                     columnChromeClass(column.id, index === columns.length - 1),
-                    column.className,
-                    column.cellClassName
+                    column.className
                   )}
                 >
                   {column.cell(row)}

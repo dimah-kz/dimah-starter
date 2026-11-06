@@ -1,7 +1,6 @@
 "use client"
 
 import { useId, useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { updateProfileAction } from "@/app/action/dashboard/account/update-profile-action"
 import { changePasswordAction } from "@/app/action/dashboard/account/change-password-action"
 import { revokeOtherSessionsAction } from "@/app/action/dashboard/account/revoke-other-sessions-action"
@@ -40,7 +39,6 @@ export function AccountSettingsPanel({
 }: AccountSettingsPanelProps) {
   const t = useTranslations("account")
   const tCommon = useTranslations("common")
-  const router = useRouter()
   const profileFormId = useId()
   const passwordFormId = useId()
   const [isPending, startTransition] = useTransition()
@@ -50,35 +48,35 @@ export function AccountSettingsPanel({
 
   const handleProfileSubmit = (formData: FormData) => {
     startTransition(async () => {
-      const result = await updateProfileAction({}, formData)
+      const result = await updateProfileAction(formData)
 
-      if (result.success) {
-        toast.add({ title: t("profile.saved"), type: "success" })
-        onClose()
-        router.refresh()
+      if (!result.success) {
+        toast.add({
+          title: result.error ?? t("profile.saveFailed"),
+          type: "error",
+        })
         return
       }
 
-      if (result.formError) {
-        toast.add({ title: result.formError, type: "error" })
-      }
+      toast.add({ title: t("profile.saved"), type: "success" })
+      onClose()
     })
   }
 
   const handlePasswordSubmit = (formData: FormData) => {
     startTransition(async () => {
-      const result = await changePasswordAction({}, formData)
+      const result = await changePasswordAction(formData)
 
-      if (result.success) {
-        toast.add({ title: t("password.saved"), type: "success" })
-        onClose()
-        router.refresh()
+      if (!result.success) {
+        toast.add({
+          title: result.error ?? t("password.saveFailed"),
+          type: "error",
+        })
         return
       }
 
-      if (result.formError) {
-        toast.add({ title: result.formError, type: "error" })
-      }
+      toast.add({ title: t("password.saved"), type: "success" })
+      onClose()
     })
   }
 
@@ -93,7 +91,6 @@ export function AccountSettingsPanel({
         return
       }
       toast.add({ title: t("sessions.signedOutOthers"), type: "success" })
-      router.refresh()
     })
   }
 

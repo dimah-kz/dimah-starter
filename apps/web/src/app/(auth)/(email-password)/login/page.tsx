@@ -1,13 +1,17 @@
 import { Suspense } from "react"
-import { cookies } from "next/headers"
+import { io } from "next/cache"
+import { cookies, headers } from "next/headers"
+import { redirect } from "next/navigation"
 import { LoginForm } from "@/app/(auth)/(email-password)/login/components/login-form"
 import {
   DEFAULT_AUTH_REDIRECT,
   normalizeAuthRedirectTarget,
 } from "@/app/(auth)/lib/auth-redirect"
-
-/** Better Auth `lastLoginMethod` cookie (httpOnly: false; plugin default). */
-const LAST_LOGIN_METHOD_COOKIE = "better-auth.last_used_login_method"
+import {
+  auth,
+  googleSignInEnabled,
+  lastLoginMethodCookieName,
+} from "@repo/auth"
 
 type LoginPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -15,7 +19,14 @@ type LoginPageProps = {
 
 export default function LoginPage({ searchParams }: LoginPageProps) {
   return (
-    <Suspense fallback={<LoginForm redirectTo={DEFAULT_AUTH_REDIRECT} />}>
+    <Suspense
+      fallback={
+        <LoginForm
+          redirectTo={DEFAULT_AUTH_REDIRECT}
+          googleSignInEnabled={googleSignInEnabled}
+        />
+      }
+    >
       <LoginPageContent searchParams={searchParams} />
     </Suspense>
   )
@@ -23,21 +34,23 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
 
 async function LoginPageContent({ searchParams }: LoginPageProps) {
   const params = await searchParams
-  const redirectRaw =
-    typeof params.redirect === "string" ? params.redirect : undefined
-  const redirectTo = normalizeAuthRedirectTarget(redirectRaw)
+  const redirectTo = normalizeAuthRedirectTarget(params.redirect)
+
+  // Signed-in visitors skip the form. `io()` first: Better Auth reads the clock.
+  await io()
+  if (await auth.api.getSession({ headers: await headers() })) {
+    redirect(redirectTo)
+  }
+
   const cookieStore = await cookies()
-  const lastLoginMethod =
-    cookieStore.get(LAST_LOGIN_METHOD_COOKIE)?.value ?? null
-  const passwordReset = params.notice === "password-reset"
-  const oauthError = typeof params.error === "string" ? params.error : null
 
   return (
     <LoginForm
       redirectTo={redirectTo}
-      lastLoginMethod={lastLoginMethod}
-      passwordReset={passwordReset}
-      oauthError={oauthError}
+      googleSignInEnabled={googleSignInEnabled}
+      lastLoginMethod={cookieStore.get(lastLoginMethodCookieName)?.value}
+      passwordReset={params.notice === "password-reset"}
+      oauthError={typeof params.error === "string" ? params.error : null}
     />
   )
 }

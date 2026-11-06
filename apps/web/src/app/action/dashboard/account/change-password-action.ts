@@ -1,22 +1,24 @@
 "use server"
 
-import { type AccountFormState } from "@/app/action/dashboard/account/shared/account-form-state"
 import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
+import { getFormPassword } from "@/components/form/form-parse"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { getFormString } from "@/components/form/form-parse"
+
+type ChangePasswordResult = {
+  success: boolean
+  error?: string
+}
 
 export async function changePasswordAction(
-  _prevState: AccountFormState,
   formData: FormData
-): Promise<AccountFormState> {
-  const currentPassword = getFormString(formData, "currentPassword")
-  const newPassword = getFormString(formData, "newPassword")
-  const confirmPassword = getFormString(formData, "confirmPassword")
+): Promise<ChangePasswordResult> {
+  const currentPassword = getFormPassword(formData, "currentPassword")
+  const newPassword = getFormPassword(formData, "newPassword")
 
-  if (newPassword !== confirmPassword) {
+  if (newPassword !== getFormPassword(formData, "confirmPassword")) {
     const t = await getTranslations("account.password")
-    return { formError: t("mismatch") }
+    return { success: false, error: t("mismatch") }
   }
 
   try {
@@ -25,7 +27,7 @@ export async function changePasswordAction(
       body: { currentPassword, newPassword, revokeOtherSessions: false },
     })
   } catch (error) {
-    return { formError: getAuthApiErrorMessage(error) }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
   return { success: true }

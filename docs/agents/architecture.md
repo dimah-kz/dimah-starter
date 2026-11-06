@@ -30,7 +30,7 @@ A **new file** only when something is reused in 2+ places, or it is segment SSOT
 | Writes         | `app/action/<segment>/` — one mutation per file → `auth.api` or `createRouterClient` |
 | Reads          | `get-*.ts` + `'use cache'`                                                           |
 
-Forbidden: `dashboard-access.ts`, custom RBAC modules, mutation Route Handlers except `/api/rpc`.
+Forbidden: `dashboard-access.ts`, custom RBAC modules, mutation Route Handlers. The only HTTP handlers are the mounted framework surfaces: `/api/rpc` (product oRPC), `/api/auth` (Better Auth links and callbacks) and `/api/s3` (upload tickets).
 
 ## Naming {#naming}
 

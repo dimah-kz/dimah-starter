@@ -17,8 +17,6 @@
     "range": "{start}–{end} of {total}",
     "rangeAria": "{start} to {end} of {total} {countLabel}"
   },
-  "item": "item",
-  "items": "items",
   "clearSearch": "Clear search",
   "search": "Search…",
   "cancel": "Cancel",
@@ -35,8 +33,7 @@
     "unauthorized": "You need to sign in.",
     "invalidImageKey": "That file is not a valid image.",
     "storagePublicUrlMissing": "Public storage URL is not configured.",
-    "selectRole": "Select at least one role.",
-    "invalidRole": "Invalid role."
+    "selectRole": "Select at least one role."
   },
   "notFound": {
     "title": "Page not found",

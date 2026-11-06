@@ -8,7 +8,7 @@
  * @see https://s3.dimah.dev/docs/db/setup
  */
 import { createId } from "@paralleldrive/cuid2"
-import { defineRelationsPart, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 import {
   bigint,
   index,
@@ -142,6 +142,3 @@ export const dimahS3Tables = {
   storageFolder,
   private_dimah_s3_settings,
 }
-
-/** Registers storage tables for Drizzle RQB. No cross-schema relations. */
-export const storageRelations = defineRelationsPart(dimahS3Tables)

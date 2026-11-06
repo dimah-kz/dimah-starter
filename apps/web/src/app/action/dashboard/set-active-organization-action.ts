@@ -1,54 +1,32 @@
 "use server"
 
-import { updateTag } from "next/cache"
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
-import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import {
-  clearDashboardActiveOrganization,
-  setDashboardActiveOrganization,
-} from "@/app/dashboard/lib/dashboard-session"
 import { headers } from "next/headers"
-import { auth } from "@repo/auth"
+import { redirect } from "next/navigation"
+import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
+import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type SetActiveOrganizationInput = {
+  /** `null` switches to the personal account. */
   organizationId: string | null
-  redirectTo?: string
 }
 
 type SetActiveOrganizationResult = {
-  redirectTo: string
+  success: false
+  error?: string
 }
 
-export async function setActiveOrganizationAction({
-  organizationId,
-  redirectTo,
-}: SetActiveOrganizationInput): Promise<SetActiveOrganizationResult> {
-  const session = await auth.api.getSession({ headers: await headers() })
-
-  if (!session) {
-    return { redirectTo: dashboardRoutes.home() }
+/** Switches the session's organization, then opens the dashboard home. */
+export async function setActiveOrganizationAction(
+  input: SetActiveOrganizationInput
+): Promise<SetActiveOrganizationResult> {
+  try {
+    await auth.api.setActiveOrganization({
+      headers: await headers(),
+      body: { organizationId: input.organizationId },
+    })
+  } catch (error) {
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  const previousOrganizationId = session.session.activeOrganizationId ?? null
-
-  if (organizationId === null) {
-    if (previousOrganizationId !== null) {
-      await clearDashboardActiveOrganization()
-      updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-    }
-
-    return {
-      redirectTo: redirectTo ?? dashboardRoutes.home(),
-    }
-  }
-
-  await setDashboardActiveOrganization(organizationId)
-
-  if (previousOrganizationId !== organizationId) {
-    updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-  }
-
-  return {
-    redirectTo: redirectTo ?? dashboardRoutes.home(),
-  }
+  redirect(dashboardRoutes.home())
 }

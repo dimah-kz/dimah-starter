@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
-import { AuthSettingsMenu } from "@/app/(auth)/components/auth-settings-menu"
+import { SettingsMenu } from "@/components/settings-menu"
 import { GitHubIcon } from "@/app/(marketing)/components/github-icon"
 import { marketingRoutes } from "@/app/(marketing)/lib/marketing-routes"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
@@ -96,7 +96,7 @@ export default async function MarketingLayout({
             >
               <GitHubIcon />
             </Button>
-            <AuthSettingsMenu
+            <SettingsMenu
               showHome={false}
               className="size-8 bg-transparent backdrop-blur-none dark:bg-transparent"
             />

@@ -1,15 +1,10 @@
 import { cacheLife, cacheTag } from "next/cache"
-import { count, desc, eq, ilike, or, type SQL } from "@repo/db/drizzle"
-import { ADMIN_ORGANIZATIONS_DEFAULT_PAGE_SIZE } from "@/app/dashboard/admin/organizations/lib/admin-organizations-table-params"
+import { count, desc, eq, ilike, or } from "@repo/db/drizzle"
+import type { AdminOrganizationsPageQuery } from "@/app/dashboard/admin/organizations/lib/admin-organizations-table-params"
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { requirePlatformAdmin } from "@/app/dashboard/lib/dashboard-session"
 import { member, organization } from "@repo/db/schema"
-import {
-  LIST_SEARCH_MIN_LENGTH,
-  clampListPage,
-  parseListPage,
-  parseListPageSize,
-  parseListQuery,
-} from "@/components/list"
+import { clampListPage, toListSearchPattern } from "@/components/list"
 import { db } from "@repo/db"
 
 export type AdminOrganizationItem = {
@@ -21,47 +16,26 @@ export type AdminOrganizationItem = {
   createdAt: string
 }
 
-export type AdminOrganizationsPageQuery = {
-  page: number
-  pageSize: number
-  q?: string
-}
-
-export type AdminOrganizationsPageResult = {
-  organizations: AdminOrganizationItem[]
-  totalCount: number
-  page: number
-  pageSize: number
-  q?: string
-}
-
-function buildOrganizationsWhere(q?: string): SQL | undefined {
-  if (!q || q.length < LIST_SEARCH_MIN_LENGTH) {
-    return undefined
-  }
-
-  return or(
-    ilike(organization.name, `%${q}%`),
-    ilike(organization.slug, `%${q}%`)
-  )
-}
-
-export function parseAdminOrganizationsPageQuery(
-  searchParams: Record<string, string | string[] | undefined>
-): AdminOrganizationsPageQuery {
-  return {
-    page: parseListPage(searchParams),
-    pageSize: parseListPageSize(searchParams, {
-      defaultPageSize: ADMIN_ORGANIZATIONS_DEFAULT_PAGE_SIZE,
-    }),
-    q: parseListQuery(searchParams),
-  }
-}
-
-async function loadAdminOrganizationsPage(
+/** Platform admins only — checks the caller, then reads the cached page. */
+export async function getAdminOrganizationsPage(
   query: AdminOrganizationsPageQuery
-): Promise<AdminOrganizationsPageResult> {
-  const where = buildOrganizationsWhere(query.q)
+) {
+  await requirePlatformAdmin()
+  return getCachedAdminOrganizationsPage(query)
+}
+
+async function getCachedAdminOrganizationsPage(
+  query: AdminOrganizationsPageQuery
+) {
+  "use cache"
+
+  cacheLife("minutes")
+  cacheTag(dashboardCacheTags.adminOrganizationsPage())
+
+  const pattern = toListSearchPattern(query.q)
+  const where = pattern
+    ? or(ilike(organization.name, pattern), ilike(organization.slug, pattern))
+    : undefined
 
   const [countRow] = await db
     .select({ totalCount: count() })
@@ -70,7 +44,6 @@ async function loadAdminOrganizationsPage(
   const totalCount = countRow?.totalCount ?? 0
 
   const page = clampListPage(query.page, totalCount, query.pageSize)
-  const skip = (page - 1) * query.pageSize
 
   const organizations = await db
     .select({
@@ -93,10 +66,10 @@ async function loadAdminOrganizationsPage(
     )
     .orderBy(desc(organization.createdAt))
     .limit(query.pageSize)
-    .offset(skip)
+    .offset((page - 1) * query.pageSize)
 
   return {
-    organizations: organizations.map((row) => ({
+    organizations: organizations.map((row): AdminOrganizationItem => ({
       id: row.id,
       name: row.name,
       slug: row.slug,
@@ -109,15 +82,4 @@ async function loadAdminOrganizationsPage(
     pageSize: query.pageSize,
     q: query.q,
   }
-}
-
-export async function getAdminOrganizationsPage(
-  query: AdminOrganizationsPageQuery
-) {
-  "use cache"
-
-  cacheLife("minutes")
-  cacheTag(dashboardCacheTags.adminOrganizationsPage())
-
-  return loadAdminOrganizationsPage(query)
 }

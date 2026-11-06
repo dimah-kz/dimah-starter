@@ -7,27 +7,26 @@ import { AvatarUpload, UploadToasts } from "@dimah-s3/ui"
 import { Avatar, AvatarImage } from "@repo/ui/components/avatar"
 import { toast } from "@repo/ui/components/toast"
 import { Button } from "@repo/ui/components/button"
+import type { RouteName } from "@repo/storage"
 import { cn } from "cn"
 
-export type AvatarUploadLabels = {
-  upload: string
-  remove: string
-  updated: string
-  removed: string
-}
-
-type SetAvatarResult = { error: string } | { imageUrl: string }
-type RemoveAvatarResult = { error: string } | { success: true }
+type ActionResult = { success: boolean; error?: string }
 
 type AvatarUploadFieldProps = {
-  route: "avatar" | "logo"
+  route: RouteName
   image: string | null
   objectKey: string | null
-  setAction: (key: string) => Promise<SetAvatarResult>
-  removeAction: () => Promise<RemoveAvatarResult>
-  labels: AvatarUploadLabels
+  setAction: (key: string) => Promise<ActionResult>
+  removeAction: () => Promise<ActionResult>
+  labels: {
+    upload: string
+    remove: string
+    updated: string
+    removed: string
+    uploadFailed: string
+    removeFailed: string
+  }
   shape?: "circle" | "square"
-  className?: string
 }
 
 export function AvatarUploadField({
@@ -38,7 +37,6 @@ export function AvatarUploadField({
   removeAction,
   labels,
   shape = "circle",
-  className,
 }: AvatarUploadFieldProps) {
   const [objectKey, setObjectKey] = useState(initialObjectKey)
   const [externalImage, setExternalImage] = useState(
@@ -54,9 +52,12 @@ export function AvatarUploadField({
   const hasImage = Boolean(objectKey || externalImage)
 
   const onChange = async (result: { key: string }) => {
-    const outcome = await setAction(result.key)
-    if ("error" in outcome) {
-      toast.add({ title: outcome.error, type: "error" })
+    const outcome = await setAction(result.key).catch(() => null)
+    if (!outcome?.success) {
+      toast.add({
+        title: outcome?.error ?? labels.uploadFailed,
+        type: "error",
+      })
       return
     }
     setObjectKey(result.key)
@@ -66,22 +67,22 @@ export function AvatarUploadField({
 
   const onRemove = async () => {
     setRemoving(true)
-    try {
-      const outcome = await removeAction()
-      if ("error" in outcome) {
-        toast.add({ title: outcome.error, type: "error" })
-        return
-      }
-      setObjectKey(null)
-      setExternalImage(null)
-      toast.add({ title: labels.removed, type: "success" })
-    } finally {
-      setRemoving(false)
+    const outcome = await removeAction().catch(() => null)
+    setRemoving(false)
+    if (!outcome?.success) {
+      toast.add({
+        title: outcome?.error ?? labels.removeFailed,
+        type: "error",
+      })
+      return
     }
+    setObjectKey(null)
+    setExternalImage(null)
+    toast.add({ title: labels.removed, type: "success" })
   }
 
   return (
-    <div className={cn("relative inline-flex", className)}>
+    <div className="relative inline-flex">
       {externalImage ? (
         <Avatar
           className={cn(

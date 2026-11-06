@@ -1,10 +1,8 @@
 "use server"
 
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
-import { setDashboardActiveOrganization } from "@/app/dashboard/lib/dashboard-session"
 import { headers } from "next/headers"
-import { updateTag } from "next/cache"
-import { getTranslations } from "next-intl/server"
+import { revalidateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type CreateOrganizationInput = {
@@ -16,77 +14,54 @@ type CreateOrganizationResult = {
   error?: string
 }
 
-function randomSlugSuffix(length = 8) {
-  return crypto.randomUUID().replace(/-/g, "").slice(0, length)
+function toSlug(name: string, suffix?: string) {
+  const base =
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "org"
+
+  return suffix ? `${base}-${suffix}` : base
 }
 
-function slugifyOrganizationName(name: string) {
-  return name
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
+/** Better Auth's code for a taken slug (its message is translated). */
+function isSlugTaken(error: unknown) {
+  return (
+    error instanceof Error &&
+    "body" in error &&
+    (error.body as { code?: string } | undefined)?.code ===
+      "ORGANIZATION_ALREADY_EXISTS"
+  )
 }
 
-function buildOrganizationSlug(name: string, suffix?: string) {
-  const base = slugifyOrganizationName(name)
-  const slugBase = base || `org-${randomSlugSuffix()}`
-  return suffix ? `${slugBase}-${suffix}` : slugBase
-}
-
-function isDuplicateSlugError(error: unknown) {
-  const message = getAuthApiErrorMessage(error).toLowerCase()
-  return message.includes("slug") && message.includes("exist")
-}
-
-async function createOrganizationWithSlug(name: string, slug: string) {
-  return auth.api.createOrganization({
-    headers: await headers(),
-    body: { name, slug },
-  })
-}
-
+/** Creates the organization and switches to it. */
 export async function createOrganizationAction(
   input: CreateOrganizationInput
 ): Promise<CreateOrganizationResult> {
+  const requestHeaders = await headers()
   const name = input.name.trim()
-  let organization: Awaited<ReturnType<typeof createOrganizationWithSlug>>
+  const create = (slug: string) =>
+    auth.api.createOrganization({
+      headers: requestHeaders,
+      body: { name, slug },
+    })
 
   try {
-    organization = await createOrganizationWithSlug(
-      name,
-      buildOrganizationSlug(name)
-    )
+    const organization = await create(toSlug(name)).catch((error: unknown) => {
+      if (!isSlugTaken(error)) throw error
+      return create(toSlug(name, crypto.randomUUID().slice(0, 8)))
+    })
+
+    // Better Auth sets the active org in the database only; this also
+    // refreshes the session cookie.
+    await auth.api.setActiveOrganization({
+      headers: requestHeaders,
+      body: { organizationId: organization.id },
+    })
   } catch (error) {
-    if (!isDuplicateSlugError(error)) {
-      return { success: false, error: getAuthApiErrorMessage(error) }
-    }
-
-    try {
-      organization = await createOrganizationWithSlug(
-        name,
-        buildOrganizationSlug(name, randomSlugSuffix())
-      )
-    } catch (retryError) {
-      return { success: false, error: getAuthApiErrorMessage(retryError) }
-    }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  const organizationId = organization?.id
-
-  if (!organizationId) {
-    const t = await getTranslations("dashboard.nav.organizationSwitcher")
-    return { success: false, error: t("organizationCreateFailed") }
-  }
-
-  await setDashboardActiveOrganization(organizationId)
-
-  updateTag(dashboardCacheTags.adminOrganizationsPage())
-
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (session) {
-    updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-  }
-
+  revalidateTag(dashboardCacheTags.adminOrganizationsPage(), "max")
   return { success: true }
 }

@@ -10,8 +10,7 @@ import {
   Section,
   Text,
 } from "@react-email/components"
-import type { Locale } from "@repo/i18n"
-import { emailDirection } from "./copy"
+import { getLocaleDirection, type Locale } from "@repo/i18n"
 
 const bodyStyle = {
   backgroundColor: "#f4f4f5",
@@ -82,7 +81,7 @@ const footerStyle = {
   margin: "0",
 }
 
-export type TransactionalEmailProps = {
+type TransactionalEmailProps = {
   locale: Locale
   preview: string
   heading: string
@@ -103,7 +102,7 @@ export function TransactionalEmail({
   fallback,
   footer,
 }: TransactionalEmailProps) {
-  const direction = emailDirection(locale)
+  const direction = getLocaleDirection(locale)
 
   return (
     <Html lang={locale} dir={direction}>

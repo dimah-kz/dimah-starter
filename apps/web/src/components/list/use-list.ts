@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useCallback, useTransition } from "react"
+import { useTransition } from "react"
 import type {
   ListPaginationProps,
   ListSearchParamsInput,
@@ -14,8 +14,7 @@ type UseListOptions<TFilter extends string = string> = {
   totalCount: number
   filter?: TFilter
   q?: string
-  countLabel?: string
-  pageSizeOptions?: readonly number[]
+  countLabel: string
 }
 
 export function useList<TFilter extends string = string>({
@@ -26,67 +25,41 @@ export function useList<TFilter extends string = string>({
   filter,
   q,
   countLabel,
-  pageSizeOptions,
 }: UseListOptions<TFilter>) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
-  const navigate = useCallback(
-    (
-      patch: Partial<{
-        page: number
-        pageSize: number
-        filter: TFilter
-        q?: string
-      }>
-    ) => {
-      startTransition(() => {
-        router.push(
-          buildPath({
-            page: patch.page ?? page,
-            pageSize: patch.pageSize ?? pageSize,
-            filter: patch.filter ?? filter,
-            q: "q" in patch ? patch.q : q,
-          })
-        )
-      })
-    },
-    [buildPath, filter, page, pageSize, q, router, startTransition]
-  )
-
-  const buildPageHref = useCallback(
-    (nextPage: number) =>
-      buildPath({
-        page: nextPage,
-        pageSize,
-        filter,
-        q,
-      }),
-    [buildPath, filter, pageSize, q]
-  )
-
-  const setQuery = useCallback(
-    (nextQuery?: string) => {
-      navigate({ page: 1, q: nextQuery })
-    },
-    [navigate]
-  )
+  const navigate = (
+    patch: Partial<{ page: number; pageSize: number; filter: TFilter }> & {
+      q?: string
+    }
+  ) => {
+    startTransition(() => {
+      router.push(
+        buildPath({
+          page: patch.page ?? page,
+          pageSize: patch.pageSize ?? pageSize,
+          filter: patch.filter ?? filter,
+          q: "q" in patch ? patch.q : q,
+        })
+      )
+    })
+  }
 
   const pagination: ListPaginationProps = {
     page,
     pageSize,
     totalCount,
     countLabel,
-    pageSizeOptions,
-    buildPageHref,
+    buildPageHref: (nextPage) =>
+      buildPath({ page: nextPage, pageSize, filter, q }),
     onPageSizeChange: (nextPageSize) =>
       navigate({ page: 1, pageSize: nextPageSize }),
   }
 
   return {
     isPending,
-    navigate,
-    setQuery,
+    setQuery: (nextQuery?: string) => navigate({ page: 1, q: nextQuery }),
     setFilter: (nextFilter: TFilter) =>
       navigate({ page: 1, filter: nextFilter }),
     pagination,

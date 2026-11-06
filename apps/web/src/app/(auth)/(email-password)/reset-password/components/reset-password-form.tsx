@@ -7,17 +7,18 @@ import { Alert, AlertDescription } from "@repo/ui/components/alert"
 import { Field, FieldGroup, FieldLabel } from "@repo/ui/components/field"
 import { FormSubmitButton } from "@/components/form/form-submit-button"
 import { PasswordInput } from "@/components/form/password-input"
-import { passwordLimits } from "@repo/auth/password-limits"
 import { useTranslations } from "next-intl"
 
 type ResetPasswordFormProps = {
   token: string
   redirectTo: string
+  passwordLimits: { minLength: number; maxLength: number }
 }
 
 export function ResetPasswordForm({
   token,
   redirectTo,
+  passwordLimits,
 }: ResetPasswordFormProps) {
   const t = useTranslations("auth.resetPassword")
   const [state, formAction] = useActionState(

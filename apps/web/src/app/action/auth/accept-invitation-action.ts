@@ -37,11 +37,6 @@ export async function acceptInvitationAction(
       // Membership is already created. The dashboard can still open.
     }
 
-    const session = await auth.api.getSession({ headers: requestHeaders })
-    if (session) {
-      updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-    }
-
     updateTag(
       dashboardCacheTags.organizationMembersById(invitation.organizationId)
     )
@@ -51,7 +46,7 @@ export async function acceptInvitationAction(
   } catch (error) {
     const t = await getTranslations("auth.acceptInvitation")
     return {
-      formError: getAuthApiErrorMessage(error) || t("unavailable"),
+      formError: getAuthApiErrorMessage(error) ?? t("unavailable"),
     }
   }
 

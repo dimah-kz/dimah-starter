@@ -1,17 +1,17 @@
 "use client"
 
 import { useId, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { updateOrganizationMemberRoleAction } from "@/app/action/dashboard/(organization)/manage/members/update-organization-member-role-action"
 import { FormLabel } from "@/components/form/form-label"
 import { ResponsiveFormOverlay } from "@/components/form/responsive-form-overlay"
 import { Button } from "@repo/ui/components/button"
 import { Checkbox } from "@repo/ui/components/checkbox"
 import { Label } from "@repo/ui/components/label"
-import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
+import {
+  memberRoleOptions,
+  toMembershipRoles,
+} from "@/app/dashboard/(organization)/manage/lib/member-role-options"
 import type { OrganizationMemberItem } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
-import type { MembershipRole } from "@repo/auth/organization-access"
-import { parseRoleString } from "@repo/auth/role-string"
 import { toast } from "@repo/ui/components/toast"
 import { useTranslations } from "next-intl"
 
@@ -31,18 +31,17 @@ export function MemberRoleFormShell({
   onClose,
 }: MemberRoleFormShellProps) {
   const t = useTranslations()
-  const router = useRouter()
   const fieldId = useId()
   const [isPending, startTransition] = useTransition()
   const memberId = member?.id ?? null
   const [rolesMemberId, setRolesMemberId] = useState(memberId)
   const [roles, setRoles] = useState(() =>
-    member ? parseRoleString(member.role) : ["member"]
+    toMembershipRoles(member?.role ?? "member")
   )
 
   if (rolesMemberId !== memberId) {
     setRolesMemberId(memberId)
-    setRoles(member ? parseRoleString(member.role) : ["member"])
+    setRoles(toMembershipRoles(member?.role ?? "member"))
   }
 
   const options = memberRoleOptions(actorRole)
@@ -75,7 +74,6 @@ export function MemberRoleFormShell({
         type: "success",
       })
       onClose()
-      router.refresh()
     })
   }
 
@@ -111,8 +109,15 @@ export function MemberRoleFormShell({
       }
     >
       {member ? (
-        <div key={member.id} className="space-y-3">
-          <FormLabel required>{t("common.roles")}</FormLabel>
+        <div
+          key={member.id}
+          role="group"
+          aria-labelledby={`${fieldId}-roles`}
+          className="space-y-3"
+        >
+          <FormLabel id={`${fieldId}-roles`} required>
+            {t("common.roles")}
+          </FormLabel>
           {options.map((option) => {
             const checkboxId = `${fieldId}-${option}`
 
@@ -132,7 +137,7 @@ export function MemberRoleFormShell({
                   disabled={isPending}
                 />
                 <Label htmlFor={checkboxId} className="font-normal">
-                  {t(`badges.membershipRole.${option as MembershipRole}`)}
+                  {t(`badges.membershipRole.${option}`)}
                 </Label>
               </div>
             )

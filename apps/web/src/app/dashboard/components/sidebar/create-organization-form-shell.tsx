@@ -1,8 +1,7 @@
 "use client"
 
 import { useId, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { createOrganizationAction } from "@/app/action/dashboard/components/create-organization-action"
+import { createOrganizationAction } from "@/app/action/dashboard/create-organization-action"
 import { FormLabel } from "@/components/form/form-label"
 import { ResponsiveFormOverlay } from "@/components/form/responsive-form-overlay"
 import { Button } from "@repo/ui/components/button"
@@ -21,20 +20,20 @@ export function CreateOrganizationFormShell({
 }: CreateOrganizationFormShellProps) {
   const t = useTranslations("dashboard.nav.organizationSwitcher")
   const tCommon = useTranslations("common")
-  const router = useRouter()
-  const fieldId = useId()
+  const formId = useId()
   const [isPending, startTransition] = useTransition()
   const [name, setName] = useState("")
 
   const canSubmit = Boolean(name.trim())
 
-  const handleSubmit = () => {
-    if (!canSubmit) {
-      return
-    }
+  const close = () => {
+    setName("")
+    onClose()
+  }
 
+  const handleSubmit = () => {
     startTransition(async () => {
-      const result = await createOrganizationAction({ name: name.trim() })
+      const result = await createOrganizationAction({ name })
 
       if (!result.success) {
         toast.add({
@@ -45,9 +44,7 @@ export function CreateOrganizationFormShell({
       }
 
       toast.add({ title: t("organizationCreated"), type: "success" })
-      setName("")
-      onClose()
-      router.refresh()
+      close()
     })
   }
 
@@ -58,17 +55,16 @@ export function CreateOrganizationFormShell({
       open={open}
       onOpenChange={(nextOpen) => {
         if (!nextOpen) {
-          setName("")
-          onClose()
+          close()
         }
       }}
       title={createOrganizationLabel}
       footer={
         <>
           <Button
-            type="button"
+            type="submit"
+            form={formId}
             disabled={isPending || !canSubmit}
-            onClick={handleSubmit}
           >
             {createOrganizationLabel}
           </Button>
@@ -76,29 +72,35 @@ export function CreateOrganizationFormShell({
             type="button"
             variant="outline"
             disabled={isPending}
-            onClick={() => {
-              setName("")
-              onClose()
-            }}
+            onClick={close}
           >
             {tCommon("cancel")}
           </Button>
         </>
       }
     >
-      <div className="space-y-3">
-        <FormLabel htmlFor={`${fieldId}-name`} required>
+      <form
+        id={formId}
+        className="space-y-3"
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (canSubmit) {
+            handleSubmit()
+          }
+        }}
+      >
+        <FormLabel htmlFor={`${formId}-name`} required>
           {t("nameLabel")}
         </FormLabel>
         <Input
-          id={`${fieldId}-name`}
+          id={`${formId}-name`}
           value={name}
           onChange={(event) => setName(event.target.value)}
           autoComplete="organization"
           disabled={isPending}
           required
         />
-      </div>
+      </form>
     </ResponsiveFormOverlay>
   )
 }

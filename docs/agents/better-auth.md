@@ -23,11 +23,11 @@ Teams stay off until you enable them in `organization()`.
 
 `lastLoginMethod({ storeInDatabase: true })` — cookie for the login UI; `session.user.lastLoginMethod` from the DB. No auth client in core.
 
-**Google** — `socialProviders.google` when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. The auth action calls `auth.api.signInSocial` (`disableRedirect`) and redirects to the returned URL. Callback: `/api/auth/callback/google`. A verified Google email links to an existing user (Better Auth default). The button stays visible when the env vars are empty and the action explains that sign-in isn't configured.
+**Google** — `socialProviders.google` when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. The auth action calls `auth.api.signInSocial` (`disableRedirect`) and redirects to the returned URL. Callback: `/api/auth/callback/google`. A verified Google email links to an existing user (Better Auth default). The button renders only when both env vars are set (`googleSignInEnabled` from `@repo/auth`).
 
 **Trusted origins** — `localhost` is not trusted in production. Set `BETTER_AUTH_URL`.
 
-**Rate limit** — `storage: "database"` (`auth.rate_limit`). Applies to Better Auth **HTTP** routes, not `auth.api` Server Actions. Enable it so `/api/auth` (if you add it) works on serverless.
+**Rate limit** — `storage: "database"` (`auth.rate_limit`), so counters survive serverless. Better Auth applies it to its HTTP routes (`/api/auth`) only. Server Actions that call `auth.api` for sign-in, sign-up and password reset call `consumeRateLimit(rule, headers, email)` from `@repo/auth` first — same table, keyed by client IP (`advanced.ipAddress`) and email. Add a rule there for any new unauthenticated flow that sends mail or checks a password.
 
 **Cookie cache** — 5 minutes. After a ban or role change, the actor may still look signed-in until that cache expires.
 
@@ -37,7 +37,7 @@ Teams stay off until you enable them in `organization()`.
 
 1. One Server Action under `app/action/…` mirroring the route.
 2. `auth.api.<method>` with `headers: await headers()` (session + locale cookie). Sign-in/up still pass `body`; `nextCookies()` sets cookies.
-3. Surface Better Auth errors with `getAuthApiErrorMessage`. Other copy from `@repo/i18n` via `getTranslations`.
+3. Return `{ success, error? }`. `error` is `getAuthApiErrorMessage(error)` — the translated Better Auth message, or `undefined` for anything else (logged, never shown); the caller falls back to its own copy from `@repo/i18n`.
 4. `updateTag` after success when the actor’s UI must refresh — [caching.md](./caching.md).
 
 Never: direct deletes on auth member/invite tables, `dashboard-access.ts`, duplicate permission matrices, write Route Handlers.
@@ -45,11 +45,11 @@ Never: direct deletes on auth member/invite tables, `dashboard-access.ts`, dupli
 ## Permissions
 
 1. Extend statements + roles in `organization-access.ts` or `admin-access.ts`.
-2. UI/route gate (optional): `hasPermission` (org) or `userHasPermission` (platform) — copy a sibling.
+2. Page and data gate: `requirePlatformAdmin()` / `requireOrganizationManager()` in `apps/web/src/app/dashboard/lib/dashboard-session.ts`, called by the page **and** its `get-*.ts` (a layout check alone still lets the page render). New permission → a `can*` helper beside them.
 3. Mutations: no extra pre-check — `auth.api` enforces.
 
 ## Session
 
-`auth.api.getSession({ headers: await dashboardAuthHeaders() })` for reads and layout gates. `dashboardAuthHeaders()` waits on `io()` first so Better Auth's expiry `Date.now()` runs in the Dynamic stage. Server Actions keep `headers: await headers()`. Never `'use cache'` on session. Client components must not import `@repo/auth`.
+`auth.api.getSession({ headers: await dashboardAuthHeaders() })` for reads and gates. `dashboardAuthHeaders()` waits on `io()` first so Better Auth's expiry `Date.now()` runs in the Dynamic stage. Server Actions keep `headers: await headers()`. Never `'use cache'` on session. Client components must not import `@repo/auth`.
 
 Auth client config for a future mobile/extension app lives in that app — not in core packages.

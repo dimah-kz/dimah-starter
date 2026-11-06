@@ -5,36 +5,20 @@ import {
   desc,
   eq,
   ilike,
-  like,
   not,
   or,
   type SQL,
 } from "@repo/db/drizzle"
-import {
-  MEMBERS_DEFAULT_PAGE_SIZE,
-  parseMemberTableFilter,
-  type MemberTableFilter,
+import type {
+  MemberTableFilter,
+  OrganizationMembersPageQuery,
 } from "@/app/dashboard/(organization)/manage/members/lib/members-table-params"
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { requireOrganizationManager } from "@/app/dashboard/lib/dashboard-session"
+import { roleColumnHasToken } from "@/app/dashboard/lib/role-column"
 import { member, user } from "@repo/db/schema"
-import {
-  LIST_SEARCH_MIN_LENGTH,
-  clampListPage,
-  parseListFilter,
-  parseListPage,
-  parseListPageSize,
-  parseListQuery,
-} from "@/components/list"
+import { clampListPage, toListSearchPattern } from "@/components/list"
 import { db } from "@repo/db"
-
-function roleColumnHasToken(column: typeof member.role, token: string): SQL {
-  return or(
-    eq(column, token),
-    like(column, `${token},%`),
-    like(column, `%,${token}`),
-    like(column, `%,${token},%`)
-  )!
-}
 
 export type OrganizationMemberItem = {
   id: string
@@ -44,22 +28,6 @@ export type OrganizationMemberItem = {
   image: string | null
   role: string
   joinedAt: string
-}
-
-export type OrganizationMembersPageQuery = {
-  page: number
-  pageSize: number
-  filter: MemberTableFilter
-  q?: string
-}
-
-export type OrganizationMembersPageResult = {
-  members: OrganizationMemberItem[]
-  totalCount: number
-  page: number
-  pageSize: number
-  filter: MemberTableFilter
-  q?: string
 }
 
 function buildMembersWhere(
@@ -86,32 +54,31 @@ function buildMembersWhere(
     )
   }
 
-  if (q && q.length >= LIST_SEARCH_MIN_LENGTH) {
-    conditions.push(
-      or(ilike(user.name, `%${q}%`), ilike(user.email, `%${q}%`))!
-    )
+  const pattern = toListSearchPattern(q)
+  if (pattern) {
+    conditions.push(or(ilike(user.name, pattern), ilike(user.email, pattern))!)
   }
 
   return and(...conditions)!
 }
 
-export function parseOrganizationMembersPageQuery(
-  searchParams: Record<string, string | string[] | undefined>
-): OrganizationMembersPageQuery {
-  return {
-    page: parseListPage(searchParams),
-    pageSize: parseListPageSize(searchParams, {
-      defaultPageSize: MEMBERS_DEFAULT_PAGE_SIZE,
-    }),
-    filter: parseMemberTableFilter(parseListFilter(searchParams)),
-    q: parseListQuery(searchParams),
-  }
+/** Members of the active organization, for its managers only. */
+export async function getOrganizationMembersPage(
+  query: OrganizationMembersPageQuery
+) {
+  const { organizationId } = await requireOrganizationManager()
+  return getCachedOrganizationMembersPage(organizationId, query)
 }
 
-async function loadOrganizationMembersPage(
+async function getCachedOrganizationMembersPage(
   organizationId: string,
   query: OrganizationMembersPageQuery
-): Promise<OrganizationMembersPageResult> {
+) {
+  "use cache"
+
+  cacheLife("minutes")
+  cacheTag(dashboardCacheTags.organizationMembersById(organizationId))
+
   const where = buildMembersWhere(organizationId, query.filter, query.q)
 
   const [countRow] = await db
@@ -122,7 +89,6 @@ async function loadOrganizationMembersPage(
   const totalCount = countRow?.totalCount ?? 0
 
   const page = clampListPage(query.page, totalCount, query.pageSize)
-  const skip = (page - 1) * query.pageSize
 
   const members = await db
     .select({
@@ -139,10 +105,10 @@ async function loadOrganizationMembersPage(
     .where(where)
     .orderBy(desc(member.createdAt))
     .limit(query.pageSize)
-    .offset(skip)
+    .offset((page - 1) * query.pageSize)
 
   return {
-    members: members.map((row) => ({
+    members: members.map((row): OrganizationMemberItem => ({
       id: row.id,
       userId: row.userId,
       name: row.name,
@@ -157,16 +123,4 @@ async function loadOrganizationMembersPage(
     filter: query.filter,
     q: query.q,
   }
-}
-
-export async function getOrganizationMembersPage(
-  organizationId: string,
-  query: OrganizationMembersPageQuery
-) {
-  "use cache"
-
-  cacheLife("minutes")
-  cacheTag(dashboardCacheTags.organizationMembersById(organizationId))
-
-  return loadOrganizationMembersPage(organizationId, query)
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
 import { getTranslations } from "next-intl/server"
+import { AuthFormLayout } from "@/app/(auth)/components/auth-form-layout"
 
 type ResetPasswordLayoutProps = {
   children: React.ReactNode
@@ -15,22 +15,5 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ResetPasswordLayout({
   children,
 }: ResetPasswordLayoutProps) {
-  return (
-    <div className="flex flex-col gap-4">
-      <Suspense>
-        <ResetPasswordLayoutHeader />
-      </Suspense>
-      {children}
-    </div>
-  )
-}
-
-async function ResetPasswordLayoutHeader() {
-  const t = await getTranslations("auth.resetPassword")
-
-  return (
-    <div className="mb-6 text-center">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
-    </div>
-  )
+  return <AuthFormLayout section="resetPassword">{children}</AuthFormLayout>
 }

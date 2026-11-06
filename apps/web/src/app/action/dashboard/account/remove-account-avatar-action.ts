@@ -1,18 +1,28 @@
 "use server"
 
-import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
 import { headers } from "next/headers"
+import { updateTag } from "next/cache"
+import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 import { deleteRouteObjects } from "@repo/storage"
 
-export async function removeAccountAvatarAction() {
+type RemoveAccountAvatarResult = {
+  success: boolean
+  error?: string
+}
+
+export async function removeAccountAvatarAction(): Promise<RemoveAccountAvatarResult> {
   const requestHeaders = await headers()
   const session = await auth.api.getSession({ headers: requestHeaders })
+
   if (!session) {
     const t = await getTranslations("common.errors")
-    return { error: t("unauthorized") }
+    return { success: false, error: t("unauthorized") }
   }
+
+  const userId = session.user.id
 
   try {
     await auth.api.updateUser({
@@ -20,15 +30,18 @@ export async function removeAccountAvatarAction() {
       body: { image: "" },
     })
   } catch (error) {
-    return { error: getAuthApiErrorMessage(error) }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  await deleteRouteObjects({
-    route: "avatar",
-    ownerId: session.user.id,
-    headers: requestHeaders,
-  })
+  // Cleared first, deleted after: the profile never points at a missing file.
+  after(() =>
+    deleteRouteObjects({
+      route: "avatar",
+      ownerId: userId,
+      headers: requestHeaders,
+    })
+  )
 
-  invalidateUserCache(session.user.id)
-  return { success: true as const }
+  updateTag(dashboardCacheTags.userProfileById(userId))
+  return { success: true }
 }

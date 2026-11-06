@@ -1,16 +1,4 @@
 {
   "extends": "@repo/typescript-config/base.json",
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "noEmit": true,
-    "declaration": false,
-    "declarationMap": false,
-    "paths": {
-      "@repo/db": ["./src/client.ts"],
-      "@repo/db/schema": ["./src/schema/index.ts"],
-      "@repo/db/dimah-s3": ["./src/dimah-s3-db.ts"]
-    }
-  },
-  "include": ["src", "scripts", "drizzle.config.ts"]
+  "include": ["src", "drizzle.config.ts"]
 }

@@ -4,19 +4,12 @@ export type Locale = (typeof locales)[number]
 
 export const defaultLocale: Locale = "en"
 
-export const localeCookieName = "BS_LOCALE"
+export const localeCookieName = "NEXT_LOCALE"
 
 export const directions = {
   en: "ltr",
   fa: "rtl",
-} as const satisfies Record<string, "ltr" | "rtl">
-
-export const i18nConfig = {
-  locales,
-  defaultLocale,
-  localeCookieName,
-  directions,
-} as const
+} as const satisfies Record<Locale, "ltr" | "rtl">
 
 export function isValidLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value)
@@ -37,15 +30,18 @@ export function resolveLocaleFromHeaders(headers: {
     const [name, ...rest] = part.trim().split("=")
 
     if (name === localeCookieName) {
-      return resolveLocale(decodeURIComponent(rest.join("=")))
+      try {
+        return resolveLocale(decodeURIComponent(rest.join("=")))
+      } catch {
+        // Malformed percent-encoding (`URIError`): ignore the cookie.
+        return defaultLocale
+      }
     }
   }
 
   return defaultLocale
 }
 
-export function getLocaleDirection(
-  locale: Locale
-): (typeof directions)[keyof typeof directions] {
-  return directions[locale as keyof typeof directions] ?? directions.en
+export function getLocaleDirection(locale: Locale) {
+  return directions[locale]
 }

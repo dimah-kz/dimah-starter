@@ -14,27 +14,22 @@ import { useTranslations } from "next-intl"
 type OrganizationProfileFormFieldsProps = {
   formId: string
   organization: OrganizationBranding & { logoKey: string | null }
-  canEdit: boolean
 }
 
 export function OrganizationProfileFormFields({
   formId,
   organization,
-  canEdit,
 }: OrganizationProfileFormFieldsProps) {
   const t = useTranslations("dashboard.organizationSettings.profile")
 
   return (
     <FieldGroup>
-      {canEdit ? (
-        <Field>
-          <OrganizationLogoField
-            organizationId={organization.id}
-            image={organization.logo}
-            objectKey={organization.logoKey}
-          />
-        </Field>
-      ) : null}
+      <Field>
+        <OrganizationLogoField
+          image={organization.logo}
+          objectKey={organization.logoKey}
+        />
+      </Field>
       <Field>
         <FieldLabel htmlFor={`${formId}-slug`}>{t("slugLabel")}</FieldLabel>
         <Input
@@ -53,7 +48,6 @@ export function OrganizationProfileFormFields({
           autoComplete="organization"
           defaultValue={organization.name}
           required
-          disabled={!canEdit}
         />
       </Field>
     </FieldGroup>

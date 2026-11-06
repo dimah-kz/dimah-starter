@@ -1,10 +1,9 @@
 "use server"
 
-import { invalidateAdminUsersPageCache } from "@/app/action/dashboard/admin/shared/invalidate-admin-cache"
-import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
 import { headers } from "next/headers"
-import { auth } from "@repo/auth"
-import { getAuthApiErrorMessage } from "@repo/auth"
+import { updateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type BanUserInput = {
   userId: string
@@ -21,16 +20,12 @@ export async function banUserAction(
   try {
     await auth.api.banUser({
       headers: await headers(),
-      body: {
-        userId: input.userId,
-      },
+      body: { userId: input.userId },
     })
   } catch (error) {
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  invalidateAdminUsersPageCache()
-  invalidateUserCache(input.userId)
-
+  updateTag(dashboardCacheTags.adminUsersPage())
   return { success: true }
 }

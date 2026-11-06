@@ -1,13 +1,10 @@
-import { redirect } from "next/navigation"
 import { Suspense } from "react"
 import {
   DashboardPageFallback,
   DashboardPageShell,
 } from "@/app/dashboard/components/layout/dashboard-page-shell"
 import { DashboardSectionHeading } from "@/app/dashboard/components/layout/dashboard-section-heading"
-import { dashboardAuthHeaders } from "@/app/dashboard/lib/dashboard-session"
-import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { auth } from "@repo/auth"
+import { requirePlatformAdmin } from "@/app/dashboard/lib/dashboard-session"
 
 type AdminLayoutProps = {
   children: React.ReactNode
@@ -22,14 +19,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 }
 
 async function AdminLayoutContent({ children }: AdminLayoutProps) {
-  const { success } = await auth.api.userHasPermission({
-    headers: await dashboardAuthHeaders(),
-    body: { permissions: { user: ["list"] } },
-  })
-
-  if (!success) {
-    redirect(dashboardRoutes.home())
-  }
+  await requirePlatformAdmin()
 
   return (
     <DashboardPageShell>

@@ -9,24 +9,22 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@repo/ui/components/input-group"
-import { cn } from "cn"
-import { LIST_SEARCH_MIN_LENGTH } from "@/components/list/types"
+import {
+  LIST_SEARCH_MAX_LENGTH,
+  LIST_SEARCH_MIN_LENGTH,
+} from "@/components/list/types"
 
-const DEFAULT_DEBOUNCE_MS = 300
+const DEBOUNCE_MS = 300
 
-export type ListSearchProps = {
+type ListSearchProps = {
   value?: string
   placeholder?: string
-  className?: string
-  debounceMs?: number
-  minLength?: number
   onCommit: (q: string | undefined) => void
 }
 
 function commitSearch(
   draft: string,
   normalizedValue: string,
-  minLength: number,
   onCommit: (q: string | undefined) => void
 ) {
   const trimmed = draft.trim()
@@ -35,11 +33,12 @@ function commitSearch(
     return
   }
 
-  if (trimmed.length > 0 && trimmed.length < minLength) {
+  if (trimmed.length > 0 && trimmed.length < LIST_SEARCH_MIN_LENGTH) {
     return
   }
 
-  const nextValue = trimmed.length >= minLength ? trimmed : undefined
+  const nextValue =
+    trimmed.length >= LIST_SEARCH_MIN_LENGTH ? trimmed : undefined
 
   if (nextValue === normalizedValue || (!nextValue && !normalizedValue)) {
     return
@@ -48,35 +47,31 @@ function commitSearch(
   onCommit(nextValue)
 }
 
-export function ListSearch({
-  value,
-  placeholder,
-  className,
-  debounceMs = DEFAULT_DEBOUNCE_MS,
-  minLength = LIST_SEARCH_MIN_LENGTH,
-  onCommit,
-}: ListSearchProps) {
+export function ListSearch({ value, placeholder, onCommit }: ListSearchProps) {
   const t = useTranslations("common")
   const searchPlaceholder = placeholder ?? t("search")
   const [draft, setDraft] = useState(value ?? "")
+  const [syncedValue, setSyncedValue] = useState(value)
   const timeoutRef = useRef<number>(undefined)
   const normalizedValue = value?.trim() ?? ""
 
-  const commitDraft = useEffectEvent((nextDraft: string) => {
-    commitSearch(nextDraft, normalizedValue, minLength, onCommit)
-  })
-
-  useEffect(() => {
+  // The URL changed from outside (back button, filter reset): show it.
+  if (value !== syncedValue) {
+    setSyncedValue(value)
     setDraft(value ?? "")
-  }, [value])
+  }
+
+  const commitDraft = useEffectEvent((nextDraft: string) => {
+    commitSearch(nextDraft, normalizedValue, onCommit)
+  })
 
   useEffect(() => {
     timeoutRef.current = window.setTimeout(() => {
       commitDraft(draft)
-    }, debounceMs)
+    }, DEBOUNCE_MS)
 
     return () => window.clearTimeout(timeoutRef.current)
-  }, [debounceMs, draft])
+  }, [draft])
 
   const handleClear = () => {
     window.clearTimeout(timeoutRef.current)
@@ -87,15 +82,13 @@ export function ListSearch({
   }
 
   return (
-    <InputGroup
-      data-slot="list-search"
-      className={cn("w-full min-w-0 sm:max-w-xs", className)}
-    >
+    <InputGroup data-slot="list-search" className="w-full min-w-0 sm:max-w-xs">
       <InputGroupAddon>
         <SearchIcon />
       </InputGroupAddon>
       <InputGroupInput
         type="search"
+        maxLength={LIST_SEARCH_MAX_LENGTH}
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
         onKeyDown={(event) => {
@@ -104,7 +97,7 @@ export function ListSearch({
           }
           event.preventDefault()
           window.clearTimeout(timeoutRef.current)
-          commitSearch(draft, normalizedValue, minLength, onCommit)
+          commitSearch(draft, normalizedValue, onCommit)
         }}
         placeholder={searchPlaceholder}
         aria-label={searchPlaceholder}

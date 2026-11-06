@@ -1,9 +1,7 @@
 import { Suspense } from "react"
-import { AdminOrganizationManagementPanel } from "@/app/dashboard/admin/organizations/components/admin-organization-management-panel"
-import {
-  getAdminOrganizationsPage,
-  parseAdminOrganizationsPageQuery,
-} from "@/app/dashboard/admin/organizations/lib/get-admin-organizations-page"
+import { AdminOrganizationsTable } from "@/app/dashboard/admin/organizations/components/admin-organizations-table"
+import { parseAdminOrganizationsPageQuery } from "@/app/dashboard/admin/organizations/lib/admin-organizations-table-params"
+import { getAdminOrganizationsPage } from "@/app/dashboard/admin/organizations/lib/get-admin-organizations-page"
 import { ListSkeleton } from "@/components/list"
 
 type AdminOrganizationsPageProps = {
@@ -23,12 +21,11 @@ export default function AdminOrganizationsPage(
 async function AdminOrganizationsPageContent({
   searchParams,
 }: AdminOrganizationsPageProps) {
-  const resolvedSearchParams = await searchParams
-  const query = parseAdminOrganizationsPageQuery(resolvedSearchParams)
+  const query = parseAdminOrganizationsPageQuery(await searchParams)
   const data = await getAdminOrganizationsPage(query)
 
   return (
-    <AdminOrganizationManagementPanel
+    <AdminOrganizationsTable
       organizations={data.organizations}
       page={data.page}
       pageSize={data.pageSize}

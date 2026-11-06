@@ -5,36 +5,20 @@ import {
   desc,
   eq,
   ilike,
-  like,
   not,
   or,
   type SQL,
 } from "@repo/db/drizzle"
-import {
-  ADMIN_USERS_DEFAULT_PAGE_SIZE,
-  parseAdminUserTableFilter,
-  type AdminUserTableFilter,
+import type {
+  AdminUserTableFilter,
+  AdminUsersPageQuery,
 } from "@/app/dashboard/admin/users/lib/admin-users-table-params"
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { requirePlatformAdmin } from "@/app/dashboard/lib/dashboard-session"
+import { roleColumnHasToken } from "@/app/dashboard/lib/role-column"
 import { user } from "@repo/db/schema"
-import {
-  LIST_SEARCH_MIN_LENGTH,
-  clampListPage,
-  parseListFilter,
-  parseListPage,
-  parseListPageSize,
-  parseListQuery,
-} from "@/components/list"
+import { clampListPage, toListSearchPattern } from "@/components/list"
 import { db } from "@repo/db"
-
-function roleColumnHasToken(column: typeof user.role, token: string): SQL {
-  return or(
-    eq(column, token),
-    like(column, `${token},%`),
-    like(column, `%,${token}`),
-    like(column, `%,${token},%`)
-  )!
-}
 
 export type AdminUserItem = {
   id: string
@@ -44,22 +28,6 @@ export type AdminUserItem = {
   role: string
   banned: boolean
   createdAt: string
-}
-
-export type AdminUsersPageQuery = {
-  page: number
-  pageSize: number
-  filter: AdminUserTableFilter
-  q?: string
-}
-
-export type AdminUsersPageResult = {
-  users: AdminUserItem[]
-  totalCount: number
-  page: number
-  pageSize: number
-  filter: AdminUserTableFilter
-  q?: string
 }
 
 function buildUsersWhere(
@@ -81,33 +49,26 @@ function buildUsersWhere(
     conditions.push(eq(user.banned, true))
   }
 
-  if (q && q.length >= LIST_SEARCH_MIN_LENGTH) {
-    conditions.push(
-      or(ilike(user.name, `%${q}%`), ilike(user.email, `%${q}%`))!
-    )
+  const pattern = toListSearchPattern(q)
+  if (pattern) {
+    conditions.push(or(ilike(user.name, pattern), ilike(user.email, pattern))!)
   }
 
   return conditions.length ? and(...conditions) : undefined
 }
 
-export function parseAdminUsersPageQuery(
-  searchParams: Record<string, string | string[] | undefined>
-): AdminUsersPageQuery {
-  const q = parseListQuery(searchParams)
-
-  return {
-    page: parseListPage(searchParams),
-    pageSize: parseListPageSize(searchParams, {
-      defaultPageSize: ADMIN_USERS_DEFAULT_PAGE_SIZE,
-    }),
-    filter: parseAdminUserTableFilter(parseListFilter(searchParams)),
-    q,
-  }
+/** Platform admins only — checks the caller, then reads the cached page. */
+export async function getAdminUsersPage(query: AdminUsersPageQuery) {
+  await requirePlatformAdmin()
+  return getCachedAdminUsersPage(query)
 }
 
-async function loadAdminUsersPage(
-  query: AdminUsersPageQuery
-): Promise<AdminUsersPageResult> {
+async function getCachedAdminUsersPage(query: AdminUsersPageQuery) {
+  "use cache"
+
+  cacheLife("minutes")
+  cacheTag(dashboardCacheTags.adminUsersPage())
+
   const where = buildUsersWhere(query.filter, query.q)
 
   const [countRow] = await db
@@ -117,7 +78,6 @@ async function loadAdminUsersPage(
   const totalCount = countRow?.totalCount ?? 0
 
   const page = clampListPage(query.page, totalCount, query.pageSize)
-  const skip = (page - 1) * query.pageSize
 
   const users = await db
     .select({
@@ -133,10 +93,10 @@ async function loadAdminUsersPage(
     .where(where)
     .orderBy(desc(user.createdAt))
     .limit(query.pageSize)
-    .offset(skip)
+    .offset((page - 1) * query.pageSize)
 
   return {
-    users: users.map((row) => ({
+    users: users.map((row): AdminUserItem => ({
       id: row.id,
       name: row.name,
       email: row.email,
@@ -151,13 +111,4 @@ async function loadAdminUsersPage(
     filter: query.filter,
     q: query.q,
   }
-}
-
-export async function getAdminUsersPage(query: AdminUsersPageQuery) {
-  "use cache"
-
-  cacheLife("minutes")
-  cacheTag(dashboardCacheTags.adminUsersPage())
-
-  return loadAdminUsersPage(query)
 }

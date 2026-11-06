@@ -2,7 +2,7 @@ import { adminSlices } from "@/app/dashboard/admin/lib/admin-slices"
 import { organizationManageTabs } from "@/app/dashboard/(organization)/manage/lib/organization-manage-tabs"
 import type { NavMainItem } from "@/app/dashboard/components/sidebar/nav-main"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { matchesPathPrefix } from "@/app/dashboard/lib/path-utils"
+import { isPathActive } from "@/app/dashboard/lib/path-utils"
 import { Building2Icon, ShieldIcon } from "lucide-react"
 import { createElement } from "react"
 
@@ -66,9 +66,7 @@ export function resolveSidebarNavSection(
   pathname: string,
   sections: SidebarNavSection[]
 ): SidebarNavSection | undefined {
-  return sections.find((section) =>
-    matchesPathPrefix(pathname, section.pathPrefix)
-  )
+  return sections.find((section) => isPathActive(pathname, section.pathPrefix))
 }
 
 export const platformEntryIcon = createElement(ShieldIcon, {

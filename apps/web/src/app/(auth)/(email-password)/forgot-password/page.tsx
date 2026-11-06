@@ -24,11 +24,9 @@ export default function ForgotPasswordPage({
 async function ForgotPasswordPageContent({
   searchParams,
 }: ForgotPasswordPageProps) {
-  const params = await searchParams
-  const redirectRaw =
-    typeof params.redirect === "string" ? params.redirect : undefined
+  const { redirect } = await searchParams
 
   return (
-    <ForgotPasswordForm redirectTo={normalizeAuthRedirectTarget(redirectRaw)} />
+    <ForgotPasswordForm redirectTo={normalizeAuthRedirectTarget(redirect)} />
   )
 }

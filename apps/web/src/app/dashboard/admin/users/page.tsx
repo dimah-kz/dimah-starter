@@ -1,10 +1,8 @@
 import { Suspense } from "react"
 import { AdminUserManagementPanel } from "@/app/dashboard/admin/users/components/admin-user-management-panel"
-import {
-  getAdminUsersPage,
-  parseAdminUsersPageQuery,
-} from "@/app/dashboard/admin/users/lib/get-admin-users-page"
-import { requireDashboardSession } from "@/app/dashboard/lib/dashboard-session"
+import { parseAdminUsersPageQuery } from "@/app/dashboard/admin/users/lib/admin-users-table-params"
+import { getAdminUsersPage } from "@/app/dashboard/admin/users/lib/get-admin-users-page"
+import { requirePlatformAdmin } from "@/app/dashboard/lib/dashboard-session"
 import { ListSkeleton } from "@/components/list"
 
 type AdminUsersPageProps = {
@@ -20,10 +18,9 @@ export default function AdminUsersPage(props: AdminUsersPageProps) {
 }
 
 async function AdminUsersPageContent({ searchParams }: AdminUsersPageProps) {
-  const resolvedSearchParams = await searchParams
-  const query = parseAdminUsersPageQuery(resolvedSearchParams)
+  const query = parseAdminUsersPageQuery(await searchParams)
   const [session, data] = await Promise.all([
-    requireDashboardSession(),
+    requirePlatformAdmin(),
     getAdminUsersPage(query),
   ])
 

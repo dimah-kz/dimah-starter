@@ -52,44 +52,12 @@ function actionMail(
   })
 }
 
-export function sendVerification({ to, url, locale }: ActionEmailInput) {
-  const copy = emailMessages(locale).verify
-  const values = { app: appName(locale), email: to }
-
-  return actionMail({
-    to,
-    url,
-    locale,
-    subject: fill(copy.subject, values),
-    preview: fill(copy.preview, values),
-    heading: fill(copy.heading, values),
-    paragraphs: [fill(copy.body, values)],
-    actionLabel: copy.action,
-    footer: fill(copy.footer, values),
-    fallback: emailMessages(locale).layout.fallback,
-  })
-}
-
-export function sendPasswordReset({ to, url, locale }: ActionEmailInput) {
-  const copy = emailMessages(locale).reset
-  const values = { app: appName(locale), email: to }
-
-  return actionMail({
-    to,
-    url,
-    locale,
-    subject: fill(copy.subject, values),
-    preview: fill(copy.preview, values),
-    heading: fill(copy.heading, values),
-    paragraphs: [fill(copy.body, values)],
-    actionLabel: copy.action,
-    footer: fill(copy.footer, values),
-    fallback: emailMessages(locale).layout.fallback,
-  })
-}
-
-export function sendSignUpAttempt({ to, url, locale }: ActionEmailInput) {
-  const copy = emailMessages(locale).signUpAttempt
+/** Better Auth link mail; `kind` picks the `email.json` copy. */
+export function sendAuthMail(
+  kind: "verify" | "reset" | "signUpAttempt",
+  { to, url, locale }: ActionEmailInput
+) {
+  const copy = emailMessages(locale)[kind]
   const values = { app: appName(locale), email: to }
 
   return actionMail({

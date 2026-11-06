@@ -29,6 +29,8 @@ export function AccountAvatarField({
           remove: t("remove"),
           updated: t("updated"),
           removed: t("removed"),
+          uploadFailed: t("uploadFailed"),
+          removeFailed: t("removeFailed"),
         }}
       />
     </div>

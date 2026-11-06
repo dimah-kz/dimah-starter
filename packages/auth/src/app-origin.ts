@@ -1,4 +1,4 @@
-const DEV_ORIGIN = "http://localhost:3000"
+export const DEV_ORIGIN = "http://localhost:3000"
 
 export function appOrigin() {
   const configured = process.env.BETTER_AUTH_URL?.trim().replace(/\/+$/, "")

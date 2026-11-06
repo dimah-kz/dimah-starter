@@ -1,7 +1,6 @@
 "use client"
 
 import type { InferS3Routes } from "@dimah-s3/core"
-import { dbClient } from "@dimah-s3/db/client"
 import { createS3Client } from "@dimah-s3/react"
 import type { Locale } from "@repo/i18n"
 import type { s3 } from "./s3"
@@ -14,9 +13,7 @@ declare module "@dimah-s3/core" {
   interface DimahS3Routes extends Record<InferS3Routes<typeof s3>, true> {}
 }
 
-export const s3Client = createS3Client({
-  plugins: [dbClient()],
-})
+const s3Client = createS3Client()
 
 export function S3ClientProvider({
   locale,

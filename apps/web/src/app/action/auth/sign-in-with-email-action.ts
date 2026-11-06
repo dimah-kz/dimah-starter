@@ -2,30 +2,42 @@
 
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
-import { getAuthRedirectFromForm } from "@/app/(auth)/lib/auth-form-parse"
+import { getTranslations } from "next-intl/server"
 import { type AuthFormState } from "@/app/(auth)/lib/auth-form-state"
-import { getFormString } from "@/components/form/form-parse"
+import { normalizeAuthRedirectTarget } from "@/app/(auth)/lib/auth-redirect"
+import { getFormPassword, getFormString } from "@/components/form/form-parse"
 import { toAbsoluteAppUrl } from "@repo/auth/app-origin"
-import { auth, getAuthApiErrorMessage } from "@repo/auth"
+import { auth, consumeRateLimit, getAuthApiErrorMessage } from "@repo/auth"
 
 export async function signInWithEmailAction(
   _prevState: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
-  const redirectTo = getAuthRedirectFromForm(formData)
+  const redirectTo = normalizeAuthRedirectTarget(formData.get("redirectTo"))
+  const email = getFormString(formData, "email")
+  const requestHeaders = await headers()
+
+  if (!(await consumeRateLimit("signIn", requestHeaders, email))) {
+    const t = await getTranslations("auth.errors")
+    return { formError: t("tooManyAttempts"), values: { email } }
+  }
 
   try {
     await auth.api.signInEmail({
-      headers: await headers(),
+      headers: requestHeaders,
       body: {
-        email: getFormString(formData, "email"),
-        password: getFormString(formData, "password"),
+        email,
+        password: getFormPassword(formData, "password"),
         callbackURL: toAbsoluteAppUrl(redirectTo),
         rememberMe: true,
       },
     })
   } catch (error) {
-    return { formError: getAuthApiErrorMessage(error) }
+    const t = await getTranslations("auth.errors")
+    return {
+      formError: getAuthApiErrorMessage(error) ?? t("unavailable"),
+      values: { email },
+    }
   }
 
   redirect(redirectTo)

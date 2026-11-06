@@ -1,20 +1,15 @@
 "use server"
 
 import { headers } from "next/headers"
-import { getTranslations } from "next-intl/server"
-import { invalidateOrganizationInvitationsCache } from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
-import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
+import { updateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 import type { MembershipRole } from "@repo/auth/organization-access"
-
-function isMembershipRole(role: string): role is MembershipRole {
-  return role === "owner" || role === "admin" || role === "member"
-}
 
 type CreateOrganizationInvitationInput = {
   organizationId: string
   email: string
-  role: string
+  role: MembershipRole
 }
 
 type CreateOrganizationInvitationResult = {
@@ -22,24 +17,13 @@ type CreateOrganizationInvitationResult = {
   error?: string
 }
 
+/** Better Auth checks the role exists and that only owners invite owners. */
 export async function createOrganizationInvitationAction(
   input: CreateOrganizationInvitationInput
 ): Promise<CreateOrganizationInvitationResult> {
-  const requestHeaders = await headers()
-
   try {
-    const actor = await auth.api.getActiveMemberRole({
-      headers: requestHeaders,
-    })
-    const allowed = memberRoleOptions(actor.role)
-
-    if (!isMembershipRole(input.role) || !allowed.includes(input.role)) {
-      const t = await getTranslations("common.errors")
-      return { success: false, error: t("invalidRole") }
-    }
-
     await auth.api.createInvitation({
-      headers: requestHeaders,
+      headers: await headers(),
       body: {
         email: input.email,
         role: input.role,
@@ -48,13 +32,11 @@ export async function createOrganizationInvitationAction(
       },
     })
   } catch (error) {
-    const t = await getTranslations("dashboard.invitationManage")
-    return {
-      success: false,
-      error: getAuthApiErrorMessage(error) || t("sendFailed"),
-    }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  invalidateOrganizationInvitationsCache(input.organizationId)
+  updateTag(
+    dashboardCacheTags.organizationInvitationsById(input.organizationId)
+  )
   return { success: true }
 }

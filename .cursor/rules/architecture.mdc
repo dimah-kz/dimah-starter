@@ -10,7 +10,7 @@ alwaysApply: false
 
 **Deps (app):** sub-feature → segment `lib/` → `src/lib` | `src/components`. No cross-sibling feature imports.
 
-**Action-first:** `app/<segment>/` + `app/action/<segment>/` (one mutation per file) → **`auth.api`** (auth) or **`createRouterClient`** (product). Product HTTP only at `/api/rpc`.
+**Action-first:** `app/<segment>/` + `app/action/<segment>/` (one mutation per file) → **`auth.api`** (auth) or **`createRouterClient`** (product). No mutation Route Handlers — only the mounted `/api/rpc`, `/api/auth`, `/api/s3`.
 
 **SSOT:** `*-routes.ts`, `cache-tags.ts` per segment. **No** `dashboard-access.ts` or custom RBAC modules.
 

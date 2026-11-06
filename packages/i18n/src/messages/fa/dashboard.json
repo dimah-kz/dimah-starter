@@ -6,20 +6,17 @@
       "platform": "پلتفرم",
       "organization": "سازمان",
       "organizationManagement": "مدیریت سازمان",
-      "platformManagement": "مدیریت پلتفرم",
-      "back": "بازگشت"
+      "platformManagement": "مدیریت پلتفرم"
     },
     "organizationSwitcher": {
-      "noOrganization": "بدون سازمان",
-      "notMember": "عضو هیچ سازمانی نیستید",
       "personalAccount": "حساب شخصی",
       "activeOrganization": "سازمان فعال",
-      "organizations": "سازمان‌ها",
+      "organizationsCount": "سازمان‌ها ({count, number})",
       "search": "جستجو…",
       "createOrganization": "ایجاد سازمان",
-      "createOrganizationHint": "برای شروع یک سازمان بسازید",
       "nameLabel": "نام سازمان",
       "switching": "در حال تغییر حساب…",
+      "switchFailed": "تغییر حساب انجام نشد.",
       "organizationCreated": "سازمان ایجاد شد.",
       "organizationCreateFailed": "ایجاد سازمان انجام نشد."
     }
@@ -39,7 +36,8 @@
       "remove": "حذف لوگو",
       "updated": "لوگوی سازمان به‌روزرسانی شد.",
       "removed": "لوگوی سازمان حذف شد.",
-      "uploadFailed": "آپلود لوگو ممکن نشد."
+      "uploadFailed": "آپلود لوگو ممکن نشد.",
+      "removeFailed": "حذف لوگو انجام نشد."
     }
   },
   "organizationSettings": {
@@ -93,7 +91,6 @@
     "sending": "در حال ارسال…",
     "sent": "دعوت ارسال شد.",
     "sendFailed": "ارسال دعوت ممکن نشد.",
-    "cancel": "لغو دعوت",
     "cancelTitle": "لغو دعوت",
     "cancelDescription": "دعوت {email} دیگر معتبر نخواهد بود.",
     "cancelConfirm": "لغو دعوت",

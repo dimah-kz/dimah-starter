@@ -16,7 +16,8 @@
     "displayName": "Display name",
     "save": "Save changes",
     "saving": "Saving…",
-    "saved": "Your profile was updated."
+    "saved": "Your profile was updated.",
+    "saveFailed": "Could not update your profile."
   },
   "password": {
     "title": "Password",
@@ -28,7 +29,8 @@
     "confirm": "Confirm new password",
     "save": "Update password",
     "saving": "Updating…",
-    "saved": "Your password was updated."
+    "saved": "Your password was updated.",
+    "saveFailed": "Could not update your password."
   },
   "sessions": {
     "title": "Active sessions",

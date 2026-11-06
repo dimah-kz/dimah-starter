@@ -4,6 +4,7 @@ import Link from "next/link"
 import { io } from "next/cache"
 import { headers } from "next/headers"
 import { AcceptInvitationForm } from "@/app/(auth)/accept-invitation/[invitationId]/components/accept-invitation-form"
+import { withAuthRedirect } from "@/app/(auth)/lib/auth-redirect"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { MembershipRoleBadge } from "@/components/badge/membership-role-badge"
 import { Alert, AlertDescription } from "@repo/ui/components/alert"
@@ -54,8 +55,7 @@ async function AcceptInvitationContent({ params }: AcceptInvitationPageProps) {
 
 async function SignedOutInvitation({ invitationId }: { invitationId: string }) {
   const t = await getTranslations("auth.acceptInvitation")
-  const redirect = authRoutes.acceptInvitation(invitationId)
-  const query = new URLSearchParams({ redirect }).toString()
+  const redirectTo = authRoutes.acceptInvitation(invitationId)
 
   return (
     <div className="space-y-4 text-center">
@@ -63,14 +63,14 @@ async function SignedOutInvitation({ invitationId }: { invitationId: string }) {
       <p className="text-sm">
         <Link
           className="font-medium text-primary"
-          href={`${authRoutes.login()}?${query}`}
+          href={withAuthRedirect(authRoutes.login(), redirectTo)}
         >
           {t("signIn")}
         </Link>
         <span className="text-muted-foreground"> · </span>
         <Link
           className="font-medium text-primary"
-          href={`${authRoutes.signup()}?${query}`}
+          href={withAuthRedirect(authRoutes.signup(), redirectTo)}
         >
           {t("signUp")}
         </Link>
@@ -87,7 +87,7 @@ async function SignedInInvitation({
   requestHeaders: Headers
 }) {
   const t = await getTranslations("auth.acceptInvitation")
-  let loadError: unknown
+  let loadError: string | undefined
   let invitation: Awaited<ReturnType<typeof auth.api.getInvitation>> | undefined
 
   try {
@@ -96,15 +96,13 @@ async function SignedInInvitation({
       query: { id: invitationId },
     })
   } catch (error) {
-    loadError = error
+    loadError = getAuthApiErrorMessage(error)
   }
 
   if (!invitation) {
     return (
       <Alert variant="destructive">
-        <AlertDescription>
-          {getAuthApiErrorMessage(loadError) || t("unavailable")}
-        </AlertDescription>
+        <AlertDescription>{loadError ?? t("unavailable")}</AlertDescription>
       </Alert>
     )
   }

@@ -52,7 +52,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
 async function DashboardShell({ children }: DashboardLayoutProps) {
   const session = await requireDashboardSession()
-  const sidebar = await getDashboardSidebarProps(session.user.id)
+  const sidebar = await getDashboardSidebarProps()
   const locale = await getLocale()
 
   return (

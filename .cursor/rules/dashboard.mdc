@@ -8,7 +8,7 @@ alwaysApply: false
 
 **SSOT:** `dashboard-routes.ts`, `cache-tags.ts` (inside the app). Dashboard copy: `@repo/i18n` `dashboard.json`. **Mirror** a sibling feature when adding routes. Admin and organization manage nav lives in the sidebar only — no in-page subnav or shared section title.
 
-**Writes:** `action/dashboard/…` → `auth.api`. **Reads:** `get-*.ts` + `'use cache'` + tags.
+**Writes:** `action/dashboard/…` → `auth.api`. **Reads:** `get-*.ts` = `requirePlatformAdmin` / `requireOrganizationManager`, then `'use cache'` + tags — never rely on a layout gate alone.
 
 **Lists:** URL `list/` + `ListTable`; never ReUI DataGrid / TanStack Table for server pages.
 

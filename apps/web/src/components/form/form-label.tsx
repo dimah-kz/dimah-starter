@@ -1,7 +1,7 @@
 import { Label } from "@repo/ui/components/label"
 import { cn } from "cn"
 
-export function RequiredMark({ className }: { className?: string }) {
+function RequiredMark({ className }: { className?: string }) {
   return (
     <span
       aria-hidden="true"

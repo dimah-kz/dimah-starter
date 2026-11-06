@@ -1,7 +1,6 @@
 import {
   dateTimeOptions,
   formatDate,
-  getLocaleDirection,
   loadMessages,
   type Locale,
 } from "@repo/i18n"
@@ -20,23 +19,23 @@ export function appName(locale: Locale) {
   return loadMessages(locale).common.appTitle
 }
 
-export function emailDirection(locale: Locale) {
-  return getLocaleDirection(locale)
-}
-
+/**
+ * Labels for a Better Auth role string (`"admin,member"`). Split locally:
+ * `parseRoleString` lives in `@repo/auth`, which already depends on this package.
+ */
 export function membershipRoleLabel(locale: Locale, role: string) {
   const labels = loadMessages(locale).badges.membershipRole as Record<
     string,
     string
   >
-  const separator = locale === "fa" ? "، " : ", "
-
-  return role
+  const tokens = role
     .split(",")
     .map((token) => token.trim())
     .filter(Boolean)
-    .map((token) => labels[token] ?? token)
-    .join(separator)
+
+  return new Intl.ListFormat(locale, { type: "conjunction" }).format(
+    tokens.map((token) => labels[token] ?? token)
+  )
 }
 
 export function formatEmailDate(value: Date | string, locale: Locale) {

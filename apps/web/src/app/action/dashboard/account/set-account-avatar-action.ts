@@ -1,52 +1,59 @@
 "use server"
 
-import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
 import { headers } from "next/headers"
+import { updateTag } from "next/cache"
+import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 import { deleteRouteObjects, toOwnedPublicUrl } from "@repo/storage"
 
-export async function setAccountAvatarAction(key: string) {
+type SetAccountAvatarResult = {
+  success: boolean
+  error?: string
+}
+
+export async function setAccountAvatarAction(
+  key: string
+): Promise<SetAccountAvatarResult> {
   const requestHeaders = await headers()
   const session = await auth.api.getSession({ headers: requestHeaders })
   const t = await getTranslations("common.errors")
+
   if (!session) {
-    return { error: t("unauthorized") }
+    return { success: false, error: t("unauthorized") }
   }
 
+  const userId = session.user.id
   const owned = await toOwnedPublicUrl({
     route: "avatar",
-    ownerId: session.user.id,
+    ownerId: userId,
     key,
   })
+
   if ("error" in owned) {
-    return {
-      error: t(
-        owned.error === "unconfigured"
-          ? "storagePublicUrlMissing"
-          : "invalidImageKey"
-      ),
-    }
+    return { success: false, error: t(owned.error) }
   }
-  const imageUrl = owned.url
 
   try {
     await auth.api.updateUser({
       headers: requestHeaders,
-      body: { image: imageUrl },
+      body: { image: owned.url },
     })
   } catch (error) {
-    return { error: getAuthApiErrorMessage(error) }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
   // The profile points at the new image: drop the previous one.
-  await deleteRouteObjects({
-    route: "avatar",
-    ownerId: session.user.id,
-    keep: key,
-    headers: requestHeaders,
-  })
+  after(() =>
+    deleteRouteObjects({
+      route: "avatar",
+      ownerId: userId,
+      keep: key,
+      headers: requestHeaders,
+    })
+  )
 
-  invalidateUserCache(session.user.id)
-  return { success: true as const, imageUrl }
+  updateTag(dashboardCacheTags.userProfileById(userId))
+  return { success: true }
 }

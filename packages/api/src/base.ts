@@ -1,16 +1,14 @@
 import { ORPCError, os } from "@orpc/server"
-import { auth } from "@repo/auth"
-
-type SessionResult = Awaited<ReturnType<typeof auth.api.getSession>>
+import { auth, type Session } from "@repo/auth"
 
 export type Context = {
   headers: Headers
-  getSession: () => Promise<SessionResult>
+  getSession: () => Promise<Session | null>
 }
 
 /** One `getSession` lookup per object, shared by repeated middleware and batch sub-requests. */
 export function createContext(headers: Headers): Context {
-  let session: Promise<SessionResult> | undefined
+  let session: Promise<Session | null> | undefined
 
   return {
     headers,

@@ -22,9 +22,9 @@ Sidebar drill-down for admin/manage comes from those registries in `sidebar-nav-
 
 1. Route under `dashboard/…` — copy a sibling.
 2. Register URL, labels, tags.
-3. Lists: `get-*.ts` + `'use cache'` + tags.
-4. Writes: `app/action/dashboard/…` → `auth.api`.
-5. Optional UI gate: `hasPermission` / `userHasPermission`.
+3. Gate: `requirePlatformAdmin()` / `requireOrganizationManager()` from `dashboard-session.ts` in the page **and** in its `get-*.ts`. A layout check does not stop the page from rendering into the RSC payload.
+4. Lists: `get-*.ts` (gate, then a `'use cache'` read with tags).
+5. Writes: `app/action/dashboard/…` → `auth.api`.
 6. Lists: copy the members table — [architecture.md § Placement](./architecture.md#placement).
 
 Remove a slice by deleting the route tree, matching `action/dashboard/…`, and unused SSOT keys.
@@ -40,11 +40,11 @@ Canonical: `…/members/components/members-table.tsx` (+ `members-columns.tsx`, 
 | Feature `*-columns` | `ListColumn<T>[]`                       |
 | shadcn `Select`     | Enum filter → `list.setFilter` (inline) |
 
-1. `get-*.ts` — tagged page from the db. Use `LIST_SEARCH_MIN_LENGTH` for `q`.
-2. `*-table-params.ts` — `listPath` + parse helpers.
+1. `*-table-params.ts` — page size, `*_TABLE_FILTERS` tuple (filter type and `Select` options), `parse*PageQuery`, `*TablePath` (`listPath`).
+2. `get-*.ts` — gate, then the tagged page from the db. Search with `toListSearchPattern(q)` (minimum length, escaped `ILIKE`).
 3. `*-columns.tsx` — identity `w-full min-w-0`; compact `min-w-*`; trailing actions `id: "actions"`.
 4. `*-table.tsx` — Card + `ListSearch` + `Select` + `ListTable` + `ListPagination`.
-5. `page.tsx` — parse search params, fetch, pass the page in. Fallback: `ListSkeleton`.
+5. `page.tsx` — parse search params, gate + fetch in parallel, pass the page in. Fallback: `ListSkeleton`.
 
 Show every column at every breakpoint (horizontal scroll). `caption`, `countLabel`, `busy={list.isPending}`. Empty: `tables.empty.results` when filtered; otherwise `tables.empty.<noun>`.
 

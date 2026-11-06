@@ -1,5 +1,11 @@
 # @repo/typescript-config
 
-Shared `tsconfig` bases: `base`, `react-library`, and `nextjs`.
+Shared `tsconfig` bases. Packages are internal: their TypeScript source is compiled by the app's bundler, so `tsc` only typechecks (`noEmit`, `Bundler` resolution).
 
-Extend the one that matches the package or app instead of copying compiler options around.
+| Base                 | For                                        |
+| -------------------- | ------------------------------------------ |
+| `base.json`          | Server-only packages (`api`, `auth`, `db`) |
+| `react-library.json` | Packages with React or DOM code            |
+| `nextjs.json`        | Next.js apps                               |
+
+A package `tsconfig.json` extends one of them and adds only what is specific to it, usually just `include`.

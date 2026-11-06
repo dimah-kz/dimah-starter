@@ -1,7 +1,6 @@
 "use client"
 
 import { useId, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { updateUserPlatformRoleAction } from "@/app/action/dashboard/admin/users/update-user-platform-role-action"
 import type { AdminUserItem } from "@/app/dashboard/admin/users/lib/get-admin-users-page"
 import { FormLabel } from "@/components/form/form-label"
@@ -42,7 +41,6 @@ export function UserPlatformRoleFormShell({
   onClose,
 }: UserPlatformRoleFormShellProps) {
   const t = useTranslations()
-  const router = useRouter()
   const fieldId = useId()
   const [isPending, startTransition] = useTransition()
   const userId = user?.id ?? null
@@ -85,7 +83,6 @@ export function UserPlatformRoleFormShell({
         type: "success",
       })
       onClose()
-      router.refresh()
     })
   }
 
@@ -122,8 +119,15 @@ export function UserPlatformRoleFormShell({
       }
     >
       {user ? (
-        <div key={user.id} className="space-y-3">
-          <FormLabel required>{t("common.roles")}</FormLabel>
+        <div
+          key={user.id}
+          role="group"
+          aria-labelledby={`${fieldId}-roles`}
+          className="space-y-3"
+        >
+          <FormLabel id={`${fieldId}-roles`} required>
+            {t("common.roles")}
+          </FormLabel>
           {platformRoles.map((option) => {
             const checkboxId = `${fieldId}-${option}`
 

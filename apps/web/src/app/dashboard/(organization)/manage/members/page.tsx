@@ -1,17 +1,10 @@
 import { Suspense } from "react"
 import { MemberManagementPanel } from "@/app/dashboard/(organization)/manage/members/components/member-management-panel"
-import {
-  getOrganizationMembersPage,
-  parseOrganizationMembersPageQuery,
-} from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
-import {
-  requireDashboardSession,
-  resolveDashboardActiveOrganizationId,
-} from "@/app/dashboard/lib/dashboard-session"
-import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { ListSkeleton } from "@/components/list"
+import { getOrganizationMembersPage } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
+import { parseOrganizationMembersPageQuery } from "@/app/dashboard/(organization)/manage/members/lib/members-table-params"
 import { getActorOrganizationRole } from "@/app/dashboard/(organization)/manage/lib/get-actor-organization-role"
-import { redirect } from "next/navigation"
+import { requireOrganizationManager } from "@/app/dashboard/lib/dashboard-session"
+import { ListSkeleton } from "@/components/list"
 
 type OrganizationMembersPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -30,19 +23,10 @@ export default function OrganizationMembersPage(
 async function OrganizationMembersPageContent({
   searchParams,
 }: OrganizationMembersPageProps) {
-  const [organizationId, resolvedSearchParams, session] = await Promise.all([
-    resolveDashboardActiveOrganizationId(),
-    searchParams,
-    requireDashboardSession(),
-  ])
-
-  if (!organizationId) {
-    redirect(dashboardRoutes.home())
-  }
-
-  const query = parseOrganizationMembersPageQuery(resolvedSearchParams)
-  const [data, actorRole] = await Promise.all([
-    getOrganizationMembersPage(organizationId, query),
+  const query = parseOrganizationMembersPageQuery(await searchParams)
+  const [{ session, organizationId }, data, actorRole] = await Promise.all([
+    requireOrganizationManager(),
+    getOrganizationMembersPage(query),
     getActorOrganizationRole(),
   ])
 

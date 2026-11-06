@@ -1,9 +1,9 @@
 "use server"
 
-import { invalidateOrganizationMembersCache } from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
 import { headers } from "next/headers"
-import { auth } from "@repo/auth"
-import { getAuthApiErrorMessage } from "@repo/auth"
+import { revalidateTag, updateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type RemoveOrganizationMemberInput = {
   organizationId: string
@@ -30,7 +30,8 @@ export async function removeOrganizationMemberAction(
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  invalidateOrganizationMembersCache(input.organizationId)
-
+  updateTag(dashboardCacheTags.organizationMembersById(input.organizationId))
+  // Member counts on the platform admin list; another actor reads those.
+  revalidateTag(dashboardCacheTags.adminOrganizationsPage(), "max")
   return { success: true }
 }

@@ -4,12 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "auth:generate": "pnpm --filter @repo/db auth:generate",
     "build": "next build",
-    "db:generate": "pnpm --filter @repo/db db:generate",
-    "db:migrate": "pnpm --filter @repo/db db:migrate",
-    "db:push": "pnpm --filter @repo/db db:push",
-    "db:studio": "pnpm --filter @repo/db db:studio",
     "dev": "next dev",
     "lint": "eslint",
     "start": "next start",
@@ -44,7 +39,6 @@
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "babel-plugin-react-compiler": "1.0.0",
     "eslint": "catalog:",
     "tailwindcss": "^4.3.4",
     "typescript": "catalog:"

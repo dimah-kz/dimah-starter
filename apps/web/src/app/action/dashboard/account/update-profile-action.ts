@@ -1,31 +1,33 @@
 "use server"
 
-import { type AccountFormState } from "@/app/action/dashboard/account/shared/account-form-state"
-import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
-import { getFormString } from "@/components/form/form-parse"
 import { headers } from "next/headers"
+import { updateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { getFormString } from "@/components/form/form-parse"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
+type UpdateProfileResult = {
+  success: boolean
+  error?: string
+}
+
 export async function updateProfileAction(
-  _prevState: AccountFormState,
   formData: FormData
-): Promise<AccountFormState> {
-  const name = getFormString(formData, "name")
+): Promise<UpdateProfileResult> {
+  const requestHeaders = await headers()
+  const session = await auth.api.getSession({ headers: requestHeaders })
 
   try {
     await auth.api.updateUser({
-      headers: await headers(),
-      body: { name },
+      headers: requestHeaders,
+      body: { name: getFormString(formData, "name") },
     })
   } catch (error) {
-    return { formError: getAuthApiErrorMessage(error) }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session?.user.id
-
-  if (userId) {
-    invalidateUserCache(userId)
+  if (session) {
+    updateTag(dashboardCacheTags.userProfileById(session.user.id))
   }
 
   return { success: true }

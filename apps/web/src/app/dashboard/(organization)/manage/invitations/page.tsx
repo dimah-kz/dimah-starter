@@ -1,16 +1,9 @@
 import { Suspense } from "react"
-import { redirect } from "next/navigation"
 import { InvitationManagementPanel } from "@/app/dashboard/(organization)/manage/invitations/components/invitation-management-panel"
-import {
-  getOrganizationInvitationsPage,
-  parseOrganizationInvitationsPageQuery,
-} from "@/app/dashboard/(organization)/manage/invitations/lib/get-organization-invitations-page"
+import { getOrganizationInvitationsPage } from "@/app/dashboard/(organization)/manage/invitations/lib/get-organization-invitations-page"
+import { parseOrganizationInvitationsPageQuery } from "@/app/dashboard/(organization)/manage/invitations/lib/invitations-table-params"
 import { getActorOrganizationRole } from "@/app/dashboard/(organization)/manage/lib/get-actor-organization-role"
-import {
-  requireDashboardSession,
-  resolveDashboardActiveOrganizationId,
-} from "@/app/dashboard/lib/dashboard-session"
-import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
+import { requireOrganizationManager } from "@/app/dashboard/lib/dashboard-session"
 import { ListSkeleton } from "@/components/list"
 
 type OrganizationInvitationsPageProps = {
@@ -30,19 +23,10 @@ export default function OrganizationInvitationsPage(
 async function OrganizationInvitationsPageContent({
   searchParams,
 }: OrganizationInvitationsPageProps) {
-  const [organizationId, resolvedSearchParams] = await Promise.all([
-    resolveDashboardActiveOrganizationId(),
-    searchParams,
-    requireDashboardSession(),
-  ])
-
-  if (!organizationId) {
-    redirect(dashboardRoutes.home())
-  }
-
-  const query = parseOrganizationInvitationsPageQuery(resolvedSearchParams)
-  const [data, actorRole] = await Promise.all([
-    getOrganizationInvitationsPage(organizationId, query),
+  const query = parseOrganizationInvitationsPageQuery(await searchParams)
+  const [{ organizationId }, data, actorRole] = await Promise.all([
+    requireOrganizationManager(),
+    getOrganizationInvitationsPage(query),
     getActorOrganizationRole(),
   ])
 

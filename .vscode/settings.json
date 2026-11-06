@@ -4,7 +4,7 @@
     "*.css": "tailwindcss"
   },
   "tailwindCSS.experimental.configFile": {
-    "packages/ui/src/styles/globals.css": "packages/ui/**"
+    "packages/ui/src/styles/globals.css": ["packages/ui/**", "apps/**"]
   },
   "tailwindCSS.files.exclude": [
     "**/.git/**",

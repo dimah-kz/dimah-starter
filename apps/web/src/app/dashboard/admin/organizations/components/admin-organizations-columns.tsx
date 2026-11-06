@@ -1,6 +1,6 @@
 "use client"
 
-import { formatDate, type Locale } from "@repo/i18n"
+import { formatDate, formatNumber, type Locale } from "@repo/i18n"
 import {
   Identity,
   IdentityAvatar,
@@ -50,7 +50,7 @@ export function createAdminOrganizationsColumns({
       id: "members",
       header: t("columns.members"),
       className: "min-w-24",
-      cell: (row) => row.memberCount,
+      cell: (row) => formatNumber(row.memberCount, locale),
     },
     {
       id: "created",

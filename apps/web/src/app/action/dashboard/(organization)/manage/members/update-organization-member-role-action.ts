@@ -1,15 +1,16 @@
 "use server"
 
-import { invalidateOrganizationMembersCache } from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
 import { headers } from "next/headers"
+import { updateTag } from "next/cache"
 import { getTranslations } from "next-intl/server"
-import { auth } from "@repo/auth"
-import { getAuthApiErrorMessage } from "@repo/auth"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { auth, getAuthApiErrorMessage } from "@repo/auth"
+import type { MembershipRole } from "@repo/auth/organization-access"
 
 type UpdateOrganizationMemberRoleInput = {
   organizationId: string
   memberId: string
-  roles: string[]
+  roles: MembershipRole[]
 }
 
 type UpdateOrganizationMemberRoleResult = {
@@ -38,7 +39,6 @@ export async function updateOrganizationMemberRoleAction(
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  invalidateOrganizationMembersCache(input.organizationId)
-
+  updateTag(dashboardCacheTags.organizationMembersById(input.organizationId))
   return { success: true }
 }

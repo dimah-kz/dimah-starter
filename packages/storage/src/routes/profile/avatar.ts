@@ -1,5 +1,4 @@
 import { route } from "@dimah-s3/server"
-import "../../locals"
 import { imageObject, imageUpload } from "./image"
 
 /** The signed-in user's picture. */

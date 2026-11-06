@@ -1,0 +1,7 @@
+# LF everywhere, as Prettier and .editorconfig expect — also on Windows clones.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

@@ -8,41 +8,23 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@repo/ui/components/dropdown-menu"
-import { cn } from "cn"
 import { IR, US } from "country-flag-icons/react/1x1"
 import { CheckIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
-import { useTransition, type ComponentProps } from "react"
+import { useTransition } from "react"
 
-export const localeOptions: Record<Locale, { label: string; Flag: typeof IR }> =
-  {
-    en: { label: "English", Flag: US },
-    fa: { label: "فارسی", Flag: IR },
-  }
+const localeOptions: Record<Locale, { label: string; Flag: typeof IR }> = {
+  en: { label: "English", Flag: US },
+  fa: { label: "فارسی", Flag: IR },
+}
 
-export function LocaleFlag({
-  locale,
-  className,
-  ...props
-}: Readonly<
-  { locale: Locale } & Omit<ComponentProps<typeof IR>, "className"> & {
-      className?: string
-    }
->) {
-  const Flag = localeOptions[locale].Flag
-  return (
-    <Flag
-      aria-hidden
-      className={cn("size-3.5 rounded-xs", className)}
-      {...props}
-    />
-  )
+function LocaleFlag({ locale }: { locale: Locale }) {
+  const { Flag } = localeOptions[locale]
+  return <Flag aria-hidden className="size-3.5 rounded-xs" />
 }
 
 export function NavUserLocaleMenu() {
-  const router = useRouter()
-  const currentLocale = useLocale() as Locale
+  const currentLocale = useLocale()
   const t = useTranslations("common")
   const [isPending, startTransition] = useTransition()
 
@@ -58,7 +40,6 @@ export function NavUserLocaleMenu() {
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent>
         {locales.map((locale) => {
-          const option = localeOptions[locale]
           const isActive = locale === currentLocale
 
           return (
@@ -70,14 +51,12 @@ export function NavUserLocaleMenu() {
                   return
                 }
 
-                startTransition(async () => {
-                  await setLocale(locale)
-                  router.refresh()
-                })
+                // Setting the cookie in a Server Action re-renders the route.
+                startTransition(() => setLocale(locale))
               }}
             >
               <LocaleFlag locale={locale} />
-              <span className="flex-1">{option.label}</span>
+              <span className="flex-1">{localeOptions[locale].label}</span>
               {isActive ? (
                 <CheckIcon className="text-muted-foreground" />
               ) : null}

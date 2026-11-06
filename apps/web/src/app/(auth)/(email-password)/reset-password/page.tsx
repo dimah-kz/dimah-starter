@@ -3,6 +3,7 @@ import { ResetPasswordForm } from "@/app/(auth)/(email-password)/reset-password/
 import { AuthCrossLink } from "@/app/(auth)/components/auth-cross-link"
 import { normalizeAuthRedirectTarget } from "@/app/(auth)/lib/auth-redirect"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
+import { passwordLimits } from "@repo/auth/password-limits"
 import { getTranslations } from "next-intl/server"
 
 type ResetPasswordPageProps = {
@@ -25,15 +26,19 @@ async function ResetPasswordPageContent({
   const params = await searchParams
   const token = typeof params.token === "string" ? params.token : ""
   const error = typeof params.error === "string" ? params.error : ""
-  const redirectTo = normalizeAuthRedirectTarget(
-    typeof params.redirect === "string" ? params.redirect : undefined
-  )
+  const redirectTo = normalizeAuthRedirectTarget(params.redirect)
 
   if (!token || error === "INVALID_TOKEN") {
     return <InvalidResetLink />
   }
 
-  return <ResetPasswordForm token={token} redirectTo={redirectTo} />
+  return (
+    <ResetPasswordForm
+      token={token}
+      redirectTo={redirectTo}
+      passwordLimits={passwordLimits}
+    />
+  )
 }
 
 async function InvalidResetLink() {

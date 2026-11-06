@@ -18,16 +18,6 @@ import faEmail from "./messages/fa/email.json"
 import faMarketing from "./messages/fa/marketing.json"
 import faTables from "./messages/fa/tables.json"
 
-export type MessageNamespace =
-  | "common"
-  | "auth"
-  | "dashboard"
-  | "account"
-  | "badges"
-  | "tables"
-  | "email"
-  | "marketing"
-
 export type Messages = {
   common: typeof enCommon
   auth: typeof enAuth
@@ -63,5 +53,5 @@ const catalogs: Record<Locale, Messages> = {
 }
 
 export function loadMessages(locale: Locale): Messages {
-  return catalogs[locale] ?? catalogs.en
+  return catalogs[locale]
 }

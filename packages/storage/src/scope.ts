@@ -1,5 +1,4 @@
 import type { DimahS3Locals } from "@dimah-s3/server"
-import "./locals"
 
 /** Who owns a route's objects. Each owner is one dimah-s3 scope. */
 export type Owner = "user" | "organization"

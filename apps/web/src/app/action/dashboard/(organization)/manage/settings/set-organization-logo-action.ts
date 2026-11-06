@@ -1,22 +1,29 @@
 "use server"
 
-import { invalidateOrganizationBrandingCache } from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { headers } from "next/headers"
-import { getTranslations } from "next-intl/server"
 import { updateTag } from "next/cache"
+import { after } from "next/server"
+import { getTranslations } from "next-intl/server"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 import { deleteRouteObjects, toOwnedPublicUrl } from "@repo/storage"
 
+type SetOrganizationLogoResult = {
+  success: boolean
+  error?: string
+}
+
+/** Logo of the active organization — the scope the `logo` upload route used. */
 export async function setOrganizationLogoAction(
-  organizationId: string,
   key: string
-) {
+): Promise<SetOrganizationLogoResult> {
   const requestHeaders = await headers()
   const session = await auth.api.getSession({ headers: requestHeaders })
+  const organizationId = session?.session.activeOrganizationId
   const t = await getTranslations("common.errors")
-  if (!session) {
-    return { error: t("unauthorized") }
+
+  if (!organizationId) {
+    return { success: false, error: t("unauthorized") }
   }
 
   const owned = await toOwnedPublicUrl({
@@ -24,39 +31,30 @@ export async function setOrganizationLogoAction(
     ownerId: organizationId,
     key,
   })
+
   if ("error" in owned) {
-    return {
-      error: t(
-        owned.error === "unconfigured"
-          ? "storagePublicUrlMissing"
-          : "invalidImageKey"
-      ),
-    }
+    return { success: false, error: t(owned.error) }
   }
-  const imageUrl = owned.url
 
   try {
     await auth.api.updateOrganization({
       headers: requestHeaders,
-      body: {
-        organizationId,
-        data: { logo: imageUrl },
-      },
+      body: { organizationId, data: { logo: owned.url } },
     })
   } catch (error) {
-    return { error: getAuthApiErrorMessage(error) }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
   // The organization points at the new logo: drop the previous one.
-  await deleteRouteObjects({
-    route: "logo",
-    ownerId: organizationId,
-    keep: key,
-    headers: requestHeaders,
-  })
+  after(() =>
+    deleteRouteObjects({
+      route: "logo",
+      ownerId: organizationId,
+      keep: key,
+      headers: requestHeaders,
+    })
+  )
 
-  invalidateOrganizationBrandingCache(organizationId)
-  updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-
-  return { success: true as const, imageUrl }
+  updateTag(dashboardCacheTags.organizationBrandingById(organizationId))
+  return { success: true }
 }

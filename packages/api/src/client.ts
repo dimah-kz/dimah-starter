@@ -1,4 +1,4 @@
-import { createORPCClient as createClient } from "@orpc/client"
+import { createORPCClient } from "@orpc/client"
 import { RPCLink } from "@orpc/client/fetch"
 import type { ClientContext } from "@orpc/client"
 import type { RPCLinkOptions } from "@orpc/client/fetch"
@@ -6,7 +6,7 @@ import type { RouterClient } from "@orpc/server"
 import { prefix } from "./prefix"
 import type { router } from "./router"
 
-export function createORPCClient<
+export function createApiClient<
   TContext extends ClientContext = Record<never, never>,
 >(options: {
   origin: string
@@ -18,5 +18,5 @@ export function createORPCClient<
     headers: options.headers,
   })
 
-  return createClient(link)
+  return createORPCClient(link)
 }

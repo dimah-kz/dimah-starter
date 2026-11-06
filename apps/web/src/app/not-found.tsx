@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
-import { buttonVariants } from "@repo/ui/components/button"
+import { Button } from "@repo/ui/components/button"
 import {
   Card,
   CardContent,
@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card"
-import { cn } from "cn"
 import { HomeIcon } from "lucide-react"
 
 export default async function NotFound() {
@@ -22,10 +21,10 @@ export default async function NotFound() {
           <CardDescription>{t("notFound.description")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Link href="/" className={cn(buttonVariants())}>
+          <Button render={<Link href="/" />} nativeButton={false}>
             <HomeIcon data-icon="inline-start" />
             {t("goHome")}
-          </Link>
+          </Button>
         </CardContent>
       </Card>
     </div>

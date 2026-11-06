@@ -1,7 +1,14 @@
 import { spawnSync } from "node:child_process"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { intro, log, outro } from "@clack/prompts"
 import pc from "picocolors"
+
+const repoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../.."
+)
 
 export function blank() {
   console.log()
@@ -20,11 +27,6 @@ export function step(label, detail = "") {
 /** @param {string} label @param {string} [detail] */
 export function ok(label, detail = "") {
   log.success(line(label, detail))
-}
-
-/** @param {string} label @param {string} [detail] */
-export function warn(label, detail = "") {
-  log.warn(line(label, detail))
 }
 
 /** @param {string} label @param {string} [detail] */
@@ -177,12 +179,13 @@ export function runPnpm(args, { cwd }) {
   return { stdout, stderr, combined }
 }
 
-/** @param {{ cwd: string }} opts */
-export function formatRepo({ cwd }) {
+/** Prettier over `packages/ui` only, from the repo root so its config and ignore files apply. */
+export function formatUi() {
   step("format", "prettier…")
-  runPnpm(["exec", "prettier", "--write", ".", "--log-level", "warn"], {
-    cwd,
-  })
+  runPnpm(
+    ["exec", "prettier", "--write", "packages/ui", "--log-level", "warn"],
+    { cwd: repoRoot }
+  )
   ok("format", "done")
 }
 

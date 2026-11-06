@@ -1,13 +1,4 @@
 {
   "extends": "@repo/typescript-config/base.json",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "lib": ["ES2022", "DOM"],
-    "noEmit": true,
-    "declaration": false,
-    "declarationMap": false
-  },
   "include": ["src"]
 }

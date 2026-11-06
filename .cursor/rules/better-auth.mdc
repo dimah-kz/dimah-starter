@@ -10,8 +10,8 @@ alwaysApply: false
 
 **Writes:** app `action/` → `auth.api` with `headers: await headers()`. Sign-in/up still pass `body`; `nextCookies()` sets cookies. Product copy via `getTranslations` — not hardcoded English.
 
-**Permissions:** extend `*-access.ts`; UI gates via `hasPermission` / `userHasPermission`. No `dashboard-access.ts`.
+**Permissions:** extend `*-access.ts`; dashboard gates in `dashboard-session.ts` (`requirePlatformAdmin`, `requireOrganizationManager`). No `dashboard-access.ts`.
 
-`localhost` is not trusted in production. Rate-limit storage is the `auth.rate_limit` table (HTTP auth only). Cookie cache is 5 minutes.
+`localhost` is not trusted in production. Rate limits live in `auth.rate_limit`: Better Auth limits `/api/auth`; sign-in, sign-up and reset actions call `consumeRateLimit` first. Cookie cache is 5 minutes.
 
 **Detail (Read):** [docs/agents/better-auth.md](docs/agents/better-auth.md).

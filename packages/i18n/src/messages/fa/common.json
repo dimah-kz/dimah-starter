@@ -17,8 +17,6 @@
     "range": "{start}–{end} از {total}",
     "rangeAria": "{start} تا {end} از {total} {countLabel}"
   },
-  "item": "مورد",
-  "items": "مورد",
   "clearSearch": "پاک کردن جستجو",
   "search": "جستجو…",
   "cancel": "انصراف",
@@ -35,8 +33,7 @@
     "unauthorized": "باید وارد شوید.",
     "invalidImageKey": "این فایل تصویر معتبری نیست.",
     "storagePublicUrlMissing": "آدرس عمومی ذخیره‌سازی تنظیم نشده است.",
-    "selectRole": "حداقل یک نقش انتخاب کنید.",
-    "invalidRole": "نقش نامعتبر است."
+    "selectRole": "حداقل یک نقش انتخاب کنید."
   },
   "notFound": {
     "title": "صفحه پیدا نشد",

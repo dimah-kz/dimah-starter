@@ -1,41 +1,47 @@
 "use server"
 
-import { invalidateOrganizationBrandingCache } from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { headers } from "next/headers"
-import { getTranslations } from "next-intl/server"
 import { updateTag } from "next/cache"
+import { after } from "next/server"
+import { getTranslations } from "next-intl/server"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 import { deleteRouteObjects } from "@repo/storage"
 
-export async function removeOrganizationLogoAction(organizationId: string) {
+type RemoveOrganizationLogoResult = {
+  success: boolean
+  error?: string
+}
+
+/** Clears the logo of the active organization. */
+export async function removeOrganizationLogoAction(): Promise<RemoveOrganizationLogoResult> {
   const requestHeaders = await headers()
   const session = await auth.api.getSession({ headers: requestHeaders })
-  if (!session) {
+  const organizationId = session?.session.activeOrganizationId
+
+  if (!organizationId) {
     const t = await getTranslations("common.errors")
-    return { error: t("unauthorized") }
+    return { success: false, error: t("unauthorized") }
   }
 
   try {
     await auth.api.updateOrganization({
       headers: requestHeaders,
-      body: {
-        organizationId,
-        data: { logo: "" },
-      },
+      body: { organizationId, data: { logo: "" } },
     })
   } catch (error) {
-    return { error: getAuthApiErrorMessage(error) }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  await deleteRouteObjects({
-    route: "logo",
-    ownerId: organizationId,
-    headers: requestHeaders,
-  })
+  // Cleared first, deleted after: the organization never points at a missing file.
+  after(() =>
+    deleteRouteObjects({
+      route: "logo",
+      ownerId: organizationId,
+      headers: requestHeaders,
+    })
+  )
 
-  invalidateOrganizationBrandingCache(organizationId)
-  updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-
-  return { success: true as const }
+  updateTag(dashboardCacheTags.organizationBrandingById(organizationId))
+  return { success: true }
 }

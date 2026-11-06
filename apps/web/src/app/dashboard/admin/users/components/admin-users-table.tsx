@@ -1,12 +1,12 @@
 "use client"
 
-import { useMemo, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 import { banUserAction } from "@/app/action/dashboard/admin/users/ban-user-action"
 import { unbanUserAction } from "@/app/action/dashboard/admin/users/unban-user-action"
 import { createAdminUsersColumns } from "@/app/dashboard/admin/users/components/admin-users-columns"
 import type { AdminUserItem } from "@/app/dashboard/admin/users/lib/get-admin-users-page"
 import {
+  ADMIN_USER_TABLE_FILTERS,
   adminUsersTablePath,
   type AdminUserTableFilter,
 } from "@/app/dashboard/admin/users/lib/admin-users-table-params"
@@ -69,7 +69,6 @@ export function AdminUsersTable({
   const locale = useLocale() as Locale
   const t = useTranslations()
   const tTables = useTranslations("tables")
-  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [banTarget, setBanTarget] = useState<AdminUserItem | null>(null)
 
@@ -84,43 +83,35 @@ export function AdminUsersTable({
     countLabel: tTables("count.users"),
   })
 
-  const filterOptions = (["all", "admins", "users", "banned"] as const).map(
-    (value) => ({
-      value,
-      label: t(`tables.filters.${value}`),
-    })
-  )
+  const filterOptions = ADMIN_USER_TABLE_FILTERS.map((value) => ({
+    value,
+    label: t(`tables.filters.${value}`),
+  }))
 
-  const columns = useMemo(
-    () =>
-      createAdminUsersColumns({
-        t: tTables,
-        locale,
-        actorUserId,
-        disabled: isPending,
-        onChangeRole,
-        onBan: setBanTarget,
-        onUnban: (user) => {
-          startTransition(async () => {
-            const result = await unbanUserAction({ userId: user.id })
-            if (!result.success) {
-              toast.add({
-                title:
-                  result.error ?? t("dashboard.adminUserManage.unbanFailed"),
-                type: "error",
-              })
-              return
-            }
-            toast.add({
-              title: t("dashboard.adminUserManage.unbanned"),
-              type: "success",
-            })
-            router.refresh()
+  const columns = createAdminUsersColumns({
+    t: tTables,
+    locale,
+    actorUserId,
+    disabled: isPending,
+    onChangeRole,
+    onBan: setBanTarget,
+    onUnban: (user) => {
+      startTransition(async () => {
+        const result = await unbanUserAction({ userId: user.id })
+        if (!result.success) {
+          toast.add({
+            title: result.error ?? t("dashboard.adminUserManage.unbanFailed"),
+            type: "error",
           })
-        },
-      }),
-    [actorUserId, isPending, locale, onChangeRole, router, t, tTables]
-  )
+          return
+        }
+        toast.add({
+          title: t("dashboard.adminUserManage.unbanned"),
+          type: "success",
+        })
+      })
+    },
+  })
 
   const handleBan = () => {
     if (!banTarget) return
@@ -138,7 +129,6 @@ export function AdminUsersTable({
         title: t("dashboard.adminUserManage.banned"),
         type: "success",
       })
-      router.refresh()
     })
   }
 

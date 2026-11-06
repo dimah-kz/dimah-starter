@@ -1,16 +1,21 @@
 "use client"
 
-import { getLocaleDirection, type Locale } from "@repo/i18n"
+import { getLocaleDirection } from "@repo/i18n"
 import { useLocale } from "next-intl"
-import { useEffect } from "react"
+import { useLayoutEffect } from "react"
 
+/**
+ * The root layout's inline script sets `lang` / `dir` before the first paint.
+ * React never updates them afterwards (the `<html>` props are static), so this
+ * re-applies them after a client-side locale switch and after the dev-only
+ * Strict Mode remount, which resets `<html>` attributes.
+ */
 export function HtmlLocaleSync() {
-  const locale = useLocale() as Locale
+  const locale = useLocale()
 
-  useEffect(() => {
-    const direction = getLocaleDirection(locale)
+  useLayoutEffect(() => {
     document.documentElement.lang = locale
-    document.documentElement.dir = direction
+    document.documentElement.dir = getLocaleDirection(locale)
   }, [locale])
 
   return null

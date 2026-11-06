@@ -6,7 +6,13 @@ import { HtmlLocaleSync } from "@/components/locale/html-locale-sync"
 import { LoadingFallbackShell } from "@/components/fallback/loading-fallback"
 import { siteAuthor } from "@/lib/site"
 import { appOrigin } from "@repo/auth/app-origin"
-import { defaultLocale, getLocaleDirection, type Locale } from "@repo/i18n"
+import {
+  defaultLocale,
+  directions,
+  getLocaleDirection,
+  localeCookieName,
+  type Locale,
+} from "@repo/i18n"
 import { Vazirmatn } from "next/font/google"
 import { getLocale, getMessages, getTranslations } from "next-intl/server"
 import { NextIntlClientProvider } from "next-intl"
@@ -23,6 +29,14 @@ const openGraphLocales: Record<Locale, string> = {
   en: "en_US",
   fa: "fa_IR",
 }
+
+/**
+ * `<html>` is static (no cookie read outside Suspense), so it ships the default
+ * locale. This runs before the first paint and applies the locale cookie's
+ * `lang` / `dir`, so RTL users never see an LTR flash. `HtmlLocaleSync` keeps
+ * them in step after client-side locale switches.
+ */
+const htmlLocaleScript = `(function(){try{var d=${JSON.stringify(directions)},m=document.cookie.match(/(?:^|; )${localeCookieName}=([^;]*)/),l=m&&decodeURIComponent(m[1]);if(l&&{}.hasOwnProperty.call(d,l)){var h=document.documentElement;h.lang=l;h.dir=d[l]}}catch(e){}})()`
 
 export const viewport: Viewport = {
   themeColor: [
@@ -97,6 +111,9 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: htmlLocaleScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <ThemeProvider>
           <Suspense
@@ -116,13 +133,16 @@ async function RootIntlShell({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = await getLocale()
-  const messages = await getMessages()
-  const direction = getLocaleDirection(locale)
+  // The provider inherits the locale from `i18n/request.ts`. Messages are passed
+  // only to keep the server-only `email` namespace out of the client payload.
+  const [locale, { email: _email, ...messages }] = await Promise.all([
+    getLocale(),
+    getMessages(),
+  ])
 
   return (
-    <DirectionProvider direction={direction}>
-      <NextIntlClientProvider locale={locale} messages={messages}>
+    <DirectionProvider direction={getLocaleDirection(locale)}>
+      <NextIntlClientProvider messages={messages}>
         <HtmlLocaleSync />
         {children}
       </NextIntlClientProvider>

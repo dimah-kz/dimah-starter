@@ -1,12 +1,12 @@
 "use client"
 
-import { useMemo, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 import { PlusIcon } from "lucide-react"
 import { cancelOrganizationInvitationAction } from "@/app/action/dashboard/(organization)/manage/invitations/cancel-organization-invitation-action"
 import { createInvitationsColumns } from "@/app/dashboard/(organization)/manage/invitations/components/invitations-columns"
 import type { OrganizationInvitationItem } from "@/app/dashboard/(organization)/manage/invitations/lib/get-organization-invitations-page"
 import {
+  INVITATION_TABLE_FILTERS,
   organizationInvitationsTablePath,
   type InvitationTableFilter,
 } from "@/app/dashboard/(organization)/manage/invitations/lib/invitations-table-params"
@@ -57,14 +57,6 @@ type InvitationsTableProps = {
   onInvite: () => void
 }
 
-const invitationFilters = [
-  "all",
-  "pending",
-  "accepted",
-  "rejected",
-  "canceled",
-] as const
-
 export function InvitationsTable({
   organizationId,
   invitations,
@@ -79,7 +71,6 @@ export function InvitationsTable({
   const t = useTranslations()
   const tTables = useTranslations("tables")
   const tManage = useTranslations("dashboard.invitationManage")
-  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [cancelTarget, setCancelTarget] =
     useState<OrganizationInvitationItem | null>(null)
@@ -95,22 +86,18 @@ export function InvitationsTable({
     countLabel: tTables("count.invitations"),
   })
 
-  const filterOptions = invitationFilters.map((value) => ({
+  const filterOptions = INVITATION_TABLE_FILTERS.map((value) => ({
     value,
     label: t(`tables.filters.${value}`),
   }))
 
-  const columns = useMemo(
-    () =>
-      createInvitationsColumns({
-        t: tTables,
-        tManage,
-        locale,
-        disabled: isPending,
-        onCancel: setCancelTarget,
-      }),
-    [isPending, locale, tManage, tTables]
-  )
+  const columns = createInvitationsColumns({
+    t: tTables,
+    tManage,
+    locale,
+    disabled: isPending,
+    onCancel: setCancelTarget,
+  })
 
   const handleCancel = () => {
     if (!cancelTarget) return
@@ -131,7 +118,6 @@ export function InvitationsTable({
 
       setCancelTarget(null)
       toast.add({ title: tManage("canceled"), type: "success" })
-      router.refresh()
     })
   }
 

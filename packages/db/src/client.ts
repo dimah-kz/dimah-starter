@@ -1,36 +1,27 @@
-import { config } from "dotenv"
 import { defineRelationsPart } from "drizzle-orm"
 import { drizzle } from "drizzle-orm/node-postgres"
 import { Pool } from "pg"
 import {
   account,
   authRelations,
+  dimahS3Tables,
   invitation,
   member,
   organization,
-  private_dimah_s3_settings,
   rateLimit,
   session,
-  storageFolder,
-  storageObject,
-  storageRelations,
   user,
   verification,
 } from "./schema"
 
-config({ path: "../../.env" })
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
-
 /**
- * The empty part registers every table on `db.query` (`verification` and
- * `rateLimit` have no relations). Auth and storage parts replace those
- * entries with the real relation graph.
+ * The empty part registers every table on `db.query` (`verification`,
+ * `rateLimit`, and the storage tables have no relations). The auth part
+ * replaces those entries with the real relation graph. The storage keys are
+ * the ones the dimah-s3 Drizzle adapter looks up.
  */
 export const db = drizzle({
-  client: pool,
+  client: new Pool({ connectionString: process.env.DATABASE_URL }),
   relations: {
     ...defineRelationsPart({
       user,
@@ -41,12 +32,8 @@ export const db = drizzle({
       member,
       invitation,
       rateLimit,
-      storageObject,
-      storageFolder,
-      private_dimah_s3_settings,
+      ...dimahS3Tables,
     }),
     ...authRelations,
-    ...storageRelations,
   },
 })
-export { pool }

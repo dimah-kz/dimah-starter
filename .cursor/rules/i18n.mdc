@@ -8,6 +8,6 @@ alwaysApply: false
 
 Product copy in `@repo/i18n` — no hardcoded strings in UI or Server Actions. URLs stay English in `*-routes.ts`.
 
-Cookie locale (`BS_LOCALE`); no `[locale]` segment. `lang`/`dir` on root layout only.
+Cookie locale (`NEXT_LOCALE`); no `[locale]` segment. `lang`/`dir` on root layout only.
 
 **Detail (Read):** [docs/agents/i18n.md](docs/agents/i18n.md).

@@ -16,15 +16,16 @@ import { cn } from "cn"
 import { HomeIcon, SettingsIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 
-type AuthSettingsMenuProps = {
+type SettingsMenuProps = {
   className?: string
   showHome?: boolean
 }
 
-export function AuthSettingsMenu({
+/** Theme and language (plus a Home link) for pages without the dashboard user menu. */
+export function SettingsMenu({
   className,
   showHome = true,
-}: AuthSettingsMenuProps) {
+}: SettingsMenuProps) {
   const t = useTranslations("common")
 
   return (

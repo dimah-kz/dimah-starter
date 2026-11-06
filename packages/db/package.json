@@ -6,8 +6,7 @@
   "exports": {
     ".": "./src/client.ts",
     "./drizzle": "./src/drizzle.ts",
-    "./schema": "./src/schema/index.ts",
-    "./dimah-s3": "./src/dimah-s3-db.ts"
+    "./schema": "./src/schema/index.ts"
   },
   "scripts": {
     "auth:generate": "pnpm --filter @repo/auth auth:generate",
@@ -19,9 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@dimah-s3/db": "2.0.0-beta.5",
     "@paralleldrive/cuid2": "^3.3.0",
-    "dotenv": "^18.0.9",
     "drizzle-orm": "rc",
     "pg": "^8.23.1"
   },
@@ -30,6 +27,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
+    "dotenv": "^18.0.9",
     "drizzle-kit": "rc",
     "eslint": "catalog:",
     "typescript": "catalog:"

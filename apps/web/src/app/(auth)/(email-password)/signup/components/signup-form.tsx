@@ -15,17 +15,20 @@ import {
 import { Alert, AlertDescription } from "@repo/ui/components/alert"
 import { FormSubmitButton } from "@/components/form/form-submit-button"
 import { PasswordInput } from "@/components/form/password-input"
-import { passwordLimits } from "@repo/auth/password-limits"
 import { useTranslations } from "next-intl"
 
 type SignUpFormProps = {
   redirectTo: string
+  passwordLimits: { minLength: number; maxLength: number }
+  googleSignInEnabled: boolean
   lastLoginMethod?: string | null
   oauthError?: string | null
 }
 
 export function SignUpForm({
   redirectTo,
+  passwordLimits,
+  googleSignInEnabled,
   lastLoginMethod = null,
   oauthError = null,
 }: SignUpFormProps) {
@@ -53,6 +56,7 @@ export function SignUpForm({
                 name="name"
                 placeholder={t("namePlaceholder")}
                 autoComplete="name"
+                defaultValue={state.values?.name}
                 required
               />
               <InputGroupAddon>
@@ -72,6 +76,7 @@ export function SignUpForm({
                 type="email"
                 placeholder={t("emailPlaceholder")}
                 autoComplete="email"
+                defaultValue={state.values?.email}
                 required
               />
               <InputGroupAddon>
@@ -99,12 +104,14 @@ export function SignUpForm({
           loadingText={t("submitting")}
         />
       </form>
-      <GoogleSignIn
-        redirectTo={redirectTo}
-        returnPath={authRoutes.signup()}
-        lastLoginMethod={lastLoginMethod}
-        oauthError={oauthError}
-      />
+      {googleSignInEnabled ? (
+        <GoogleSignIn
+          redirectTo={redirectTo}
+          returnPath={authRoutes.signup()}
+          lastLoginMethod={lastLoginMethod}
+          oauthError={oauthError}
+        />
+      ) : null}
     </div>
   )
 }

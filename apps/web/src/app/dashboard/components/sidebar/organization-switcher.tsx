@@ -1,8 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { setActiveOrganizationAction } from "@/app/action/dashboard/components/set-active-organization-action"
+import { setActiveOrganizationAction } from "@/app/action/dashboard/set-active-organization-action"
 import { CreateOrganizationFormShell } from "@/app/dashboard/components/sidebar/create-organization-form-shell"
 import type { NavUserProfile } from "@/app/dashboard/components/sidebar/nav-user"
 import { LoadingFallbackShell } from "@/components/fallback/loading-fallback"
@@ -31,6 +30,7 @@ import {
 import { IconTile } from "@repo/ui/components/reui/icon-tile"
 import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import { Input } from "@repo/ui/components/input"
+import { toast } from "@repo/ui/components/toast"
 import { cn } from "cn"
 import {
   CheckIcon,
@@ -66,27 +66,21 @@ export function OrganizationSwitchProvider({
 }: {
   children: React.ReactNode
 }) {
-  const router = useRouter()
+  const t = useTranslations("dashboard.nav.organizationSwitcher")
   const [isSwitching, startTransition] = React.useTransition()
 
-  const switchOrganization = React.useCallback(
-    (organizationId: string | null) => {
-      startTransition(async () => {
-        const result = await setActiveOrganizationAction({ organizationId })
-        router.replace(result.redirectTo)
-        router.refresh()
-      })
-    },
-    [router]
-  )
-
-  const value = React.useMemo(
-    () => ({ isSwitching, switchOrganization }),
-    [isSwitching, switchOrganization]
-  )
+  // On success the action redirects to the dashboard home.
+  const switchOrganization = (organizationId: string | null) => {
+    startTransition(async () => {
+      const result = await setActiveOrganizationAction({ organizationId })
+      toast.add({ title: result.error ?? t("switchFailed"), type: "error" })
+    })
+  }
 
   return (
-    <OrganizationSwitchContext.Provider value={value}>
+    <OrganizationSwitchContext.Provider
+      value={{ isSwitching, switchOrganization }}
+    >
       {children}
     </OrganizationSwitchContext.Provider>
   )
@@ -186,17 +180,13 @@ export function OrganizationSwitcher({
 
   const isPersonalAccount = activeOrganizationId === null
 
-  const filteredOrganizations = React.useMemo(() => {
-    const query = search.trim().toLowerCase()
-
-    if (!query) {
-      return organizations
-    }
-
-    return organizations.filter((organization) =>
-      organization.name.toLowerCase().includes(query)
-    )
-  }, [organizations, search])
+  const query = search.trim().toLowerCase()
+  const isSearching = query.length > 0
+  const filteredOrganizations = isSearching
+    ? organizations.filter((organization) =>
+        organization.name.toLowerCase().includes(query)
+      )
+    : organizations
 
   const handleMenuOpenChange = (nextOpen: boolean) => {
     setMenuOpen(nextOpen)
@@ -206,15 +196,10 @@ export function OrganizationSwitcher({
     }
   }
 
-  const isSearching = search.trim().length > 0
-
-  const activeOrganization = React.useMemo(
-    () =>
-      organizations.find(
-        (organization) => organization.id === activeOrganizationId
-      ) ?? null,
-    [organizations, activeOrganizationId]
-  )
+  const activeOrganization =
+    organizations.find(
+      (organization) => organization.id === activeOrganizationId
+    ) ?? null
 
   const handleSwitchToPersonal = () => {
     if (isPersonalAccount || isSwitching) {
@@ -283,7 +268,9 @@ export function OrganizationSwitcher({
           {!isSearching ? <DropdownMenuSeparator /> : null}
           <DropdownMenuGroup>
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {t("organizations")} ({filteredOrganizations.length})
+              {t("organizationsCount", {
+                count: filteredOrganizations.length,
+              })}
             </DropdownMenuLabel>
             {filteredOrganizations.map((organization) => {
               const isActive = organization.id === activeOrganizationId

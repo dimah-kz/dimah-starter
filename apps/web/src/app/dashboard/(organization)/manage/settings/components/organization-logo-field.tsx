@@ -1,18 +1,17 @@
 "use client"
 
-import { removeOrganizationLogoAction } from "@/app/action/dashboard/(organization)/manage/remove-organization-logo-action"
-import { setOrganizationLogoAction } from "@/app/action/dashboard/(organization)/manage/set-organization-logo-action"
+import { removeOrganizationLogoAction } from "@/app/action/dashboard/(organization)/manage/settings/remove-organization-logo-action"
+import { setOrganizationLogoAction } from "@/app/action/dashboard/(organization)/manage/settings/set-organization-logo-action"
 import { AvatarUploadField } from "@/components/form/avatar-upload-field"
 import { useTranslations } from "next-intl"
 
 type OrganizationLogoFieldProps = {
-  organizationId: string
   image: string | null
   objectKey: string | null
 }
 
+/** Logo of the active organization. */
 export function OrganizationLogoField({
-  organizationId,
   image,
   objectKey,
 }: OrganizationLogoFieldProps) {
@@ -25,13 +24,15 @@ export function OrganizationLogoField({
         shape="square"
         image={image}
         objectKey={objectKey}
-        setAction={(key) => setOrganizationLogoAction(organizationId, key)}
-        removeAction={() => removeOrganizationLogoAction(organizationId)}
+        setAction={setOrganizationLogoAction}
+        removeAction={removeOrganizationLogoAction}
         labels={{
           upload: t("upload"),
           remove: t("remove"),
           updated: t("updated"),
           removed: t("removed"),
+          uploadFailed: t("uploadFailed"),
+          removeFailed: t("removeFailed"),
         }}
       />
     </div>

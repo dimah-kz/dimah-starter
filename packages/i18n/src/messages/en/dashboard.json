@@ -6,20 +6,17 @@
       "platform": "Platform",
       "organization": "Organization",
       "organizationManagement": "Organization management",
-      "platformManagement": "Platform management",
-      "back": "Back"
+      "platformManagement": "Platform management"
     },
     "organizationSwitcher": {
-      "noOrganization": "No organization",
-      "notMember": "Not a member of any organization",
       "personalAccount": "Personal account",
       "activeOrganization": "Active organization",
-      "organizations": "Organizations",
+      "organizationsCount": "Organizations ({count, number})",
       "search": "Search…",
       "createOrganization": "Create organization",
-      "createOrganizationHint": "Create one to get started",
       "nameLabel": "Organization name",
       "switching": "Switching account…",
+      "switchFailed": "Could not switch the account.",
       "organizationCreated": "Organization created.",
       "organizationCreateFailed": "Could not create the organization."
     }
@@ -39,7 +36,8 @@
       "remove": "Remove logo",
       "updated": "Organization logo was updated.",
       "removed": "Organization logo was removed.",
-      "uploadFailed": "Could not upload logo."
+      "uploadFailed": "Could not upload logo.",
+      "removeFailed": "Could not remove logo."
     }
   },
   "organizationSettings": {
@@ -93,7 +91,6 @@
     "sending": "Sending…",
     "sent": "Invitation sent.",
     "sendFailed": "Could not send the invitation.",
-    "cancel": "Cancel invitation",
     "cancelTitle": "Cancel invitation",
     "cancelDescription": "The invitation for {email} will no longer be valid.",
     "cancelConfirm": "Cancel invitation",

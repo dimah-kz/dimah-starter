@@ -1,18 +1,12 @@
-import {
-  getLocaleDirection,
-  loadMessages,
-  resolveLocaleFromHeaders,
-} from "@repo/i18n"
+import { loadMessages, resolveLocaleFromHeaders } from "@repo/i18n"
 import { headers } from "next/headers"
 import { getRequestConfig } from "next-intl/server"
 
 export default getRequestConfig(async () => {
   const locale = resolveLocaleFromHeaders(await headers())
-  const messages = loadMessages(locale)
 
   return {
     locale,
-    messages,
-    direction: getLocaleDirection(locale),
+    messages: loadMessages(locale),
   }
 })

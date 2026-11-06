@@ -30,7 +30,7 @@ A helper used by one procedure stays in that file. Something shared by one domai
 | ---------------- | ----------------------------------------------------------------------------------------------------------- |
 | Server Action    | `createRouterClient(router, { context: createContext(await headers()) })` — in-process                      |
 | Server Component | Same client, but `createContext(await dashboardAuthHeaders())` so the expiry `Date.now()` runs after `io()` |
-| Mobile / HTTP    | `createORPCClient({ origin })` from `@repo/api/client` — never import `@repo/api` (pulls auth/db)           |
+| Mobile / HTTP    | `createApiClient({ origin })` from `@repo/api/client` — never import `@repo/api` (pulls auth/db)            |
 | `'use cache'`    | Do not call `headers()` or `getSession` inside the cache function. Pass ids, or query the db in the app     |
 
 Web mutations stay in `app/action/<segment>/`. Next cache APIs never belong in `@repo/api`.

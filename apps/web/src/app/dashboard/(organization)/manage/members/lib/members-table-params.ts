@@ -2,41 +2,47 @@ import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import {
   listPath,
   parseListEnumFilter,
+  parseListFilter,
+  parseListPage,
+  parseListPageSize,
+  parseListQuery,
   type ListSearchParamsInput,
 } from "@/components/list"
 
 export const MEMBERS_DEFAULT_PAGE_SIZE = 20
 
-export type MemberTableFilter = "all" | "managers" | "members"
+export const MEMBER_TABLE_FILTERS = ["all", "managers", "members"] as const
 
-const MEMBER_TABLE_FILTERS = [
-  "all",
-  "managers",
-  "members",
-] as const satisfies readonly MemberTableFilter[]
+export type MemberTableFilter = (typeof MEMBER_TABLE_FILTERS)[number]
 
-export function parseMemberTableFilter(
-  value: string | undefined
-): MemberTableFilter {
-  return parseListEnumFilter(value, MEMBER_TABLE_FILTERS, "all")
+export type OrganizationMembersPageQuery = {
+  page: number
+  pageSize: number
+  filter: MemberTableFilter
+  q?: string
+}
+
+export function parseOrganizationMembersPageQuery(
+  searchParams: Record<string, string | string[] | undefined>
+): OrganizationMembersPageQuery {
+  return {
+    page: parseListPage(searchParams),
+    pageSize: parseListPageSize(searchParams, MEMBERS_DEFAULT_PAGE_SIZE),
+    filter: parseListEnumFilter(
+      parseListFilter(searchParams),
+      MEMBER_TABLE_FILTERS,
+      "all"
+    ),
+    q: parseListQuery(searchParams),
+  }
 }
 
 export function organizationMembersTablePath(
-  input: ListSearchParamsInput & {
-    filter?: MemberTableFilter
-  } = {}
+  input: ListSearchParamsInput & { filter?: MemberTableFilter } = {}
 ): string {
-  const filter =
-    input.filter && input.filter !== "all" ? input.filter : undefined
-
   return listPath(
     dashboardRoutes.organizationMembers(),
-    {
-      page: input.page,
-      pageSize: input.pageSize,
-      filter,
-      q: input.q,
-    },
-    { defaultPageSize: MEMBERS_DEFAULT_PAGE_SIZE }
+    input,
+    MEMBERS_DEFAULT_PAGE_SIZE
   )
 }

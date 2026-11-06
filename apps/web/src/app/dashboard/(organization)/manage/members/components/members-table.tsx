@@ -1,11 +1,11 @@
 "use client"
 
-import { useMemo, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 import { removeOrganizationMemberAction } from "@/app/action/dashboard/(organization)/manage/members/remove-organization-member-action"
 import { createMembersColumns } from "@/app/dashboard/(organization)/manage/members/components/members-columns"
 import type { OrganizationMemberItem } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
 import {
+  MEMBER_TABLE_FILTERS,
   organizationMembersTablePath,
   type MemberTableFilter,
 } from "@/app/dashboard/(organization)/manage/members/lib/members-table-params"
@@ -72,7 +72,6 @@ export function MembersTable({
   const locale = useLocale() as Locale
   const t = useTranslations()
   const tTables = useTranslations("tables")
-  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [removeTarget, setRemoveTarget] =
     useState<OrganizationMemberItem | null>(null)
@@ -88,26 +87,20 @@ export function MembersTable({
     countLabel: tTables("count.members"),
   })
 
-  const memberFilterOptions = (["all", "managers", "members"] as const).map(
-    (value) => ({
-      value,
-      label: t(`tables.filters.${value}`),
-    })
-  )
+  const memberFilterOptions = MEMBER_TABLE_FILTERS.map((value) => ({
+    value,
+    label: t(`tables.filters.${value}`),
+  }))
 
-  const columns = useMemo(
-    () =>
-      createMembersColumns({
-        t: tTables,
-        locale,
-        actorUserId,
-        actorRole,
-        disabled: isPending,
-        onChangeRole,
-        onRemove: setRemoveTarget,
-      }),
-    [actorRole, actorUserId, isPending, locale, onChangeRole, tTables]
-  )
+  const columns = createMembersColumns({
+    t: tTables,
+    locale,
+    actorUserId,
+    actorRole,
+    disabled: isPending,
+    onChangeRole,
+    onRemove: setRemoveTarget,
+  })
 
   const handleRemove = () => {
     if (!removeTarget) return
@@ -128,7 +121,6 @@ export function MembersTable({
         title: t("dashboard.memberManage.removed"),
         type: "success",
       })
-      router.refresh()
     })
   }
 

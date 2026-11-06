@@ -2,7 +2,6 @@ export {
   defaultLocale,
   directions,
   getLocaleDirection,
-  i18nConfig,
   isValidLocale,
   localeCookieName,
   locales,
@@ -11,14 +10,9 @@ export {
   type Locale,
 } from "./config"
 export {
-  dateOnlyOptions,
   dateTimeOptions,
   formatDate,
   formatNumber,
   formatRelativeTime,
 } from "./format"
-export {
-  loadMessages,
-  type MessageNamespace,
-  type Messages,
-} from "./load-messages"
+export { loadMessages, type Messages } from "./load-messages"

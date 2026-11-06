@@ -1,6 +1,5 @@
 "use client"
 
-import { parseRoleString } from "@repo/auth/role-string"
 import { formatDate, type Locale } from "@repo/i18n"
 import {
   Identity,
@@ -11,23 +10,9 @@ import {
 } from "@repo/ui/components/dimah/identity"
 import type { OrganizationMemberItem } from "@/app/dashboard/(organization)/manage/members/lib/get-organization-members-page"
 import { MemberRowActionsMenu } from "@/app/dashboard/(organization)/manage/members/components/member-row-actions-menu"
-import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
+import { canManageMember } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
 import { MembershipRoleBadge } from "@/components/badge/membership-role-badge"
 import type { ListColumn } from "@/components/list"
-
-function canChangeMemberRole(
-  actorRole: string | null,
-  memberRole: string
-): boolean {
-  if (!memberRoleOptions(actorRole).length) return false
-  if (
-    parseRoleString(memberRole).includes("owner") &&
-    !parseRoleString(actorRole).includes("owner")
-  ) {
-    return false
-  }
-  return true
-}
 
 type TablesTranslator = {
   (key: "columns.user"): string
@@ -90,8 +75,10 @@ export function createMembersColumns({
         <MemberRowActionsMenu
           member={row}
           disabled={disabled}
-          canRemove={row.userId !== actorUserId}
-          canChangeRole={canChangeMemberRole(actorRole, row.role)}
+          canRemove={
+            row.userId !== actorUserId && canManageMember(actorRole, row.role)
+          }
+          canChangeRole={canManageMember(actorRole, row.role)}
           onChangeRole={() => onChangeRole(row)}
           onRemove={() => onRemove(row)}
         />

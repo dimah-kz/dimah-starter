@@ -34,7 +34,6 @@ export function SettingsNavItem({
   return (
     <Item
       className="rounded-none hover:bg-muted/50"
-      role="listitem"
       render={
         href ? (
           <Link href={href} className={itemTriggerClassName} />

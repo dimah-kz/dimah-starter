@@ -1,8 +1,8 @@
 "use server"
 
 import { headers } from "next/headers"
-import { getAuthApiErrorMessage } from "@repo/auth"
-import { auth } from "@repo/auth"
+import { refresh } from "next/cache"
+import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type RevokeOtherSessionsResult = {
   success: boolean
@@ -13,11 +13,10 @@ export async function revokeOtherSessionsAction(): Promise<RevokeOtherSessionsRe
   try {
     await auth.api.revokeOtherSessions({ headers: await headers() })
   } catch (error) {
-    return {
-      success: false,
-      error: getAuthApiErrorMessage(error),
-    }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
+  // The session list is read per request, not from a tag.
+  refresh()
   return { success: true }
 }

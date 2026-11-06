@@ -1,8 +1,8 @@
 "use server"
 
 import { headers } from "next/headers"
-import { getTranslations } from "next-intl/server"
-import { invalidateOrganizationInvitationsCache } from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
+import { updateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type CancelOrganizationInvitationInput = {
@@ -24,13 +24,11 @@ export async function cancelOrganizationInvitationAction(
       body: { invitationId: input.invitationId },
     })
   } catch (error) {
-    const t = await getTranslations("dashboard.invitationManage")
-    return {
-      success: false,
-      error: getAuthApiErrorMessage(error) || t("cancelFailed"),
-    }
+    return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  invalidateOrganizationInvitationsCache(input.organizationId)
+  updateTag(
+    dashboardCacheTags.organizationInvitationsById(input.organizationId)
+  )
   return { success: true }
 }

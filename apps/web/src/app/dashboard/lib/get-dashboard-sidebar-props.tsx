@@ -1,30 +1,19 @@
-import { cacheLife, cacheTag } from "next/cache"
 import { HomeIcon, UserCircleIcon } from "lucide-react"
 import type { NavMainGroup } from "@/app/dashboard/components/sidebar/nav-main"
-import type { SidebarOrganizationItem } from "@/app/dashboard/components/sidebar/organization-switcher"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import {
   buildSidebarNavSections,
   organizationEntryIcon,
   organizationNavSection,
   platformEntryIcon,
   platformNavSection,
-  type SidebarNavSection,
 } from "@/app/dashboard/lib/sidebar-nav-sections"
 import {
-  dashboardAuthHeaders,
+  canAccessPlatformAdmin,
+  canManageOrganization,
   listDashboardOrganizations,
   resolveDashboardActiveOrganizationId,
 } from "@/app/dashboard/lib/dashboard-session"
-import { auth } from "@repo/auth"
-
-export type DashboardSidebarProps = {
-  organizations: SidebarOrganizationItem[]
-  activeOrganizationId: string | null
-  navGroups: NavMainGroup[]
-  navSections: SidebarNavSection[]
-}
 
 function buildNavGroups(input: {
   isPersonalAccount: boolean
@@ -83,64 +72,20 @@ function buildNavGroups(input: {
   return groups
 }
 
-async function getDashboardSidebarNavConfig(
-  userId: string,
-  isPersonalAccount: boolean,
-  canManageActiveOrganization: boolean,
-  canAccessAdmin: boolean
-): Promise<Pick<DashboardSidebarProps, "navGroups" | "navSections">> {
-  "use cache"
-
-  cacheLife("minutes")
-  cacheTag(dashboardCacheTags.sidebarConfigByUser(userId))
-
-  const permissions = {
-    canAccessAdmin,
-    canManageActiveOrganization,
-  }
-
-  return {
-    navGroups: buildNavGroups({
-      isPersonalAccount,
-      ...permissions,
-    }),
-    navSections: buildSidebarNavSections(permissions),
-  }
-}
-
-export async function getDashboardSidebarProps(
-  userId: string
-): Promise<DashboardSidebarProps> {
+/** Sidebar data for the signed-in user. Request-scoped — never cached. */
+export async function getDashboardSidebarProps() {
   const activeOrganizationId = await resolveDashboardActiveOrganizationId()
-  const isPersonalAccount = activeOrganizationId === null
-  const requestHeaders = await dashboardAuthHeaders()
 
-  const [organizations, canManageActiveOrganization, adminPermission] =
+  const [organizations, canManageActiveOrganization, canAccessAdmin] =
     await Promise.all([
       listDashboardOrganizations(),
       activeOrganizationId
-        ? auth.api
-            .hasPermission({
-              headers: requestHeaders,
-              body: {
-                organizationId: activeOrganizationId,
-                permissions: { member: ["update"] },
-              },
-            })
-            .then((result) => result.success)
+        ? canManageOrganization(activeOrganizationId)
         : false,
-      auth.api.userHasPermission({
-        headers: requestHeaders,
-        body: { permissions: { user: ["list"] } },
-      }),
+      canAccessPlatformAdmin(),
     ])
 
-  const { navGroups, navSections } = await getDashboardSidebarNavConfig(
-    userId,
-    isPersonalAccount,
-    canManageActiveOrganization,
-    adminPermission.success
-  )
+  const permissions = { canAccessAdmin, canManageActiveOrganization }
 
   return {
     organizations: organizations.map((organization) => ({
@@ -149,7 +94,10 @@ export async function getDashboardSidebarProps(
       logo: organization.logo ?? null,
     })),
     activeOrganizationId,
-    navGroups,
-    navSections,
+    navGroups: buildNavGroups({
+      isPersonalAccount: activeOrganizationId === null,
+      ...permissions,
+    }),
+    navSections: buildSidebarNavSections(permissions),
   }
 }

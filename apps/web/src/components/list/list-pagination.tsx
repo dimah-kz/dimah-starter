@@ -121,14 +121,11 @@ export function ListPagination({
   totalCount,
   buildPageHref,
   onPageSizeChange,
-  pageSizeOptions = LIST_PAGE_SIZES,
   countLabel,
   className,
 }: ListPaginationProps) {
   const locale = useLocale()
   const t = useTranslations("common")
-  const resolvedCountLabel =
-    countLabel ?? (totalCount === 1 ? t("item") : t("items"))
   const formatValue = (value: number) => formatNumber(value, locale)
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
@@ -150,18 +147,22 @@ export function ListPagination({
         className="shrink-0 max-sm:order-1"
         aria-live="polite"
         aria-atomic="true"
-        aria-label={t("pagination.rangeAria", {
-          start: formatValue(start),
-          end: formatValue(end),
-          total: formatValue(totalCount),
-          countLabel: resolvedCountLabel,
-        })}
       >
-        {t("pagination.range", {
-          start: formatValue(start),
-          end: formatValue(end),
-          total: formatValue(totalCount),
-        })}
+        <span aria-hidden="true">
+          {t("pagination.range", {
+            start: formatValue(start),
+            end: formatValue(end),
+            total: formatValue(totalCount),
+          })}
+        </span>
+        <span className="sr-only">
+          {t("pagination.rangeAria", {
+            start: formatValue(start),
+            end: formatValue(end),
+            total: formatValue(totalCount),
+            countLabel,
+          })}
+        </span>
       </span>
 
       {showPagination ? (
@@ -202,7 +203,7 @@ export function ListPagination({
                       page: formatValue(num),
                     })}
                   >
-                    {num}
+                    {formatValue(num)}
                   </PageLink>
                 </PaginationItem>
               )
@@ -247,7 +248,7 @@ export function ListPagination({
           <SelectValue>{formatValue(pageSize)}</SelectValue>
         </SelectTrigger>
         <SelectContent align="end">
-          {pageSizeOptions.map((size) => (
+          {LIST_PAGE_SIZES.map((size) => (
             <SelectItem key={size} value={String(size)}>
               {formatValue(size)}
             </SelectItem>

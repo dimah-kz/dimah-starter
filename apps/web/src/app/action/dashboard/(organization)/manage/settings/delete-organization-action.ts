@@ -1,15 +1,9 @@
 "use server"
 
-import {
-  invalidateOrganizationBrandingCache,
-  invalidateOrganizationMembersCache,
-} from "@/app/action/dashboard/(organization)/manage/shared/invalidate-organization-manage-cache"
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
-import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { headers } from "next/headers"
+import { revalidateTag, updateTag } from "next/cache"
 import { after } from "next/server"
-import { getTranslations } from "next-intl/server"
-import { updateTag } from "next/cache"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 import { deleteOwnedObjects } from "@repo/storage"
 
@@ -20,36 +14,40 @@ type DeleteOrganizationInput = {
 type DeleteOrganizationResult = {
   success: boolean
   error?: string
-  redirectTo?: string
 }
 
+/** Deletes the organization and switches back to the personal account. */
 export async function deleteOrganizationAction(
   input: DeleteOrganizationInput
 ): Promise<DeleteOrganizationResult> {
   const requestHeaders = await headers()
-  const session = await auth.api.getSession({ headers: requestHeaders })
-
-  if (!session) {
-    const t = await getTranslations("common.errors")
-    return { success: false, error: t("unauthorized") }
-  }
+  const { organizationId } = input
 
   try {
     await auth.api.deleteOrganization({
       headers: requestHeaders,
-      body: { organizationId: input.organizationId },
+      body: { organizationId },
     })
   } catch (error) {
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
+  // Better Auth clears the active org in the database only; this refreshes
+  // the session cookie too. If it fails, render already reads the stale id as
+  // the personal account.
+  await auth.api
+    .setActiveOrganization({
+      headers: requestHeaders,
+      body: { organizationId: null },
+    })
+    .catch((error: unknown) => console.error(error))
+
   // The logo and any other files of the organization go with it.
-  after(() => deleteOwnedObjects("organization", input.organizationId))
+  after(() => deleteOwnedObjects("organization", organizationId))
 
-  invalidateOrganizationBrandingCache(input.organizationId)
-  invalidateOrganizationMembersCache(input.organizationId)
-  updateTag(dashboardCacheTags.adminOrganizationsPage())
-  updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))
-
-  return { success: true, redirectTo: dashboardRoutes.home() }
+  updateTag(dashboardCacheTags.organizationBrandingById(organizationId))
+  updateTag(dashboardCacheTags.organizationMembersById(organizationId))
+  updateTag(dashboardCacheTags.organizationInvitationsById(organizationId))
+  revalidateTag(dashboardCacheTags.adminOrganizationsPage(), "max")
+  return { success: true }
 }

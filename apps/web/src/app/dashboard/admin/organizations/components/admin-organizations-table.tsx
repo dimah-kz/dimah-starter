@@ -1,6 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
 import { createAdminOrganizationsColumns } from "@/app/dashboard/admin/organizations/components/admin-organizations-columns"
 import type { AdminOrganizationItem } from "@/app/dashboard/admin/organizations/lib/get-admin-organizations-page"
 import { adminOrganizationsTablePath } from "@/app/dashboard/admin/organizations/lib/admin-organizations-table-params"
@@ -50,14 +49,10 @@ export function AdminOrganizationsTable({
     countLabel: tTables("count.organizations"),
   })
 
-  const columns = useMemo(
-    () =>
-      createAdminOrganizationsColumns({
-        t: tTables,
-        locale,
-      }),
-    [locale, tTables]
-  )
+  const columns = createAdminOrganizationsColumns({
+    t: tTables,
+    locale,
+  })
 
   return (
     <Card className="w-full">

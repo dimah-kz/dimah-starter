@@ -4,11 +4,7 @@
   "compilerOptions": {
     "plugins": [{ "name": "next" }],
     "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
     "allowJs": true,
-    "jsx": "preserve",
-    "noEmit": true,
-    "noUncheckedIndexedAccess": false
+    "jsx": "preserve"
   }
 }

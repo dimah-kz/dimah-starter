@@ -2,44 +2,53 @@ import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import {
   listPath,
   parseListEnumFilter,
+  parseListFilter,
+  parseListPage,
+  parseListPageSize,
+  parseListQuery,
   type ListSearchParamsInput,
 } from "@/components/list"
 
 export const INVITATIONS_DEFAULT_PAGE_SIZE = 20
 
-export type InvitationTableFilter =
-  "all" | "pending" | "accepted" | "rejected" | "canceled"
-
-const INVITATION_TABLE_FILTERS = [
+export const INVITATION_TABLE_FILTERS = [
   "all",
   "pending",
   "accepted",
   "rejected",
   "canceled",
-] as const satisfies readonly InvitationTableFilter[]
+] as const
 
-export function parseInvitationTableFilter(
-  value: string | undefined
-): InvitationTableFilter {
-  return parseListEnumFilter(value, INVITATION_TABLE_FILTERS, "all")
+export type InvitationTableFilter = (typeof INVITATION_TABLE_FILTERS)[number]
+
+export type OrganizationInvitationsPageQuery = {
+  page: number
+  pageSize: number
+  filter: InvitationTableFilter
+  q?: string
+}
+
+export function parseOrganizationInvitationsPageQuery(
+  searchParams: Record<string, string | string[] | undefined>
+): OrganizationInvitationsPageQuery {
+  return {
+    page: parseListPage(searchParams),
+    pageSize: parseListPageSize(searchParams, INVITATIONS_DEFAULT_PAGE_SIZE),
+    filter: parseListEnumFilter(
+      parseListFilter(searchParams),
+      INVITATION_TABLE_FILTERS,
+      "all"
+    ),
+    q: parseListQuery(searchParams),
+  }
 }
 
 export function organizationInvitationsTablePath(
-  input: ListSearchParamsInput & {
-    filter?: InvitationTableFilter
-  } = {}
+  input: ListSearchParamsInput & { filter?: InvitationTableFilter } = {}
 ): string {
-  const filter =
-    input.filter && input.filter !== "all" ? input.filter : undefined
-
   return listPath(
     dashboardRoutes.organizationInvitations(),
-    {
-      page: input.page,
-      pageSize: input.pageSize,
-      filter,
-      q: input.q,
-    },
-    { defaultPageSize: INVITATIONS_DEFAULT_PAGE_SIZE }
+    input,
+    INVITATIONS_DEFAULT_PAGE_SIZE
   )
 }

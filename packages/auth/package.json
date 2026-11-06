@@ -24,14 +24,18 @@
     "@repo/email": "workspace:*",
     "@repo/i18n": "workspace:*",
     "better-auth": "1.7.18",
-    "drizzle-orm": "rc",
-    "next": "16.4.5"
+    "drizzle-orm": "rc"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^26.6.6",
     "auth": "1.7.18",
     "eslint": "catalog:",
+    "next": "16.4.5",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "next": "^16.0.0"
   }
 }

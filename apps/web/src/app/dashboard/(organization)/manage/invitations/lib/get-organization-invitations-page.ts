@@ -2,20 +2,13 @@ import { cacheLife, cacheTag } from "next/cache"
 import { and, count, desc, eq, ilike, type SQL } from "@repo/db/drizzle"
 import { db } from "@repo/db"
 import { invitation } from "@repo/db/schema"
-import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
-import {
-  INVITATIONS_DEFAULT_PAGE_SIZE,
-  parseInvitationTableFilter,
-  type InvitationTableFilter,
+import type {
+  InvitationTableFilter,
+  OrganizationInvitationsPageQuery,
 } from "@/app/dashboard/(organization)/manage/invitations/lib/invitations-table-params"
-import {
-  LIST_SEARCH_MIN_LENGTH,
-  clampListPage,
-  parseListFilter,
-  parseListPage,
-  parseListPageSize,
-  parseListQuery,
-} from "@/components/list"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { requireOrganizationManager } from "@/app/dashboard/lib/dashboard-session"
+import { clampListPage, toListSearchPattern } from "@/components/list"
 
 export type OrganizationInvitationItem = {
   id: string
@@ -23,22 +16,6 @@ export type OrganizationInvitationItem = {
   role: string
   status: string
   expiresAt: string
-}
-
-export type OrganizationInvitationsPageQuery = {
-  page: number
-  pageSize: number
-  filter: InvitationTableFilter
-  q?: string
-}
-
-export type OrganizationInvitationsPageResult = {
-  invitations: OrganizationInvitationItem[]
-  totalCount: number
-  page: number
-  pageSize: number
-  filter: InvitationTableFilter
-  q?: string
 }
 
 function buildInvitationsWhere(
@@ -52,30 +29,31 @@ function buildInvitationsWhere(
     conditions.push(eq(invitation.status, filter))
   }
 
-  if (q && q.length >= LIST_SEARCH_MIN_LENGTH) {
-    conditions.push(ilike(invitation.email, `%${q}%`))
+  const pattern = toListSearchPattern(q)
+  if (pattern) {
+    conditions.push(ilike(invitation.email, pattern))
   }
 
   return and(...conditions)!
 }
 
-export function parseOrganizationInvitationsPageQuery(
-  searchParams: Record<string, string | string[] | undefined>
-): OrganizationInvitationsPageQuery {
-  return {
-    page: parseListPage(searchParams),
-    pageSize: parseListPageSize(searchParams, {
-      defaultPageSize: INVITATIONS_DEFAULT_PAGE_SIZE,
-    }),
-    filter: parseInvitationTableFilter(parseListFilter(searchParams)),
-    q: parseListQuery(searchParams),
-  }
+/** Invitations of the active organization, for its managers only. */
+export async function getOrganizationInvitationsPage(
+  query: OrganizationInvitationsPageQuery
+) {
+  const { organizationId } = await requireOrganizationManager()
+  return getCachedOrganizationInvitationsPage(organizationId, query)
 }
 
-async function loadOrganizationInvitationsPage(
+async function getCachedOrganizationInvitationsPage(
   organizationId: string,
   query: OrganizationInvitationsPageQuery
-): Promise<OrganizationInvitationsPageResult> {
+) {
+  "use cache"
+
+  cacheLife("minutes")
+  cacheTag(dashboardCacheTags.organizationInvitationsById(organizationId))
+
   const where = buildInvitationsWhere(organizationId, query.filter, query.q)
 
   const [countRow] = await db
@@ -83,8 +61,8 @@ async function loadOrganizationInvitationsPage(
     .from(invitation)
     .where(where)
   const totalCount = countRow?.totalCount ?? 0
+
   const page = clampListPage(query.page, totalCount, query.pageSize)
-  const skip = (page - 1) * query.pageSize
 
   const invitations = await db
     .select({
@@ -98,10 +76,10 @@ async function loadOrganizationInvitationsPage(
     .where(where)
     .orderBy(desc(invitation.createdAt))
     .limit(query.pageSize)
-    .offset(skip)
+    .offset((page - 1) * query.pageSize)
 
   return {
-    invitations: invitations.map((row) => ({
+    invitations: invitations.map((row): OrganizationInvitationItem => ({
       id: row.id,
       email: row.email,
       role: row.role ?? "member",
@@ -114,16 +92,4 @@ async function loadOrganizationInvitationsPage(
     filter: query.filter,
     q: query.q,
   }
-}
-
-export async function getOrganizationInvitationsPage(
-  organizationId: string,
-  query: OrganizationInvitationsPageQuery
-) {
-  "use cache"
-
-  cacheLife("minutes")
-  cacheTag(dashboardCacheTags.organizationInvitationsById(organizationId))
-
-  return loadOrganizationInvitationsPage(organizationId, query)
 }

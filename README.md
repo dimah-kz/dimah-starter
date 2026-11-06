@@ -53,29 +53,40 @@ Node ≥ 22 · pnpm 12 · PostgreSQL · dimah-s3 storage (S3-compatible bucket, 
 pnpm install
 cp .env.example .env          # DATABASE_URL, BETTER_AUTH_*, DIMAH_S3_SECRET, optional GOOGLE_*, S3_*, RESEND_*, EMAIL_FROM
 pnpm --filter @repo/db db:migrate
-pnpm dev                     # web + db
+pnpm dev
 ```
 
 → [http://localhost:3000](http://localhost:3000)
 
-| Command                             | What it does     |
-| ----------------------------------- | ---------------- |
-| `pnpm --filter web dev`             | Run the web app  |
-| `pnpm build` / `lint` / `typecheck` | Quality gates    |
-| `pnpm --filter @repo/db db:migrate` | Apply migrations |
+**First platform admin.** Sign up, verify the email (without `RESEND_API_KEY` the link is printed to the server log), then grant the role once:
+
+```sql
+UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
+```
+
+Sign in again to see **Platform management** in the sidebar. Later admins are promoted from `/dashboard/admin/users`.
+
+| Command                                              | What it does                        |
+| ---------------------------------------------------- | ----------------------------------- |
+| `pnpm dev`                                           | Run the web app                     |
+| `pnpm format:check` · `lint` · `typecheck` · `build` | Quality gates (CI runs all of them) |
+| `pnpm --filter @repo/db db:generate` · `db:migrate`  | Create and apply migrations         |
+| `pnpm --filter @repo/db db:studio`                   | Browse the database                 |
+| `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components |
 
 ## Included vs add when you need it
 
-Ships with email/password sign-in and sign-up, email verification, password reset, organizations, members, invitations, platform admin, and S3 uploads.
+Ships with email/password and Google sign-in, email verification, password reset, organizations, members, invitations, platform admin, avatar and logo uploads, a landing page, and English/Persian with RTL.
 
-Not in the UI yet: OAuth. Product oRPC is a `health.ping` stub in `@repo/api` (`src/routers/health/`) — add procedures there, then call them from Server Actions with `createRouterClient`.
+Google appears when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. Product oRPC is a `health.ping` stub in `@repo/api` (`src/routers/health/`) — add procedures there, then call them from Server Actions with `createRouterClient`.
 
 ## Production
 
 - **Trusted origins** — `http://localhost:3000` is trusted only outside production. Set `BETTER_AUTH_URL` to the public origin.
 - **Postgres on serverless** — use a **pooled** `DATABASE_URL` (Neon pooler, PgBouncer, Supabase pooler). Direct `5432` will exhaust connections under bursty functions.
 - **Session cookie cache** — `getSession` may use a cookie for up to **5 minutes**. After a ban or role change, the affected user can still look signed-in until that cache expires.
-- **Auth rate limit** — counters live in Postgres so they survive serverless. That limiter applies to Better Auth HTTP routes (`/api/auth`), not Server Actions. Email verification and password-reset links use those routes.
+- **Auth rate limit** — counters live in Postgres so they survive serverless. Better Auth limits its HTTP routes (`/api/auth`); the sign-in, sign-up and password-reset Server Actions call `consumeRateLimit` first. Behind more than one proxy, set Better Auth `advanced.ipAddress` so the client IP is right.
+- **Security headers** — `next.config.ts` denies framing and sets `nosniff`, `Referrer-Policy`, `Permissions-Policy` and, in production, HSTS. Add a script CSP if you need one.
 - **SEO** — canonicals, `sitemap.xml`, `robots.txt`, and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
 - **Email** — set `RESEND_API_KEY` and `EMAIL_FROM` in production. Without a key, development prints the message (including the link) to the server log.
 - **Storage** — allow `GET`, `PUT`, and `HEAD` from your origin in the bucket CORS, serve objects at `S3_PUBLIC_BASE_URL`, and schedule `s3.db.purgeStale()` for uploads that never confirm — [packages/storage](./packages/storage/README.md).

@@ -6,6 +6,7 @@ export function normalizePathname(pathname: string) {
   return pathname
 }
 
+/** `href` itself or a page below it; `exactMatchHref` matches only itself. */
 export function isPathActive(
   pathname: string,
   href: string,
@@ -19,11 +20,4 @@ export function isPathActive(
   }
 
   return path === url || path.startsWith(`${url}/`)
-}
-
-export function matchesPathPrefix(pathname: string, prefix: string) {
-  const path = normalizePathname(pathname)
-  const normalizedPrefix = normalizePathname(prefix)
-
-  return path === normalizedPrefix || path.startsWith(`${normalizedPrefix}/`)
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { logoutAction } from "@/app/action/dashboard/components/logout-action"
+import { logoutAction } from "@/app/action/dashboard/logout-action"
 import { NavUserLocaleMenu } from "@/components/locale/locale-switcher"
 import { ThemeSwitchItem } from "@/components/theme/theme-switch-item"
 import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"

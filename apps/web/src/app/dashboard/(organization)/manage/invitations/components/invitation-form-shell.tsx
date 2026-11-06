@@ -1,7 +1,6 @@
 "use client"
 
 import { useId, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
 import { createOrganizationInvitationAction } from "@/app/action/dashboard/(organization)/manage/invitations/create-organization-invitation-action"
 import { memberRoleOptions } from "@/app/dashboard/(organization)/manage/lib/member-role-options"
 import { FormLabel } from "@/components/form/form-label"
@@ -26,12 +25,6 @@ type InvitationFormShellProps = {
   onClose: () => void
 }
 
-function defaultInvitationRole(actorRole: string | null) {
-  const options = memberRoleOptions(actorRole)
-  if (options.includes("member")) return "member"
-  return options[0] ?? "member"
-}
-
 export function InvitationFormShell({
   organizationId,
   actorRole,
@@ -41,27 +34,23 @@ export function InvitationFormShell({
   const t = useTranslations("dashboard.invitationManage")
   const tBadges = useTranslations("badges.membershipRole")
   const tCommon = useTranslations("common")
-  const router = useRouter()
-  const emailId = useId()
+  const formId = useId()
   const [isPending, startTransition] = useTransition()
   const [email, setEmail] = useState("")
-  const [role, setRole] = useState(() => defaultInvitationRole(actorRole))
-  const options = memberRoleOptions(actorRole)
-  const roleItems = options.map((option) => ({
+  const [role, setRole] = useState<MembershipRole>("member")
+  const roleItems = memberRoleOptions(actorRole).map((option) => ({
     value: option,
-    label: tBadges(option as MembershipRole),
+    label: tBadges(option),
   }))
-  const canSubmit = Boolean(email.trim() && options.includes(role))
+  const canSubmit = Boolean(email.trim())
 
   const close = () => {
     setEmail("")
-    setRole(defaultInvitationRole(actorRole))
+    setRole("member")
     onClose()
   }
 
   const handleSubmit = () => {
-    if (!canSubmit) return
-
     startTransition(async () => {
       const result = await createOrganizationInvitationAction({
         organizationId,
@@ -79,7 +68,6 @@ export function InvitationFormShell({
 
       toast.add({ title: t("sent"), type: "success" })
       close()
-      router.refresh()
     })
   }
 
@@ -94,9 +82,9 @@ export function InvitationFormShell({
       footer={
         <>
           <Button
-            type="button"
+            type="submit"
+            form={formId}
             disabled={isPending || !canSubmit}
-            onClick={handleSubmit}
           >
             {isPending ? t("sending") : t("send")}
           </Button>
@@ -111,13 +99,22 @@ export function InvitationFormShell({
         </>
       }
     >
-      <div className="space-y-4">
+      <form
+        id={formId}
+        className="space-y-4"
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (canSubmit) {
+            handleSubmit()
+          }
+        }}
+      >
         <div className="space-y-2">
-          <FormLabel htmlFor={emailId} required>
+          <FormLabel htmlFor={`${formId}-email`} required>
             {t("email")}
           </FormLabel>
           <Input
-            id={emailId}
+            id={`${formId}-email`}
             type="email"
             value={email}
             placeholder={t("emailPlaceholder")}
@@ -128,7 +125,9 @@ export function InvitationFormShell({
           />
         </div>
         <div className="space-y-2">
-          <FormLabel required>{t("role")}</FormLabel>
+          <FormLabel htmlFor={`${formId}-role`} required>
+            {t("role")}
+          </FormLabel>
           <Select
             items={roleItems}
             value={role}
@@ -136,7 +135,7 @@ export function InvitationFormShell({
               if (next) setRole(next)
             }}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${formId}-role`} className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -148,7 +147,7 @@ export function InvitationFormShell({
             </SelectContent>
           </Select>
         </div>
-      </div>
+      </form>
     </ResponsiveFormOverlay>
   )
 }

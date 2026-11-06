@@ -1,13 +1,18 @@
 import { Suspense } from "react"
-import { cookies } from "next/headers"
+import { io } from "next/cache"
+import { cookies, headers } from "next/headers"
+import { redirect } from "next/navigation"
 import { SignUpForm } from "@/app/(auth)/(email-password)/signup/components/signup-form"
 import {
   DEFAULT_AUTH_REDIRECT,
   normalizeAuthRedirectTarget,
 } from "@/app/(auth)/lib/auth-redirect"
-
-/** Better Auth `lastLoginMethod` cookie (httpOnly: false; plugin default). */
-const LAST_LOGIN_METHOD_COOKIE = "better-auth.last_used_login_method"
+import {
+  auth,
+  googleSignInEnabled,
+  lastLoginMethodCookieName,
+} from "@repo/auth"
+import { passwordLimits } from "@repo/auth/password-limits"
 
 type SignUpPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -15,7 +20,15 @@ type SignUpPageProps = {
 
 export default function SignUpPage({ searchParams }: SignUpPageProps) {
   return (
-    <Suspense fallback={<SignUpForm redirectTo={DEFAULT_AUTH_REDIRECT} />}>
+    <Suspense
+      fallback={
+        <SignUpForm
+          redirectTo={DEFAULT_AUTH_REDIRECT}
+          passwordLimits={passwordLimits}
+          googleSignInEnabled={googleSignInEnabled}
+        />
+      }
+    >
       <SignUpPageContent searchParams={searchParams} />
     </Suspense>
   )
@@ -23,19 +36,23 @@ export default function SignUpPage({ searchParams }: SignUpPageProps) {
 
 async function SignUpPageContent({ searchParams }: SignUpPageProps) {
   const params = await searchParams
-  const redirectRaw =
-    typeof params.redirect === "string" ? params.redirect : undefined
-  const redirectTo = normalizeAuthRedirectTarget(redirectRaw)
+  const redirectTo = normalizeAuthRedirectTarget(params.redirect)
+
+  // Signed-in visitors skip the form. `io()` first: Better Auth reads the clock.
+  await io()
+  if (await auth.api.getSession({ headers: await headers() })) {
+    redirect(redirectTo)
+  }
+
   const cookieStore = await cookies()
-  const lastLoginMethod =
-    cookieStore.get(LAST_LOGIN_METHOD_COOKIE)?.value ?? null
-  const oauthError = typeof params.error === "string" ? params.error : null
 
   return (
     <SignUpForm
       redirectTo={redirectTo}
-      lastLoginMethod={lastLoginMethod}
-      oauthError={oauthError}
+      passwordLimits={passwordLimits}
+      googleSignInEnabled={googleSignInEnabled}
+      lastLoginMethod={cookieStore.get(lastLoginMethodCookieName)?.value}
+      oauthError={typeof params.error === "string" ? params.error : null}
     />
   )
 }

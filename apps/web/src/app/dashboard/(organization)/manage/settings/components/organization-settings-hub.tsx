@@ -3,8 +3,8 @@
 import { useId, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { ChevronRightIcon, Trash2Icon } from "lucide-react"
-import { deleteOrganizationAction } from "@/app/action/dashboard/(organization)/manage/delete-organization-action"
-import { updateOrganizationNameAction } from "@/app/action/dashboard/(organization)/manage/update-organization-name-action"
+import { deleteOrganizationAction } from "@/app/action/dashboard/(organization)/manage/settings/delete-organization-action"
+import { updateOrganizationNameAction } from "@/app/action/dashboard/(organization)/manage/settings/update-organization-name-action"
 import { OrganizationProfileFormFields } from "@/app/dashboard/(organization)/manage/settings/components/organization-profile-form-fields"
 import type { OrganizationBranding } from "@/app/dashboard/(organization)/manage/settings/lib/get-active-organization-branding"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
@@ -61,10 +61,6 @@ export function OrganizationSettingsHub({
   const [isDeleting, startDeleteTransition] = useTransition()
 
   const handleSave = (formData: FormData) => {
-    if (!canEdit) {
-      return
-    }
-
     const name = String(formData.get("name") ?? "").trim()
     if (!name) {
       return
@@ -86,7 +82,6 @@ export function OrganizationSettingsHub({
 
       toast.add({ title: t("profile.saved"), type: "success" })
       setProfileOpen(false)
-      router.refresh()
     })
   }
 
@@ -106,8 +101,7 @@ export function OrganizationSettingsHub({
 
       toast.add({ title: t("delete.deleted"), type: "success" })
       setDeleteOpen(false)
-      router.push(result.redirectTo ?? dashboardRoutes.home())
-      router.refresh()
+      router.replace(dashboardRoutes.home())
     })
   }
 
@@ -119,7 +113,6 @@ export function OrganizationSettingsHub({
             className={
               canEdit ? "rounded-none hover:bg-muted/50" : "rounded-none"
             }
-            role="listitem"
             render={
               canEdit ? (
                 <button
@@ -155,7 +148,6 @@ export function OrganizationSettingsHub({
           <SettingsSection label={t("sections.delete")}>
             <Item
               className="rounded-none hover:bg-destructive/5"
-              role="listitem"
               render={
                 <button
                   type="button"
@@ -224,7 +216,6 @@ export function OrganizationSettingsHub({
             <OrganizationProfileFormFields
               formId={formId}
               organization={organization}
-              canEdit={canEdit}
             />
           </form>
         </ResponsiveFormOverlay>

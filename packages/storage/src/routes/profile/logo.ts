@@ -1,6 +1,5 @@
 import { route, s3Error } from "@dimah-s3/server"
 import { auth } from "@repo/auth"
-import "../../locals"
 import { imageObject, imageUpload } from "./image"
 
 /**

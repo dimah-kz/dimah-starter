@@ -7,18 +7,14 @@ import type { AccessControl } from "better-auth/plugins/access"
 import { admin, lastLoginMethod, organization } from "better-auth/plugins"
 import { db } from "@repo/db"
 import * as schema from "@repo/db/schema"
-import {
-  sendOrganizationInvitation,
-  sendPasswordReset,
-  sendSignUpAttempt,
-  sendVerification,
-} from "@repo/email"
+import { sendAuthMail, sendOrganizationInvitation } from "@repo/email"
 import {
   defaultLocale,
   localeCookieName,
+  locales,
   resolveLocaleFromHeaders,
 } from "@repo/i18n"
-import { appOrigin, toAbsoluteAppUrl } from "./app-origin"
+import { DEV_ORIGIN, toAbsoluteAppUrl } from "./app-origin"
 import { adminPluginAc, adminPluginRoles } from "./admin-access"
 import { orgAc, orgRoles } from "./organization-access"
 import { passwordLimits } from "./password-limits"
@@ -26,10 +22,21 @@ import { acceptInvitationPath, loginPath } from "./paths"
 
 const isProduction = process.env.NODE_ENV === "production"
 
+const emailVerificationExpiresIn = 60 * 60
 const resetPasswordTokenExpiresIn = 60 * 60
 const invitationExpiresIn = 60 * 60 * 48
 const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim()
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim()
+const google =
+  googleClientId && googleClientSecret
+    ? { clientId: googleClientId, clientSecret: googleClientSecret }
+    : undefined
+
+/** Google is registered only when both env vars are set; the login UI hides its button otherwise. */
+export const googleSignInEnabled = google !== undefined
+
+/** Readable (not httpOnly) cookie the login UI uses for its "Last used" badge. */
+export const lastLoginMethodCookieName = "better-auth.last_used_login_method"
 
 export const auth = betterAuth({
   advanced: {
@@ -40,16 +47,17 @@ export const auth = betterAuth({
       handler: runAuthBackgroundTask,
     },
   },
-  trustedOrigins: [
-    process.env.BETTER_AUTH_URL,
-    ...(isProduction ? [] : ["http://localhost:3000"]),
-  ].filter(Boolean) as string[],
+  // The baseURL (`BETTER_AUTH_URL`) is trusted already. Development may leave
+  // it unset, so trust the origin `toAbsoluteAppUrl` falls back to.
+  trustedOrigins: isProduction ? [] : [DEV_ORIGIN],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
     schemaName: "auth",
   }),
   session: {
+    // 0 skips the freshness check. The account page lists sessions, and
+    // `listSessions` would otherwise reject a session older than a day.
     freshAge: 0,
     // Cookie cache skips a DB read. Ban/role changes can lag until maxAge.
     cookieCache: {
@@ -64,9 +72,9 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     sendOnSignIn: true,
     autoSignInAfterVerification: true,
-    expiresIn: resetPasswordTokenExpiresIn,
+    expiresIn: emailVerificationExpiresIn,
     sendVerificationEmail: async ({ user, url }, request) => {
-      await sendVerification({
+      await sendAuthMail("verify", {
         to: user.email,
         url,
         locale: localeFromRequest(request),
@@ -81,14 +89,14 @@ export const auth = betterAuth({
     resetPasswordTokenExpiresIn,
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }, request) => {
-      await sendPasswordReset({
+      await sendAuthMail("reset", {
         to: user.email,
         url,
         locale: localeFromRequest(request),
       })
     },
     onExistingUserSignUp: async ({ user }, request) => {
-      await sendSignUpAttempt({
+      await sendAuthMail("signUpAttempt", {
         to: user.email,
         url: toAbsoluteAppUrl(loginPath),
         locale: localeFromRequest(request),
@@ -105,15 +113,7 @@ export const auth = betterAuth({
       id,
     }),
   },
-  socialProviders:
-    googleClientId && googleClientSecret
-      ? {
-          google: {
-            clientId: googleClientId,
-            clientSecret: googleClientSecret,
-          },
-        }
-      : undefined,
+  socialProviders: google ? { google } : undefined,
   plugins: [
     admin({
       ac: adminPluginAc as AccessControl,
@@ -128,7 +128,7 @@ export const auth = betterAuth({
       sendInvitationEmail: async (data, request) => {
         await sendOrganizationInvitation({
           to: data.email,
-          url: `${appOrigin()}${acceptInvitationPath(data.id)}`,
+          url: toAbsoluteAppUrl(acceptInvitationPath(data.id)),
           locale: localeFromRequest(request),
           organizationName: data.organization.name,
           inviterName: data.inviter.user.name,
@@ -138,16 +138,16 @@ export const auth = betterAuth({
       },
     }),
     i18n({
-      translations: {
-        en: authErrorLocales.en,
-        fa: authErrorLocales.fa,
-      },
+      translations: Object.fromEntries(
+        locales.map((locale) => [locale, authErrorLocales[locale]])
+      ),
       defaultLocale,
       detection: ["cookie", "header"],
       localeCookie: localeCookieName,
     }),
     lastLoginMethod({
       storeInDatabase: true,
+      cookieName: lastLoginMethodCookieName,
     }),
     nextCookies(),
   ],

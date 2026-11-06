@@ -1,15 +1,24 @@
 import js from "@eslint/js"
 import eslintConfigPrettier from "eslint-config-prettier/flat"
+import { defineConfig, globalIgnores } from "eslint/config"
 import turboPlugin from "eslint-plugin-turbo"
 import tseslint from "typescript-eslint"
 
-import { globalIgnores } from "./ignores.js"
-
-/** @type {import("eslint").Linter.Config[]} */
-export const baseConfig = [
-  globalIgnores,
+export const baseConfig = defineConfig(
+  globalIgnores(
+    [
+      "**/dist/**",
+      "**/.next/**",
+      "**/out/**",
+      "**/build/**",
+      "**/.turbo/**",
+      "**/coverage/**",
+      "**/next-env.d.ts",
+    ],
+    "repo/ignores"
+  ),
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  tseslint.configs.recommended,
   turboPlugin.configs["flat/recommended"],
   {
     name: "repo/overrides",
@@ -24,11 +33,10 @@ export const baseConfig = [
       ],
       "turbo/no-undeclared-env-vars": "warn",
     },
-  },
-]
+  }
+)
 
-/** @type {import("eslint").Linter.Config} */
+/** Turns off rules that Prettier owns — always last. */
 export const prettierConfig = eslintConfigPrettier
 
-/** @type {import("eslint").Linter.Config[]} */
-export const config = [...baseConfig, prettierConfig]
+export const config = defineConfig(baseConfig, prettierConfig)

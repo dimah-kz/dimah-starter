@@ -14,7 +14,6 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemGroup,
   ItemMedia,
   ItemTitle,
 } from "@repo/ui/components/item"
@@ -58,7 +57,7 @@ export function AccountSecurityHub({
           </h1>
         </div>
 
-        <ItemGroup className="gap-2" role="list">
+        <div className="flex flex-col gap-2">
           {accountSecurityItems.map((item) => {
             const Icon = item.icon
             return (
@@ -66,7 +65,6 @@ export function AccountSecurityHub({
                 key={item.key}
                 variant="outline"
                 className="hover:bg-muted/50"
-                role="listitem"
                 render={
                   <button
                     type="button"
@@ -93,7 +91,7 @@ export function AccountSecurityHub({
               </Item>
             )
           })}
-        </ItemGroup>
+        </div>
       </div>
 
       <AccountSettingsPanel

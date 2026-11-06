@@ -2,42 +2,52 @@ import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import {
   listPath,
   parseListEnumFilter,
+  parseListFilter,
+  parseListPage,
+  parseListPageSize,
+  parseListQuery,
   type ListSearchParamsInput,
 } from "@/components/list"
 
 export const ADMIN_USERS_DEFAULT_PAGE_SIZE = 20
 
-export type AdminUserTableFilter = "all" | "admins" | "users" | "banned"
-
-const ADMIN_USER_TABLE_FILTERS = [
+export const ADMIN_USER_TABLE_FILTERS = [
   "all",
   "admins",
   "users",
   "banned",
-] as const satisfies readonly AdminUserTableFilter[]
+] as const
 
-export function parseAdminUserTableFilter(
-  value: string | undefined
-): AdminUserTableFilter {
-  return parseListEnumFilter(value, ADMIN_USER_TABLE_FILTERS, "all")
+export type AdminUserTableFilter = (typeof ADMIN_USER_TABLE_FILTERS)[number]
+
+export type AdminUsersPageQuery = {
+  page: number
+  pageSize: number
+  filter: AdminUserTableFilter
+  q?: string
+}
+
+export function parseAdminUsersPageQuery(
+  searchParams: Record<string, string | string[] | undefined>
+): AdminUsersPageQuery {
+  return {
+    page: parseListPage(searchParams),
+    pageSize: parseListPageSize(searchParams, ADMIN_USERS_DEFAULT_PAGE_SIZE),
+    filter: parseListEnumFilter(
+      parseListFilter(searchParams),
+      ADMIN_USER_TABLE_FILTERS,
+      "all"
+    ),
+    q: parseListQuery(searchParams),
+  }
 }
 
 export function adminUsersTablePath(
-  input: ListSearchParamsInput & {
-    filter?: AdminUserTableFilter
-  } = {}
+  input: ListSearchParamsInput & { filter?: AdminUserTableFilter } = {}
 ): string {
-  const filter =
-    input.filter && input.filter !== "all" ? input.filter : undefined
-
   return listPath(
     dashboardRoutes.adminUsers(),
-    {
-      page: input.page,
-      pageSize: input.pageSize,
-      filter,
-      q: input.q,
-    },
-    { defaultPageSize: ADMIN_USERS_DEFAULT_PAGE_SIZE }
+    input,
+    ADMIN_USERS_DEFAULT_PAGE_SIZE
   )
 }

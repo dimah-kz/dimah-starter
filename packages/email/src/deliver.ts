@@ -1,7 +1,7 @@
 import { Resend } from "resend"
 import type { ReactElement } from "react"
 
-export type SendEmailInput = {
+type SendEmailInput = {
   to: string
   subject: string
   react: ReactElement

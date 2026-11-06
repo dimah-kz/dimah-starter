@@ -21,6 +21,7 @@ import { useTranslations } from "next-intl"
 
 type LoginFormProps = {
   redirectTo: string
+  googleSignInEnabled: boolean
   lastLoginMethod?: string | null
   passwordReset?: boolean
   oauthError?: string | null
@@ -28,6 +29,7 @@ type LoginFormProps = {
 
 export function LoginForm({
   redirectTo,
+  googleSignInEnabled,
   lastLoginMethod = null,
   passwordReset = false,
   oauthError = null,
@@ -63,6 +65,7 @@ export function LoginForm({
                 type="email"
                 placeholder={t("emailPlaceholder")}
                 autoComplete="email"
+                defaultValue={state.values?.email}
                 required
               />
               <InputGroupAddon>
@@ -106,12 +109,14 @@ export function LoginForm({
           ) : null}
         </div>
       </form>
-      <GoogleSignIn
-        redirectTo={redirectTo}
-        returnPath={authRoutes.login()}
-        lastLoginMethod={lastLoginMethod}
-        oauthError={oauthError}
-      />
+      {googleSignInEnabled ? (
+        <GoogleSignIn
+          redirectTo={redirectTo}
+          returnPath={authRoutes.login()}
+          lastLoginMethod={lastLoginMethod}
+          oauthError={oauthError}
+        />
+      ) : null}
     </div>
   )
 }

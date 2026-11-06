@@ -4,10 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./config": "./src/config.ts",
-    "./messages": "./src/load-messages.ts",
-    "./format": "./src/format.ts"
+    ".": "./src/index.ts"
   },
   "scripts": {
     "lint": "eslint",

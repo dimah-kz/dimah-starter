@@ -1,31 +1,42 @@
+import { DELETE_MANY_MAX_KEYS } from "@dimah-s3/core"
+import type { S3ServerCallOptions } from "@dimah-s3/server"
 import { toPublicUrl } from "./public-url"
 import { routeOwners, type RouteName } from "./routes"
 import { bucket, s3 } from "./s3"
 import { toScope, type Owner } from "./scope"
 
-export type OwnedPublicUrl =
-  { url: string } | { error: "invalid" | "unconfigured" }
-
 /**
- * Public URL of `key` when it is an active `route` object of `ownerId`.
- * `invalid` when it is not. `unconfigured` when `S3_PUBLIC_BASE_URL` is unset.
+ * Public URL of `key` when it is an active `route` object of `ownerId`. The
+ * error is a `common.errors` message key. Never throws: `key` comes from the
+ * browser, and a failed lookup is logged.
  */
 export async function toOwnedPublicUrl(input: {
   route: RouteName
   ownerId: string
   key: string
-}): Promise<OwnedPublicUrl> {
-  const row = await s3.db.objects.find({ bucket, key: input.key })
-  if (
-    !row ||
-    row.status !== "active" ||
-    row.route !== input.route ||
-    row.scope !== toScope(routeOwners[input.route], input.ownerId)
-  ) {
-    return { error: "invalid" }
+}): Promise<
+  { url: string } | { error: "storagePublicUrlMissing" | "invalidImageKey" }
+> {
+  const { route, ownerId, key } = input
+  if (typeof key !== "string" || key.length === 0) {
+    return { error: "invalidImageKey" }
   }
-  const url = toPublicUrl(row.key)
-  return url ? { url } : { error: "unconfigured" }
+  try {
+    const row = await s3.db.objects.find({ bucket, key })
+    if (
+      !row ||
+      row.status !== "active" ||
+      row.route !== route ||
+      row.scope !== toScope(routeOwners[route], ownerId)
+    ) {
+      return { error: "invalidImageKey" }
+    }
+    const url = toPublicUrl(row.key)
+    return url ? { url } : { error: "storagePublicUrlMissing" }
+  } catch (error) {
+    console.error("[storage] object lookup failed", error)
+    return { error: "invalidImageKey" }
+  }
 }
 
 /**
@@ -41,21 +52,10 @@ export async function deleteRouteObjects(input: {
   headers: Headers
 }) {
   const { route, ownerId, keep, headers } = input
-  try {
-    const { objects } = await s3.db.objects.list({
-      scope: toScope(routeOwners[route], ownerId),
-      route,
-      limit: 100,
-    })
-    const keys = objects
-      .map((object) => object.key)
-      .filter((key) => key !== keep)
-    if (keys.length === 0) return
-    const { failed } = await s3.api.deleteMany({ route, keys }, { headers })
-    if (failed.length > 0) console.error("[storage] delete failed", failed)
-  } catch (error) {
-    console.error("[storage] delete failed", error)
-  }
+  await deleteScopeObjects(
+    { scope: toScope(routeOwners[route], ownerId), route, keep },
+    { headers }
+  )
 }
 
 /**
@@ -64,29 +64,60 @@ export async function deleteRouteObjects(input: {
  * `system` call. Never throws; failures are logged.
  */
 export async function deleteOwnedObjects(owner: Owner, ownerId: string) {
-  const scope = toScope(owner, ownerId)
-  const locals =
-    owner === "organization"
-      ? { system: true, organizationId: ownerId }
-      : { system: true, userId: ownerId }
-  try {
-    let cursor: string | null = null
-    do {
-      const page = await s3.db.objects.list({ scope, limit: 100, cursor })
-      const keysByRoute: Record<string, string[]> = {}
-      for (const object of page.objects) {
-        ;(keysByRoute[object.route] ??= []).push(object.key)
-      }
-      for (const [route, keys] of Object.entries(keysByRoute)) {
+  await deleteScopeObjects(
+    { scope: toScope(owner, ownerId) },
+    {
+      locals:
+        owner === "organization"
+          ? { system: true, organizationId: ownerId }
+          : { system: true, userId: ownerId },
+    }
+  )
+}
+
+/**
+ * Deletes the active objects of `scope` (of one `route` when given) except
+ * `keep`, one page per `deleteMany`. A failed batch is logged and the sweep
+ * goes on; a failed listing ends it.
+ */
+async function deleteScopeObjects(
+  filter: { scope: string; route?: RouteName; keep?: string },
+  options: S3ServerCallOptions
+) {
+  const { scope, route, keep } = filter
+  let cursor: string | null = null
+  do {
+    let page
+    try {
+      page = await s3.db.objects.list({
+        scope,
+        route,
+        limit: DELETE_MANY_MAX_KEYS,
+        cursor,
+      })
+    } catch (error) {
+      console.error("[storage] list failed", error)
+      return
+    }
+    const keysByRoute = new Map<RouteName, string[]>()
+    for (const object of page.objects) {
+      if (object.key === keep) continue
+      const objectRoute = object.route as RouteName
+      const keys = keysByRoute.get(objectRoute) ?? []
+      keys.push(object.key)
+      keysByRoute.set(objectRoute, keys)
+    }
+    for (const [objectRoute, keys] of keysByRoute) {
+      try {
         const { failed } = await s3.api.deleteMany(
-          { route: route as RouteName, keys },
-          { locals }
+          { route: objectRoute, keys },
+          options
         )
         if (failed.length > 0) console.error("[storage] delete failed", failed)
+      } catch (error) {
+        console.error("[storage] delete failed", error)
       }
-      cursor = page.nextCursor
-    } while (cursor)
-  } catch (error) {
-    console.error("[storage] delete failed", error)
-  }
+    }
+    cursor = page.nextCursor
+  } while (cursor)
 }

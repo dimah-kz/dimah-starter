@@ -9,18 +9,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/ui/components/sheet"
-import { cn } from "cn"
 
-export type ResponsiveFormOverlayProps = {
+type ResponsiveFormOverlayProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   title: string
   description?: string
   footer: ReactNode
   children: ReactNode
-  headerClassName?: string
-  contentClassName?: string
-  footerClassName?: string
 }
 
 export function ResponsiveFormOverlay({
@@ -30,9 +26,6 @@ export function ResponsiveFormOverlay({
   description,
   footer,
   children,
-  headerClassName,
-  contentClassName,
-  footerClassName,
 }: ResponsiveFormOverlayProps) {
   const closeOnHide = useEffectEvent(() => {
     if (open) {
@@ -49,20 +42,14 @@ export function ResponsiveFormOverlay({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="p-0 max-sm:w-full!">
-        <SheetHeader className={cn("p-4 pe-14", headerClassName)}>
+        <SheetHeader className="p-4 pe-14">
           <SheetTitle>{title}</SheetTitle>
           {description ? (
             <SheetDescription>{description}</SheetDescription>
           ) : null}
         </SheetHeader>
-        <div
-          className={cn("min-h-0 flex-1 overflow-y-auto p-4", contentClassName)}
-        >
-          {children}
-        </div>
-        <SheetFooter className={cn("p-4", footerClassName)}>
-          {footer}
-        </SheetFooter>
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">{children}</div>
+        <SheetFooter className="p-4">{footer}</SheetFooter>
       </SheetContent>
     </Sheet>
   )

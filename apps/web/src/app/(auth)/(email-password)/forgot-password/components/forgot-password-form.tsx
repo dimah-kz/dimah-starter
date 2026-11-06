@@ -48,6 +48,7 @@ export function ForgotPasswordForm({ redirectTo }: ForgotPasswordFormProps) {
               type="email"
               placeholder={t("emailPlaceholder")}
               autoComplete="email"
+              defaultValue={state.values?.email}
               required
             />
             <InputGroupAddon>

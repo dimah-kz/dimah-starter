@@ -1,8 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
-import { AuthSettingsMenu } from "@/app/(auth)/components/auth-settings-menu"
 import { BrandMark } from "@/components/brand-mark"
+import { SettingsMenu } from "@/components/settings-menu"
 import authPanel from "./auth-panel.jpg"
 
 export default async function AuthLayout({
@@ -31,11 +31,11 @@ export default async function AuthLayout({
                 {t("appTitle")}
               </span>
             </Link>
-            <AuthSettingsMenu />
+            <SettingsMenu />
           </div>
-          <div className="flex flex-1 flex-col items-center justify-center px-6 pb-10 md:px-12 lg:px-16">
+          <main className="flex flex-1 flex-col items-center justify-center px-6 pb-10 md:px-12 lg:px-16">
             <div className="w-full max-w-sm">{children}</div>
-          </div>
+          </main>
         </div>
       </div>
 

@@ -1,33 +1,36 @@
-import { orgRoles, type MembershipRole } from "@repo/auth/organization-access"
+import type { MembershipRole } from "@repo/auth/organization-access"
 import { parseRoleString } from "@repo/auth/role-string"
 
+/** Lowest to highest. */
 const membershipRoleHierarchy = [
   "member",
   "admin",
   "owner",
 ] as const satisfies readonly MembershipRole[]
 
-export function memberRoleOptions(actorRole: string | null): string[] {
-  const actorTokens = parseRoleString(actorRole)
-  let actorMaxRank = 0
+/** Known membership roles in a Better Auth role string. */
+export function toMembershipRoles(role: string | null): MembershipRole[] {
+  return parseRoleString(role).filter((token): token is MembershipRole =>
+    (membershipRoleHierarchy as readonly string[]).includes(token)
+  )
+}
 
-  for (const token of actorTokens) {
-    if (!(token in orgRoles)) {
-      continue
-    }
+/** Roles the actor may grant: up to their highest role, highest first. */
+export function memberRoleOptions(actorRole: string | null): MembershipRole[] {
+  const highest = Math.max(
+    0,
+    ...toMembershipRoles(actorRole).map((role) =>
+      membershipRoleHierarchy.indexOf(role)
+    )
+  )
 
-    const rank = membershipRoleHierarchy.indexOf(token as MembershipRole) + 1
-    if (rank > actorMaxRank) {
-      actorMaxRank = rank
-    }
-  }
+  return membershipRoleHierarchy.slice(0, highest + 1).reverse()
+}
 
-  if (actorMaxRank === 0) {
-    return ["member"]
-  }
-
-  return membershipRoleHierarchy
-    .filter((role) => membershipRoleHierarchy.indexOf(role) + 1 <= actorMaxRank)
-    .slice()
-    .reverse()
+/** Only an owner may change or remove another owner. */
+export function canManageMember(actorRole: string | null, memberRole: string) {
+  return (
+    !toMembershipRoles(memberRole).includes("owner") ||
+    toMembershipRoles(actorRole).includes("owner")
+  )
 }

@@ -3,7 +3,7 @@ import { io } from "next/cache"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
-import { normalizeAuthRedirectTarget } from "@/app/(auth)/lib/auth-redirect"
+import { withAuthRedirect } from "@/app/(auth)/lib/auth-redirect"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { auth } from "@repo/auth"
 
@@ -26,10 +26,7 @@ export async function requireDashboardSession() {
   const session = await getDashboardSession()
 
   if (!session?.user) {
-    const params = new URLSearchParams({
-      redirect: normalizeAuthRedirectTarget(dashboardRoutes.home()),
-    })
-    redirect(`${authRoutes.login()}?${params.toString()}`)
+    redirect(withAuthRedirect(authRoutes.login(), dashboardRoutes.home()))
   }
 
   return session
@@ -40,55 +37,69 @@ export const listDashboardOrganizations = cache(async () => {
   return auth.api.listOrganizations({ headers: await dashboardAuthHeaders() })
 })
 
-/** Set session active org via Better Auth — authorization enforced by the API. */
-export async function setDashboardActiveOrganization(organizationId: string) {
-  await auth.api.setActiveOrganization({
-    headers: await dashboardAuthHeaders(),
-    body: { organizationId },
-  })
-}
-
-/** Unset active org — personal account context. */
-export async function clearDashboardActiveOrganization() {
-  await auth.api.setActiveOrganization({
-    headers: await dashboardAuthHeaders(),
-    body: { organizationId: null },
-  })
-}
-
 /**
  * Session active org when the user is still a member. `null` means personal
- * account (explicit user choice). Only heals stale ids — never auto-selects
- * the first membership when active org is intentionally unset.
+ * account. A stale id (the user left, or the org was deleted) reads as
+ * personal — render never writes; switching is the Server Action's job.
  */
 export const resolveDashboardActiveOrganizationId = cache(async () => {
   const session = await getDashboardSession()
-  if (!session) {
-    return null
-  }
+  const activeOrganizationId = session?.session.activeOrganizationId
 
-  const activeOrganizationId = session.session.activeOrganizationId ?? null
-
-  if (activeOrganizationId === null) {
+  if (!activeOrganizationId) {
     return null
   }
 
   const organizations = await listDashboardOrganizations()
-  const membershipIds = new Set(
-    organizations.map((organization) => organization.id)
-  )
 
-  if (membershipIds.has(activeOrganizationId)) {
-    return activeOrganizationId
-  }
-
-  const firstOrganization = organizations[0]
-
-  if (firstOrganization?.id) {
-    await setDashboardActiveOrganization(firstOrganization.id)
-    return firstOrganization.id
-  }
-
-  await clearDashboardActiveOrganization()
-  return null
+  return organizations.some(({ id }) => id === activeOrganizationId)
+    ? activeOrganizationId
+    : null
 })
+
+/** Platform admin area (`/dashboard/admin`). */
+export const canAccessPlatformAdmin = cache(async () => {
+  const { success } = await auth.api.userHasPermission({
+    headers: await dashboardAuthHeaders(),
+    body: { permissions: { user: ["list"] } },
+  })
+  return success
+})
+
+/** Organization manage area (`/dashboard/manage`) for `organizationId`. */
+export const canManageOrganization = cache(async (organizationId: string) => {
+  const { success } = await auth.api.hasPermission({
+    headers: await dashboardAuthHeaders(),
+    body: { organizationId, permissions: { member: ["update"] } },
+  })
+  return success
+})
+
+/**
+ * Gate for admin pages **and** their data reads. A layout check alone does not
+ * stop a page from rendering into the RSC payload, so every read calls this.
+ */
+export async function requirePlatformAdmin() {
+  const session = await requireDashboardSession()
+
+  if (!(await canAccessPlatformAdmin())) {
+    redirect(dashboardRoutes.home())
+  }
+
+  return session
+}
+
+/**
+ * Gate for organization manage pages and their data reads. Returns the active
+ * organization the signed-in user may manage.
+ */
+export async function requireOrganizationManager() {
+  const session = await requireDashboardSession()
+  const organizationId = await resolveDashboardActiveOrganizationId()
+
+  if (!organizationId || !(await canManageOrganization(organizationId))) {
+    redirect(dashboardRoutes.home())
+  }
+
+  return { session, organizationId }
+}
