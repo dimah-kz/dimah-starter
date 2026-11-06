@@ -66,13 +66,14 @@ UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
 
 Sign in again to see **Platform management** in the sidebar. Later admins are promoted from `/dashboard/admin/users`.
 
-| Command                                              | What it does                        |
-| ---------------------------------------------------- | ----------------------------------- |
-| `pnpm dev`                                           | Run the web app                     |
-| `pnpm format:check` · `lint` · `typecheck` · `build` | Quality gates (CI runs all of them) |
-| `pnpm --filter @repo/db db:generate` · `db:migrate`  | Create and apply migrations         |
-| `pnpm --filter @repo/db db:studio`                   | Browse the database                 |
-| `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components |
+| Command                                              | What it does                                    |
+| ---------------------------------------------------- | ----------------------------------------------- |
+| `pnpm dev`                                           | Run the web app                                 |
+| `pnpm format:check` · `lint` · `typecheck` · `build` | Quality gates (CI runs all of them)             |
+| `pnpm --filter @repo/db db:generate` · `db:migrate`  | Create and apply migrations                     |
+| `pnpm --filter @repo/db db:studio`                   | Browse the database                             |
+| `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components             |
+| `pnpm storage:purge`                                 | Clean up abandoned uploads (schedule it hourly) |
 
 ## Included vs add when you need it
 
@@ -89,6 +90,6 @@ Google appears when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. Produ
 - **Security headers** — `next.config.ts` denies framing and sets `nosniff`, `Referrer-Policy`, `Permissions-Policy` and, in production, HSTS. Add a script CSP if you need one.
 - **SEO** — canonicals, `sitemap.xml`, `robots.txt`, and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
 - **Email** — set `RESEND_API_KEY` and `EMAIL_FROM` in production. Without a key, development prints the message (including the link) to the server log.
-- **Storage** — allow `GET`, `PUT`, and `HEAD` from your origin in the bucket CORS, serve objects at `S3_PUBLIC_BASE_URL`, and schedule `s3.db.purgeStale()` for uploads that never confirm — [packages/storage](./packages/storage/README.md).
+- **Storage** — allow `GET`, `PUT`, and `HEAD` from your origin in the bucket CORS, serve objects at `S3_PUBLIC_BASE_URL`, and schedule `pnpm storage:purge` hourly so uploads that never confirm leave the bucket and the database — [packages/storage](./packages/storage/README.md#purging-stale-uploads).
 
 Conventions: [`AGENTS.md`](./AGENTS.md). MIT — see [LICENSE](./LICENSE).

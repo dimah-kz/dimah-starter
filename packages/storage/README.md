@@ -51,4 +51,23 @@ Importing the package never throws: without `S3_BUCKET`, every storage call fail
 
 - Rows live in the `storage` PostgreSQL schema (schema 2.1.0, `@repo/db`).
 - Deletes are soft: the object leaves S3, the row stays as `deleted`.
-- Uploads that never confirm leave `pending` rows. Run `s3.db.purgeStale()` from a scheduled job, and `s3.db.pruneDeleted({ olderThan })` to drop old rows — [Purge](https://s3.dimah.dev/docs/db/purge). An `AbortIncompleteMultipartUpload` lifecycle rule on the bucket is a good backstop.
+- An upload that never confirms leaves a `pending` row, and can leave an object or an unfinished multipart upload. Schedule `pnpm storage:purge` hourly to clean them up.
+- An `AbortIncompleteMultipartUpload` lifecycle rule on the bucket is a good backstop.
+
+### Purging stale uploads
+
+`pnpm storage:purge` runs `scripts/purge.ts`:
+
+1. `s3.db.purgeStale()`, repeated until no stale upload is left. For each upload past its confirm deadline it aborts the multipart upload, deletes the object the upload left, and removes the `pending` row — [Purge](https://s3.dimah.dev/docs/db/purge).
+2. `s3.db.pruneDeleted()` drops rows deleted more than 30 days ago.
+
+It reads `DATABASE_URL` and the `S3_*` variables from the environment, or from the root `.env`. It prints a summary and exits 1 when an upload could not be purged. A later run retries that upload once its 15-minute claim lapses.
+
+Run it from any scheduler that has a checkout with dependencies installed:
+
+```bash
+# crontab: every hour
+0 * * * * cd /srv/dimah-starter && pnpm storage:purge
+```
+
+Serverless hosts such as Vercel only schedule HTTP requests. Use your platform's cron job, a server crontab, or a scheduled GitHub Actions workflow with the production `DATABASE_URL` and `S3_*` as secrets.

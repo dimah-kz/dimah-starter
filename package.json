@@ -9,6 +9,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "turbo lint",
+    "storage:purge": "pnpm --filter @repo/storage storage:purge",
     "typecheck": "turbo typecheck",
     "ui:sync": "pnpm --filter @repo/ui sync"
   },
