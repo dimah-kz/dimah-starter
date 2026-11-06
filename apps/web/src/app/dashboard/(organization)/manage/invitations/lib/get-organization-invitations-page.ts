@@ -10,12 +10,17 @@ import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { requireOrganizationManager } from "@/app/dashboard/lib/dashboard-session"
 import { clampListPage, toListSearchPattern } from "@/components/list"
 
-export type OrganizationInvitationItem = {
+type CachedOrganizationInvitation = {
   id: string
   email: string
   role: string
   status: string
   expiresAt: string
+}
+
+export type OrganizationInvitationItem = CachedOrganizationInvitation & {
+  /** Pending invite that is already past `expiresAt`. Computed per request, outside the cache. */
+  expired: boolean
 }
 
 function buildInvitationsWhere(
@@ -42,7 +47,18 @@ export async function getOrganizationInvitationsPage(
   query: OrganizationInvitationsPageQuery
 ) {
   const { organizationId } = await requireOrganizationManager()
-  return getCachedOrganizationInvitationsPage(organizationId, query)
+  const page = await getCachedOrganizationInvitationsPage(organizationId, query)
+  // After `io()` inside the gate. Caching this would freeze expiry for the cache life.
+  const now = Date.now()
+
+  return {
+    ...page,
+    invitations: page.invitations.map((row): OrganizationInvitationItem => ({
+      ...row,
+      expired:
+        row.status === "pending" && new Date(row.expiresAt).getTime() < now,
+    })),
+  }
 }
 
 async function getCachedOrganizationInvitationsPage(
@@ -79,7 +95,7 @@ async function getCachedOrganizationInvitationsPage(
     .offset((page - 1) * query.pageSize)
 
   return {
-    invitations: invitations.map((row): OrganizationInvitationItem => ({
+    invitations: invitations.map((row): CachedOrganizationInvitation => ({
       id: row.id,
       email: row.email,
       role: row.role ?? "member",

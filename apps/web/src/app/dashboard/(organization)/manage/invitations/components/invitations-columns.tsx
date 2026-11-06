@@ -9,14 +9,7 @@ import { MembershipRoleBadge } from "@/components/badge/membership-role-badge"
 import type { ListColumn } from "@/components/list"
 
 function invitationDisplayStatus(row: OrganizationInvitationItem) {
-  if (
-    row.status === "pending" &&
-    new Date(row.expiresAt).getTime() < Date.now()
-  ) {
-    return "expired"
-  }
-
-  return row.status
+  return row.expired ? "expired" : row.status
 }
 
 type TablesTranslator = {

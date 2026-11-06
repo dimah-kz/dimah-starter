@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { cacheLife } from "next/cache"
 import Link from "next/link"
 import { getLocale, getTranslations } from "next-intl/server"
 import type { ReactNode } from "react"
@@ -130,7 +131,11 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-/** Shiki colors rendered on the server into shadcn code block lines — no client JS. */
+/**
+ * Shiki colors rendered on the server into shadcn code block lines — no client JS.
+ * vscode-textmate calls `Date.now()` as a tokenize timeout, which Cache Components
+ * rejects during prerender. The samples are static, so cache the colored lines.
+ */
 async function HighlightedCode({
   code,
   language,
@@ -140,6 +145,9 @@ async function HighlightedCode({
   language: string
   lineNumbers?: boolean
 }) {
+  "use cache"
+  cacheLife("max")
+
   const lines = (await highlightCode(code, language)) ?? code.split("\n")
 
   return (

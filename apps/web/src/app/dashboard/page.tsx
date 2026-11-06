@@ -6,6 +6,7 @@ import {
 } from "@/app/dashboard/components/layout/dashboard-page-shell"
 import {
   listDashboardOrganizations,
+  requireDashboardSession,
   resolveDashboardActiveOrganizationId,
 } from "@/app/dashboard/lib/dashboard-session"
 
@@ -20,6 +21,7 @@ export default function DashboardPage() {
 }
 
 async function DashboardHome() {
+  await requireDashboardSession()
   const [organizations, activeOrganizationId] = await Promise.all([
     listDashboardOrganizations(),
     resolveDashboardActiveOrganizationId(),
