@@ -76,6 +76,7 @@ Not in the UI yet: OAuth. Product oRPC is a `health.ping` stub in `@repo/api` (`
 - **Postgres on serverless** — use a **pooled** `DATABASE_URL` (Neon pooler, PgBouncer, Supabase pooler). Direct `5432` will exhaust connections under bursty functions.
 - **Session cookie cache** — `getSession` may use a cookie for up to **5 minutes**. After a ban or role change, the affected user can still look signed-in until that cache expires.
 - **Auth rate limit** — counters live in Postgres so they survive serverless. That limiter applies to Better Auth HTTP routes (`/api/auth`), not Server Actions. Email verification and password-reset links use those routes.
+- **SEO** — canonicals, `sitemap.xml`, `robots.txt`, and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
 - **Email** — set `RESEND_API_KEY` and `EMAIL_FROM` in production. Without a key, development prints the message (including the link) to the server log.
 
 Conventions: [`AGENTS.md`](./AGENTS.md). MIT — see [LICENSE](./LICENSE).

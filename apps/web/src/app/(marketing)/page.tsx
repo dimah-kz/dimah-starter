@@ -8,7 +8,7 @@ import {
   marketingSections,
 } from "@/app/(marketing)/lib/marketing-routes"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
-import { openGraphLocales, siteAuthor, siteLinks } from "@/lib/site"
+import { siteAuthor, siteLinks } from "@/lib/site"
 import { appOrigin } from "@repo/auth/app-origin"
 import { Button } from "@repo/ui/components/button"
 import {
@@ -62,28 +62,21 @@ const quickStartCommands = [
 const ctaClassName =
   "h-10 gap-2 px-4 text-sm has-data-[icon=inline-end]:pe-3.5 has-data-[icon=inline-start]:ps-3.5"
 
+/**
+ * Title, description, and canonical only: Next derives the og/twitter title and
+ * description from them, and a page-level `openGraph` object would replace the
+ * root one, dropping the inherited share image.
+ */
 export async function generateMetadata(): Promise<Metadata> {
-  const [t, tc, locale] = await Promise.all([
+  const [t, tc] = await Promise.all([
     getTranslations("marketing.home"),
     getTranslations("common"),
-    getLocale(),
   ])
-  const title = t("metaTitle")
-  const description = tc("appDescription")
 
   return {
-    title: { absolute: title },
-    description,
+    title: { absolute: t("metaTitle") },
+    description: tc("appDescription"),
     alternates: { canonical: marketingRoutes.home() },
-    openGraph: {
-      type: "website",
-      url: marketingRoutes.home(),
-      siteName: tc("appTitle"),
-      locale: openGraphLocales[locale],
-      title,
-      description,
-    },
-    twitter: { card: "summary_large_image", title, description },
   }
 }
 
@@ -194,9 +187,7 @@ export default async function Home() {
               <span className="sr-only"> {newTabLabel}</span>
             </Button>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t("demoHint")}
-          </p>
+          <p className="mt-4 text-sm text-muted-foreground">{t("demoHint")}</p>
         </div>
       </section>
 
@@ -233,16 +224,21 @@ export default async function Home() {
 
           <ul className="mt-12 grid gap-px overflow-hidden rounded-xl border bg-border sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
             {features.map(({ key, icon: Icon }) => (
-              <li key={key} className="bg-background p-6 sm:p-8">
+              <li
+                key={key}
+                className="flex gap-4 bg-background p-6 sm:block sm:p-8"
+              >
                 <IconTile size="sm">
                   <Icon aria-hidden />
                 </IconTile>
-                <h3 className="mt-5 text-base font-medium">
-                  {t(`features.items.${key}.title`)}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-pretty text-muted-foreground">
-                  {t(`features.items.${key}.description`)}
-                </p>
+                <div className="sm:mt-5">
+                  <h3 className="text-base font-medium">
+                    {t(`features.items.${key}.title`)}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-6 text-pretty text-muted-foreground sm:mt-2">
+                    {t(`features.items.${key}.description`)}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>
@@ -311,7 +307,9 @@ export default async function Home() {
                 />
               </CodeBlockActions>
             </CodeBlockHeader>
-            <CodeBlockContent lineNumbers>{quickStartCommands}</CodeBlockContent>
+            <CodeBlockContent lineNumbers>
+              {quickStartCommands}
+            </CodeBlockContent>
           </CodeBlock>
         </div>
       </section>

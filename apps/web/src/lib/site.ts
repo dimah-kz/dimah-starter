@@ -1,5 +1,3 @@
-import type { Locale } from "@repo/i18n"
-
 /**
  * Public project facts for metadata, JSON-LD, and marketing links.
  * The site origin is not here: it is `appOrigin()` from `@repo/auth/app-origin`
@@ -16,9 +14,3 @@ export const siteAuthor = {
   name: "dimah-kz",
   url: "https://github.com/dimah-kz",
 } as const
-
-/** `og:locale` values — one per locale in `@repo/i18n`. */
-export const openGraphLocales: Record<Locale, string> = {
-  en: "en_US",
-  fa: "fa_IR",
-}

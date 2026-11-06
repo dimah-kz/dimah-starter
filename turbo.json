@@ -16,6 +16,7 @@
     "S3_PUBLIC_BASE_URL",
     "RESEND_API_KEY",
     "EMAIL_FROM",
+    "GOOGLE_SITE_VERIFICATION",
     "NODE_ENV"
   ],
   "tasks": {

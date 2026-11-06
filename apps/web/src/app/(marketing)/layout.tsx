@@ -124,7 +124,10 @@ export default async function MarketingLayout({
                 </li>
               ))}
               <li>
-                <Link href={dashboardRoutes.home()} className={navLinkClassName}>
+                <Link
+                  href={dashboardRoutes.home()}
+                  className={navLinkClassName}
+                >
                   {t("nav.dashboard")}
                 </Link>
               </li>

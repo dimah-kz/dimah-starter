@@ -14,6 +14,7 @@ How-to pages — **not** a map of the repo. Explore code for what exists. Read a
 | [nextjs.md](./nextjs.md)                 | Always `apps/web/node_modules/next/dist/docs/` |
 | [ui-design.md](./ui-design.md)           | `@repo/ui`, logical Tailwind                   |
 | [i18n.md](./i18n.md)                     | Messages, locale, RTL                          |
+| [seo.md](./seo.md)                       | Metadata, sitemap, public pages                |
 
 Skip these pages for a one-line bugfix, a “where is X?” grep, or a rename — the matching `.cursor/rules/*.mdc` is enough.
 

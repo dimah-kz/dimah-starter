@@ -43,7 +43,8 @@ export default function OpengraphImage() {
             fontSize: 68,
             lineHeight: 1.1,
             letterSpacing: -2,
-            maxWidth: 960,
+            // Wraps before "multi-tenant" instead of at its hyphen.
+            maxWidth: 820,
           }}
         >
           {headline}

@@ -4,9 +4,9 @@ import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { HtmlLocaleSync } from "@/components/locale/html-locale-sync"
 import { LoadingFallbackShell } from "@/components/fallback/loading-fallback"
-import { openGraphLocales, siteAuthor } from "@/lib/site"
+import { siteAuthor } from "@/lib/site"
 import { appOrigin } from "@repo/auth/app-origin"
-import { defaultLocale, getLocaleDirection } from "@repo/i18n"
+import { defaultLocale, getLocaleDirection, type Locale } from "@repo/i18n"
 import { Vazirmatn } from "next/font/google"
 import { getLocale, getMessages, getTranslations } from "next-intl/server"
 import { NextIntlClientProvider } from "next-intl"
@@ -18,6 +18,11 @@ const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin", "latin-ext"],
   variable: "--font-sans",
 })
+
+const openGraphLocales: Record<Locale, string> = {
+  en: "en_US",
+  fa: "fa_IR",
+}
 
 export const viewport: Viewport = {
   themeColor: [
