@@ -6,7 +6,7 @@ import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { updateTag } from "next/cache"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { toOwnedImageUrl } from "@repo/storage"
+import { deleteRouteObjects, toOwnedPublicUrl } from "@repo/storage"
 
 export async function setOrganizationLogoAction(
   organizationId: string,
@@ -19,7 +19,7 @@ export async function setOrganizationLogoAction(
     return { error: t("unauthorized") }
   }
 
-  const owned = await toOwnedImageUrl({
+  const owned = await toOwnedPublicUrl({
     route: "logo",
     ownerId: organizationId,
     key,
@@ -29,7 +29,7 @@ export async function setOrganizationLogoAction(
       error: t(
         owned.error === "unconfigured"
           ? "storagePublicUrlMissing"
-          : "invalidAvatarKey"
+          : "invalidImageKey"
       ),
     }
   }
@@ -46,6 +46,14 @@ export async function setOrganizationLogoAction(
   } catch (error) {
     return { error: getAuthApiErrorMessage(error) }
   }
+
+  // The organization points at the new logo: drop the previous one.
+  await deleteRouteObjects({
+    route: "logo",
+    ownerId: organizationId,
+    keep: key,
+    headers: requestHeaders,
+  })
 
   invalidateOrganizationBrandingCache(organizationId)
   updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))

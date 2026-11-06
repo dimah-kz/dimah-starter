@@ -6,7 +6,7 @@ import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { updateTag } from "next/cache"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { fromPublicUrl, s3 } from "@repo/storage"
+import { deleteRouteObjects } from "@repo/storage"
 
 export async function removeOrganizationLogoAction(organizationId: string) {
   const requestHeaders = await headers()
@@ -15,14 +15,6 @@ export async function removeOrganizationLogoAction(organizationId: string) {
     const t = await getTranslations("common.errors")
     return { error: t("unauthorized") }
   }
-
-  const organizations = await auth.api.listOrganizations({
-    headers: requestHeaders,
-  })
-  const current = organizations.find(
-    (organization) => organization.id === organizationId
-  )
-  const previousKey = current?.logo ? fromPublicUrl(current.logo) : null
 
   try {
     await auth.api.updateOrganization({
@@ -36,16 +28,11 @@ export async function removeOrganizationLogoAction(organizationId: string) {
     return { error: getAuthApiErrorMessage(error) }
   }
 
-  if (previousKey) {
-    try {
-      await s3.api.delete(
-        { route: "logo", key: previousKey },
-        { headers: requestHeaders }
-      )
-    } catch {
-      // Best-effort — the logo link is already cleared.
-    }
-  }
+  await deleteRouteObjects({
+    route: "logo",
+    ownerId: organizationId,
+    headers: requestHeaders,
+  })
 
   invalidateOrganizationBrandingCache(organizationId)
   updateTag(dashboardCacheTags.sidebarConfigByUser(session.user.id))

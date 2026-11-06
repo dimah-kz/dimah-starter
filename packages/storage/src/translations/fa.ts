@@ -91,6 +91,7 @@ export const fa = {
     "تا {count} دقیقه دیگر منقضی می‌شود",
   "Expires in {count} seconds(object list menu)":
     "تا {count} ثانیه دیگر منقضی می‌شود",
+  "Failed(status)": "ناموفق",
   "File actions(object list menu)": "عملیات فایل",
   "File changed during upload(API error)": "فایل هنگام آپلود تغییر کرد",
   "File content does not match its type(API error)":
@@ -222,7 +223,7 @@ export const fa = {
   "{hours}h left(time remaining)": "{hours} ساعت مانده",
   "{hours}h {minutes}m left(time remaining)":
     "{hours} ساعت و {minutes} دقیقه مانده",
-  "{loaded} of {total}(download progress)": "{loaded} از {total}",
+  "{loaded} of {total}(transfer progress)": "{loaded} از {total}",
   "{minutes}m left(time remaining)": "{minutes} دقیقه مانده",
   "{percent}%(progress)": "{percent}٪",
   "{seconds}s left(time remaining)": "{seconds} ثانیه مانده",

@@ -7,9 +7,11 @@ import {
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { headers } from "next/headers"
+import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { updateTag } from "next/cache"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
+import { deleteOwnedObjects } from "@repo/storage"
 
 type DeleteOrganizationInput = {
   organizationId: string
@@ -40,6 +42,9 @@ export async function deleteOrganizationAction(
   } catch (error) {
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
+
+  // The logo and any other files of the organization go with it.
+  after(() => deleteOwnedObjects("organization", input.organizationId))
 
   invalidateOrganizationBrandingCache(input.organizationId)
   invalidateOrganizationMembersCache(input.organizationId)

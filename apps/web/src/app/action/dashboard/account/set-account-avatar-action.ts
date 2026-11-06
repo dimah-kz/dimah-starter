@@ -4,7 +4,7 @@ import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
 import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { toOwnedImageUrl } from "@repo/storage"
+import { deleteRouteObjects, toOwnedPublicUrl } from "@repo/storage"
 
 export async function setAccountAvatarAction(key: string) {
   const requestHeaders = await headers()
@@ -14,7 +14,7 @@ export async function setAccountAvatarAction(key: string) {
     return { error: t("unauthorized") }
   }
 
-  const owned = await toOwnedImageUrl({
+  const owned = await toOwnedPublicUrl({
     route: "avatar",
     ownerId: session.user.id,
     key,
@@ -24,7 +24,7 @@ export async function setAccountAvatarAction(key: string) {
       error: t(
         owned.error === "unconfigured"
           ? "storagePublicUrlMissing"
-          : "invalidAvatarKey"
+          : "invalidImageKey"
       ),
     }
   }
@@ -38,6 +38,14 @@ export async function setAccountAvatarAction(key: string) {
   } catch (error) {
     return { error: getAuthApiErrorMessage(error) }
   }
+
+  // The profile points at the new image: drop the previous one.
+  await deleteRouteObjects({
+    route: "avatar",
+    ownerId: session.user.id,
+    keep: key,
+    headers: requestHeaders,
+  })
 
   invalidateUserCache(session.user.id)
   return { success: true as const, imageUrl }

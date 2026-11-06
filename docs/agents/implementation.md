@@ -29,13 +29,14 @@ Cookie cache (5 min) can lag ban/role changes — [better-auth.md](./better-auth
 
 ## Storage uploads {#storage-uploads}
 
-`@repo/storage` owns `dimahS3({ routes })` on dimah-s3 2.0 beta. A route is `src/routes/<group>/<name>.ts`; the group index spreads into `routes/index.ts`, and `s3.ts` only mounts that map. `@dimah-s3/db` owns scope, rows, and replacement of the previous object. App actions persist the public URL and invalidate cache.
+`@repo/storage` owns `dimahS3({ routes })` on dimah-s3 2.0 beta. A route is `src/routes/<group>/<name>.ts`; the group index spreads into `routes/index.ts`, and every route names its owner in `routeOwners` (`user` or `organization`). The instance guard reads the session once into `locals`; `@dimah-s3/db` resolves the caller's scope (`user:{id}` / `org:{id}`) from them and owns the rows. App actions persist the public URL, then clean up. [packages/storage/README.md](../../packages/storage/README.md)
 
-1. Client: `useUpload({ route: "avatar" | "logo" })` or `AvatarUpload`. Omit `accept` / `maxFileSize` — the route catalog is the limit.
-2. `avatar` is the signed-in user (`user:{id}`). `logo` is the active organization (`org:{id}`). Guards throw `s3Error`. `previousKey` deletes the previous object after confirm.
-3. Persist with `toOwnedImageUrl({ route, ownerId, key })`, then **`auth.api`**. It returns a URL only for an active row in that scope.
-4. On remove, `fromPublicUrl` + `s3.api.delete({ route, key }, { headers })`.
-5. `updateTag` / `invalidateUserCache` — [caching.md](./caching.md).
+1. Client: `useUpload({ route })` or `AvatarUpload`. Route names are inferred from the server. Omit `accept` / `maxFileSize` — the route catalog is the limit.
+2. Access lives on the route: guards throw `s3Error`. `logo` lets members read and needs `organization:update` to upload or delete.
+3. Persist with `toOwnedPublicUrl({ route, ownerId, key })`, then **`auth.api`**. It returns a URL only for an active row of that owner.
+4. After the write, `deleteRouteObjects({ route, ownerId, keep: key, headers })` drops the previous object and unsaved uploads. Remove: write `""`, then the same call without `keep`. Never delete before the write.
+5. Deleting an owner: `after(() => deleteOwnedObjects(owner, id))`.
+6. `updateTag` / `invalidateUserCache` — [caching.md](./caching.md).
 
 Reference: `set-account-avatar-action.ts`, organization-logo siblings. Schema is 2.1.0 in `@repo/db` (`storage` PostgreSQL schema).
 

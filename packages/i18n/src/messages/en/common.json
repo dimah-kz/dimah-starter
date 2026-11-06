@@ -33,7 +33,7 @@
     "title": "Something went wrong",
     "description": "We could not load this page. Try again or return later.",
     "unauthorized": "You need to sign in.",
-    "invalidAvatarKey": "That file is not a valid avatar.",
+    "invalidImageKey": "That file is not a valid image.",
     "storagePublicUrlMissing": "Public storage URL is not configured.",
     "selectRole": "Select at least one role.",
     "invalidRole": "Invalid role."

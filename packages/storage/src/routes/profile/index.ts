@@ -6,10 +6,3 @@ export const profile = {
   avatar,
   logo,
 }
-
-export {
-  imageRoutes,
-  toCallerScope,
-  toProfileScope,
-  type ImageRoute,
-} from "./scope"

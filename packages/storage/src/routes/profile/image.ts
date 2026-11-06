@@ -1,30 +1,20 @@
-import { fromPublicUrl } from "../../keys"
+import { s3Error } from "@dimah-s3/server"
 
-const imageCacheControl = "public, max-age=31536000, immutable"
-
-/** Shared limits for profile images. Routes still decide the folder and owner. */
+/** Shared limits for profile images. Routes still decide the owner. */
 export const imageUpload = {
   fileTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   maxFileSize: 2 * 1024 * 1024,
   verifyContent: true,
 }
 
-/** Key already stored for this owner, when the URL is one of ours. */
-function previousOwnedKey(url: string | null | undefined, folder: string) {
-  if (!url) return
-  const key = fromPublicUrl(url)
-  if (!key || (key !== folder && !key.startsWith(`${folder}/`))) return
-  return key
-}
-
-export function imageObject(
-  routeName: string,
-  folder: string,
-  previousUrl: string | null | undefined
-) {
+/**
+ * Keys stay under the owner's folder (`avatar/{userId}/{uuid}/{name}`). Each
+ * upload gets a new key, so its public URL can be cached forever.
+ */
+export function imageObject(ownerId: string | null | undefined) {
+  if (!ownerId) throw s3Error("FORBIDDEN")
   return {
-    keyFolder: folder,
-    cacheControl: imageCacheControl,
-    previousKey: previousOwnedKey(previousUrl, `${routeName}/${folder}`),
+    keyFolder: ownerId,
+    cacheControl: "public, max-age=31536000, immutable",
   }
 }

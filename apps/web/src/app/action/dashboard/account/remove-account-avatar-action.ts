@@ -4,7 +4,7 @@ import { invalidateUserCache } from "@/app/dashboard/lib/invalidate-user-cache"
 import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
-import { fromPublicUrl, s3 } from "@repo/storage"
+import { deleteRouteObjects } from "@repo/storage"
 
 export async function removeAccountAvatarAction() {
   const requestHeaders = await headers()
@@ -13,10 +13,6 @@ export async function removeAccountAvatarAction() {
     const t = await getTranslations("common.errors")
     return { error: t("unauthorized") }
   }
-
-  const previousKey = session.user.image
-    ? fromPublicUrl(session.user.image)
-    : null
 
   try {
     await auth.api.updateUser({
@@ -27,16 +23,11 @@ export async function removeAccountAvatarAction() {
     return { error: getAuthApiErrorMessage(error) }
   }
 
-  if (previousKey) {
-    try {
-      await s3.api.delete(
-        { route: "avatar", key: previousKey },
-        { headers: requestHeaders }
-      )
-    } catch {
-      // Best-effort — the profile link is already cleared.
-    }
-  }
+  await deleteRouteObjects({
+    route: "avatar",
+    ownerId: session.user.id,
+    headers: requestHeaders,
+  })
 
   invalidateUserCache(session.user.id)
   return { success: true as const }

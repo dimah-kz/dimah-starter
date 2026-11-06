@@ -1,21 +1,13 @@
-import { route, s3Error } from "@dimah-s3/server"
+import { route } from "@dimah-s3/server"
 import "../../locals"
 import { imageObject, imageUpload } from "./image"
 
-/** One image per signed-in user. A new upload replaces the previous object. */
+/** The signed-in user's picture. */
 export const avatar = route({
   upload: {
     ...imageUpload,
-    object: ({ locals }) => {
-      const userId = locals.userId
-      if (!userId) throw s3Error("UNAUTHORIZED")
-      return imageObject("avatar", userId, locals.userImage)
-    },
+    object: ({ locals }) => imageObject(locals.userId),
   },
   download: { disposition: "inline" },
   delete: true,
 })
-
-export function toAvatarScope(ownerId: string) {
-  return `user:${ownerId}`
-}

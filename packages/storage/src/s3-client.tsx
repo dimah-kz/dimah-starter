@@ -1,15 +1,17 @@
 "use client"
 
+import type { InferS3Routes } from "@dimah-s3/core"
 import { dbClient } from "@dimah-s3/db/client"
 import { createS3Client } from "@dimah-s3/react"
 import type { Locale } from "@repo/i18n"
+import type { s3 } from "./s3"
 import { translationsByLocale } from "./translations"
 
+// Route names come from the server instance: a new route needs no edit here.
 declare module "@dimah-s3/core" {
-  interface DimahS3Routes {
-    avatar: true
-    logo: true
-  }
+  // Declaration merging needs an interface; a type alias cannot augment it.
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface DimahS3Routes extends Record<InferS3Routes<typeof s3>, true> {}
 }
 
 export const s3Client = createS3Client({
