@@ -11,7 +11,7 @@
     "metaTitle": "Dimah Starter — Next.js Starter for Multi-Tenant SaaS",
     "eyebrow": "Open source · MIT licensed",
     "headline": "A server-first <accent>starter</accent> for multi-tenant SaaS",
-    "lede": "Start from a working app, not a blank page. Auth, organizations, admin, and file uploads on Next.js, Better Auth, and Postgres — with i18n and RTL built in.",
+    "lede": "<line>Sign-in, teams, roles, and file uploads work from the first run.</line> <line>Clone it, put your brand on it, and ship your first feature this week.</line>",
     "tryDemo": "Try the live demo",
     "useTemplate": "Use this template",
     "demoHint": "Sign up with email or Google to explore the dashboard.",

@@ -148,7 +148,9 @@ export default async function Home() {
             })}
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-balance text-muted-foreground sm:text-lg sm:leading-8">
-            {t("lede")}
+            {t.rich("lede", {
+              line: (chunks) => <span className="sm:block">{chunks}</span>,
+            })}
           </p>
 
           <div className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
