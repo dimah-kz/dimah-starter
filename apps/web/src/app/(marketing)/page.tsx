@@ -133,16 +133,7 @@ export default async function Home() {
         }}
       />
 
-      <section className="relative isolate overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black_20%,transparent_100%)] [background-size:3.5rem_3.5rem] opacity-60"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-32 -z-10 mx-auto h-72 max-w-3xl rounded-full bg-linear-to-r from-[#FF1E56]/15 to-[#0196FF]/15 blur-3xl"
-        />
-
+      <section>
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-20 pb-20 text-center sm:px-6 sm:pt-28 sm:pb-24">
           <p className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-xs font-medium text-muted-foreground">
             <span

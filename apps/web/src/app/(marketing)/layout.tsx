@@ -44,7 +44,18 @@ export default async function MarketingLayout({
   )
 
   return (
-    <div className="flex min-h-svh flex-1 flex-col">
+    <div className="relative isolate flex min-h-svh flex-1 flex-col">
+      {/* Grid and glow start at the page top, so the glass header sits on them.
+          Grid rows match the header (h-14 = 3.5rem); the 55px offset lands a
+          grid line on the header's bottom border. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[40rem] overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black_20%,transparent_100%)] [background-size:3.5rem_3.5rem] [background-position:center_55px] opacity-60" />
+        <div className="absolute inset-x-0 -top-20 mx-auto h-72 max-w-3xl rounded-full bg-linear-to-r from-[#FF1E56]/15 to-[#0196FF]/15 blur-3xl" />
+      </div>
+
       <a
         href="#main"
         className="sr-only rounded-md bg-background px-3 py-2 text-sm font-medium shadow-sm ring-2 ring-ring focus:not-sr-only focus:fixed focus:start-4 focus:top-3 focus:z-50"
