@@ -24,8 +24,10 @@ import {
   CodeBlockContent,
   CodeBlockCopyButton,
   CodeBlockHeader,
+  CodeBlockLine,
   CodeBlockTitle,
 } from "@repo/ui/components/code-block"
+import { highlightCode } from "@repo/ui/lib/highlighter"
 import { IconTile } from "@repo/ui/components/reui/icon-tile"
 import {
   ArrowRightIcon,
@@ -80,7 +82,7 @@ const nextjsPoints = [
 ] as const
 
 /** Trimmed from `get-organization-members-page.ts` and its remove action. */
-const cacheExample = `// Read — a gate per request, then a tagged cache entry
+const cacheExample = `// Read: check access, then a tagged cache entry
 export async function getOrganizationMembersPage(query) {
   const { organizationId } = await requireOrganizationManager()
   return getCachedPage(organizationId, query)
@@ -93,7 +95,7 @@ async function getCachedPage(organizationId, query) {
   return db.select().from(member) // …
 }
 
-// Write — a Server Action; fresh UI in the same response
+// Write: a Server Action; the change shows at once
 export async function removeOrganizationMemberAction(input) {
   await auth.api.removeMember({ headers: await headers(), body })
   updateTag(tags.organizationMembersById(input.organizationId))
@@ -126,6 +128,27 @@ export async function generateMetadata(): Promise<Metadata> {
     description: tc("appDescription"),
     alternates: { canonical: marketingRoutes.home() },
   }
+}
+
+/** Shiki colors rendered on the server into shadcn code block lines — no client JS. */
+async function HighlightedCode({
+  code,
+  language,
+  lineNumbers,
+}: {
+  code: string
+  language: string
+  lineNumbers?: boolean
+}) {
+  const lines = (await highlightCode(code, language)) ?? code.split("\n")
+
+  return (
+    <CodeBlockContent lineNumbers={lineNumbers}>
+      {lines.map((line, index) => (
+        <CodeBlockLine key={index}>{line}</CodeBlockLine>
+      ))}
+    </CodeBlockContent>
+  )
 }
 
 function HeadlineAccent({ children }: { children: ReactNode }) {
@@ -349,7 +372,7 @@ export default async function Home() {
                 {t("nextjs.code")}
               </CodeBlockTitle>
             </CodeBlockHeader>
-            <CodeBlockContent>{cacheExample}</CodeBlockContent>
+            <HighlightedCode code={cacheExample} language="typescript" />
           </CodeBlock>
         </div>
       </section>
@@ -416,9 +439,11 @@ export default async function Home() {
                 />
               </CodeBlockActions>
             </CodeBlockHeader>
-            <CodeBlockContent lineNumbers>
-              {quickStartCommands}
-            </CodeBlockContent>
+            <HighlightedCode
+              code={quickStartCommands}
+              language="bash"
+              lineNumbers
+            />
           </CodeBlock>
         </div>
       </section>

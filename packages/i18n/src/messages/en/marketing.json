@@ -48,28 +48,28 @@
       }
     },
     "nextjs": {
-      "eyebrow": "Next.js 16, the way it is meant to be used",
+      "eyebrow": "Next.js 16, done right",
       "title": "Built on Cache Components",
-      "description": "Pages open on an instant static shell and stream in the signed-in parts. Data stays cached until someone changes it, and then the change shows at once.",
+      "description": "Pages open instantly and stay fresh after every change.",
       "points": {
         "prefetch": {
           "title": "Instant navigation",
-          "description": "Partial Prefetching loads each page's shell ahead of the click; only the parts that need your session wait for the server."
+          "description": "Each page's shell is prefetched before you click."
         },
         "cache": {
-          "title": "Cached reads, tagged",
-          "description": "Lists are 'use cache' functions tagged per user or organization, so a visit does not mean a database query."
+          "title": "Tagged cache",
+          "description": "Lists are cached per user and organization."
         },
         "update": {
-          "title": "Fresh right after a write",
-          "description": "A Server Action calls updateTag, and the person who made the change sees it in the same response, with no refetch or client cache."
+          "title": "Fresh after every write",
+          "description": "updateTag shows the change in the same response."
         },
         "secure": {
-          "title": "Checks next to the data",
-          "description": "Every data read checks permissions itself, not only the layout, and sessions are never cached."
+          "title": "Secure by default",
+          "description": "Every read checks access. Sessions are never cached."
         }
       },
-      "code": "A real list from the dashboard"
+      "code": "A real read and write from the dashboard"
     },
     "quickStart": {
       "title": "Up and running in minutes",
