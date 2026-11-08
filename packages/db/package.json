@@ -15,10 +15,10 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "lint": "eslint",
+    "storage:generate": "pnpm --filter @repo/storage storage:generate",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@paralleldrive/cuid2": "^3.3.0",
     "drizzle-orm": "rc",
     "pg": "^8.23.1"
   },

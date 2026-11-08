@@ -1,6 +1,6 @@
 # @repo/storage
 
-[dimah-s3](https://s3.dimah.dev) 2.0 beta (`2.0.0-beta.5`). The browser uploads straight to the bucket; this package owns the routes, who may call them, and the object rows.
+[dimah-s3](https://s3.dimah.dev) 2.0 beta (`2.0.0-beta.7`). The browser uploads straight to the bucket; this package owns the routes, who may call them, and the object rows.
 
 | File                  | Owns                                                                                               |
 | --------------------- | -------------------------------------------------------------------------------------------------- |
@@ -49,7 +49,7 @@ Importing the package never throws: without `S3_BUCKET`, every storage call fail
 
 ## Production
 
-- Rows live in the `storage` PostgreSQL schema (schema 2.1.0, `@repo/db`).
+- Rows live in the `storage` PostgreSQL schema (schema 2.1.0, `@repo/db`). `scripts/generate-schema.ts` writes the tables from `@dimah-s3/db`: after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`.
 - Deletes are soft: the object leaves S3, the row stays as `deleted`.
 - An upload that never confirms leaves a `pending` row, and can leave an object or an unfinished multipart upload. Schedule `pnpm storage:purge` hourly to clean them up.
 - An `AbortIncompleteMultipartUpload` lifecycle rule on the bucket is a good backstop.
