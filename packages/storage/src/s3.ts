@@ -46,9 +46,10 @@ export const s3 = dimahS3({
   },
   plugins: [
     db({
-      client: DimahS3DB.client(
-        drizzleAdapter({ db: drizzleDb, provider: "postgresql" })
-      ),
+      // Tables in the `storage` PostgreSQL schema; `scripts/dimah-s3.ts` generates them.
+      client: DimahS3DB.names
+        .schema("storage")
+        .client(drizzleAdapter({ db: drizzleDb, provider: "postgresql" })),
       resolveScope: ({ locals, route }) =>
         toCallerScope(toRouteOwner(route), locals),
       // Refuses `PATCH /db/object` and the folder endpoints: nothing uses them.

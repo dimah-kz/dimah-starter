@@ -9,16 +9,16 @@
   },
   "scripts": {
     "lint": "eslint",
-    "storage:generate": "tsx scripts/generate-schema.ts && pnpm -w exec prettier --write packages/db/src/schema/dimah-s3.schema.ts",
+    "storage:generate": "tsx scripts/dimah-s3.ts generate latest -o ../db/src/schema/dimah-s3.schema.ts && pnpm -w exec prettier --write packages/db/src/schema/dimah-s3.schema.ts",
     "storage:purge": "tsx --env-file-if-exists=../../.env scripts/purge.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1164.0",
-    "@dimah-s3/core": "2.0.0-beta.7",
-    "@dimah-s3/db": "2.0.0-beta.7",
-    "@dimah-s3/react": "2.0.0-beta.7",
-    "@dimah-s3/server": "2.0.0-beta.7",
+    "@dimah-s3/core": "2.0.0-beta.8",
+    "@dimah-s3/db": "2.0.0-beta.8",
+    "@dimah-s3/react": "2.0.0-beta.8",
+    "@dimah-s3/server": "2.0.0-beta.8",
     "@fuma-translate/react": "1.0.2",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
