@@ -1,8 +1,8 @@
-CREATE SCHEMA "auth";
+CREATE SCHEMA IF NOT EXISTS "auth";
 --> statement-breakpoint
-CREATE SCHEMA "storage";
+CREATE SCHEMA IF NOT EXISTS "storage";
 --> statement-breakpoint
-CREATE TABLE "auth"."account" (
+CREATE TABLE IF NOT EXISTS "auth"."account" (
 	"id" text PRIMARY KEY,
 	"account_id" text NOT NULL,
 	"provider_id" text NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE "auth"."account" (
 	"updated_at" timestamp NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."invitation" (
+CREATE TABLE IF NOT EXISTS "auth"."invitation" (
 	"id" text PRIMARY KEY,
 	"organization_id" text NOT NULL,
 	"email" text NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE "auth"."invitation" (
 	"inviter_id" text NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."member" (
+CREATE TABLE IF NOT EXISTS "auth"."member" (
 	"id" text PRIMARY KEY,
 	"organization_id" text NOT NULL,
 	"user_id" text NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE "auth"."member" (
 	"created_at" timestamp NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."organization" (
+CREATE TABLE IF NOT EXISTS "auth"."organization" (
 	"id" text PRIMARY KEY,
 	"name" text NOT NULL,
 	"slug" text NOT NULL UNIQUE,
@@ -46,14 +46,14 @@ CREATE TABLE "auth"."organization" (
 	"metadata" text
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."rate_limit" (
+CREATE TABLE IF NOT EXISTS "auth"."rate_limit" (
 	"id" text PRIMARY KEY,
 	"key" text NOT NULL UNIQUE,
 	"count" integer NOT NULL,
 	"last_request" bigint NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."session" (
+CREATE TABLE IF NOT EXISTS "auth"."session" (
 	"id" text PRIMARY KEY,
 	"expires_at" timestamp NOT NULL,
 	"token" text NOT NULL UNIQUE,
@@ -66,7 +66,7 @@ CREATE TABLE "auth"."session" (
 	"active_organization_id" text
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."user" (
+CREATE TABLE IF NOT EXISTS "auth"."user" (
 	"id" text PRIMARY KEY,
 	"name" text NOT NULL,
 	"email" text NOT NULL UNIQUE,
@@ -81,7 +81,7 @@ CREATE TABLE "auth"."user" (
 	"last_login_method" text
 );
 --> statement-breakpoint
-CREATE TABLE "auth"."verification" (
+CREATE TABLE IF NOT EXISTS "auth"."verification" (
 	"id" text PRIMARY KEY,
 	"identifier" text NOT NULL,
 	"value" text NOT NULL,
@@ -90,12 +90,12 @@ CREATE TABLE "auth"."verification" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "private_dimah_s3_settings" (
+CREATE TABLE IF NOT EXISTS "private_dimah_s3_settings" (
 	"key" varchar(255) PRIMARY KEY,
 	"value" text DEFAULT '2.1.0' NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "storage"."storage_folder" (
+CREATE TABLE IF NOT EXISTS "storage"."storage_folder" (
 	"id" varchar(255) PRIMARY KEY,
 	"scope" varchar(255) NOT NULL,
 	"parent_id" varchar(255) DEFAULT '' NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE "storage"."storage_folder" (
 	CONSTRAINT "storage_folder_scope_parent_name_uk" UNIQUE("scope","parent_id","name")
 );
 --> statement-breakpoint
-CREATE TABLE "storage"."storage_object" (
+CREATE TABLE IF NOT EXISTS "storage"."storage_object" (
 	"id" varchar(255) PRIMARY KEY,
 	"scope" varchar(255) NOT NULL,
 	"bucket" varchar(255) NOT NULL,
@@ -133,22 +133,70 @@ CREATE TABLE "storage"."storage_object" (
 	CONSTRAINT "storage_object_bucket_key_uk" UNIQUE("bucket","key")
 );
 --> statement-breakpoint
-CREATE INDEX "account_userId_idx" ON "auth"."account" ("user_id");--> statement-breakpoint
-CREATE INDEX "invitation_organizationId_idx" ON "auth"."invitation" ("organization_id");--> statement-breakpoint
-CREATE INDEX "invitation_email_idx" ON "auth"."invitation" ("email");--> statement-breakpoint
-CREATE INDEX "member_organizationId_idx" ON "auth"."member" ("organization_id");--> statement-breakpoint
-CREATE INDEX "member_userId_idx" ON "auth"."member" ("user_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "organization_slug_uidx" ON "auth"."organization" ("slug");--> statement-breakpoint
-CREATE INDEX "session_userId_idx" ON "auth"."session" ("user_id");--> statement-breakpoint
-CREATE INDEX "verification_identifier_idx" ON "auth"."verification" ("identifier");--> statement-breakpoint
-CREATE INDEX "storage_object_scope_folder_idx" ON "storage"."storage_object" ("scope","status","folder_id","created_at");--> statement-breakpoint
-CREATE INDEX "storage_object_scope_updated_idx" ON "storage"."storage_object" ("scope","status","updated_at");--> statement-breakpoint
-CREATE INDEX "storage_object_scope_filename_idx" ON "storage"."storage_object" ("scope","status","filename");--> statement-breakpoint
-CREATE INDEX "storage_object_scope_size_idx" ON "storage"."storage_object" ("scope","status","size");--> statement-breakpoint
-CREATE INDEX "storage_object_status_expires_idx" ON "storage"."storage_object" ("status","expires_at");--> statement-breakpoint
-ALTER TABLE "auth"."account" ADD CONSTRAINT "account_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;--> statement-breakpoint
-ALTER TABLE "auth"."invitation" ADD CONSTRAINT "invitation_organization_id_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "auth"."organization"("id") ON DELETE CASCADE;--> statement-breakpoint
-ALTER TABLE "auth"."invitation" ADD CONSTRAINT "invitation_inviter_id_user_id_fkey" FOREIGN KEY ("inviter_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;--> statement-breakpoint
-ALTER TABLE "auth"."member" ADD CONSTRAINT "member_organization_id_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "auth"."organization"("id") ON DELETE CASCADE;--> statement-breakpoint
-ALTER TABLE "auth"."member" ADD CONSTRAINT "member_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;--> statement-breakpoint
-ALTER TABLE "auth"."session" ADD CONSTRAINT "session_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS "account_userId_idx" ON "auth"."account" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "invitation_organizationId_idx" ON "auth"."invitation" ("organization_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "invitation_email_idx" ON "auth"."invitation" ("email");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "member_organizationId_idx" ON "auth"."member" ("organization_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "member_userId_idx" ON "auth"."member" ("user_id");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "organization_slug_uidx" ON "auth"."organization" ("slug");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "session_userId_idx" ON "auth"."session" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "verification_identifier_idx" ON "auth"."verification" ("identifier");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "storage_object_scope_folder_idx" ON "storage"."storage_object" ("scope","status","folder_id","created_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "storage_object_scope_updated_idx" ON "storage"."storage_object" ("scope","status","updated_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "storage_object_scope_filename_idx" ON "storage"."storage_object" ("scope","status","filename");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "storage_object_scope_size_idx" ON "storage"."storage_object" ("scope","status","size");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "storage_object_status_expires_idx" ON "storage"."storage_object" ("status","expires_at");--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'account_user_id_user_id_fkey'
+			AND conrelid = 'auth.account'::regclass
+	) THEN
+		ALTER TABLE "auth"."account" ADD CONSTRAINT "account_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;
+	END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'invitation_organization_id_organization_id_fkey'
+			AND conrelid = 'auth.invitation'::regclass
+	) THEN
+		ALTER TABLE "auth"."invitation" ADD CONSTRAINT "invitation_organization_id_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "auth"."organization"("id") ON DELETE CASCADE;
+	END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'invitation_inviter_id_user_id_fkey'
+			AND conrelid = 'auth.invitation'::regclass
+	) THEN
+		ALTER TABLE "auth"."invitation" ADD CONSTRAINT "invitation_inviter_id_user_id_fkey" FOREIGN KEY ("inviter_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;
+	END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'member_organization_id_organization_id_fkey'
+			AND conrelid = 'auth.member'::regclass
+	) THEN
+		ALTER TABLE "auth"."member" ADD CONSTRAINT "member_organization_id_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "auth"."organization"("id") ON DELETE CASCADE;
+	END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'member_user_id_user_id_fkey'
+			AND conrelid = 'auth.member'::regclass
+	) THEN
+		ALTER TABLE "auth"."member" ADD CONSTRAINT "member_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;
+	END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'session_user_id_user_id_fkey'
+			AND conrelid = 'auth.session'::regclass
+	) THEN
+		ALTER TABLE "auth"."session" ADD CONSTRAINT "session_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE;
+	END IF;
+END $$;
