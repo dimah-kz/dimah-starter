@@ -18,21 +18,21 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "1.7.18",
-    "@better-auth/i18n": "1.7.18",
+    "@better-auth/drizzle-adapter": "1.7.21",
+    "@better-auth/i18n": "1.7.21",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
     "@repo/i18n": "workspace:*",
-    "better-auth": "1.7.18",
+    "better-auth": "1.7.21",
     "drizzle-orm": "rc"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^26.6.6",
-    "auth": "1.7.18",
+    "auth": "1.7.21",
     "eslint": "catalog:",
-    "next": "16.4.5",
+    "next": "16.4.6",
     "typescript": "catalog:"
   },
   "peerDependencies": {
