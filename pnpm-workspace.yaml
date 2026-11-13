@@ -1,10 +1,42 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tooling/*"
+
+# Versions used by more than one workspace package, or released in lockstep
+# with one that is. Reference them as `catalog:` in package.json.
 catalog:
+  # Framework
+  next: 16.4.6
+  react: 19.3.1
+  react-dom: 19.3.1
+  "@types/react": ^19.3.0
+  "@types/react-dom": ^19.3.0
+  "@types/node": ^26.6.6
+
+  # Data
+  drizzle-orm: rc
+  drizzle-kit: rc
+  dotenv: ^18.0.10
+
+  # Storage
+  "@dimah-s3/core": 2.0.0-beta.8
+  "@dimah-s3/db": 2.0.0-beta.8
+  "@dimah-s3/react": 2.0.0-beta.8
+  "@dimah-s3/server": 2.0.0-beta.8
+  "@dimah-s3/ui": 2.0.0-beta.8
+
+  # UI
+  tailwindcss: ^4.3.5
+  "@tailwindcss/turbopack": ^4.3.5
+  cn: ^0.5.2
+  lucide-react: ^1.72.0
+  "@fuma-translate/react": 1.0.2
+
+  # Tooling
   typescript: ^7.0.2
-  eslint: ^10.15.0
-  prettier: ^3.10.1
-  prettier-plugin-packagejson: ^3.1.0
-  prettier-plugin-tailwindcss: ^0.8.1
   turbo: ^2.11.11
+  eslint: ^10.15.0
   "@eslint/js": ^10.0.1
   "@next/eslint-plugin-next": ^16.4.6
   eslint-config-prettier: ^10.1.8
@@ -13,6 +45,9 @@ catalog:
   eslint-plugin-turbo: ^2.11.11
   globals: ^17.14.0
   typescript-eslint: ^8.72.2
+  prettier: ^3.10.1
+  prettier-plugin-packagejson: ^3.1.0
+  prettier-plugin-tailwindcss: ^0.8.1
 
 # typescript-eslint has no TypeScript 7.0 compiler API. Keep `tsc` on 7;
 # point only eslint's typescript peer at the TS 6 compatibility package.
@@ -32,17 +67,12 @@ overrides:
   "@typescript-eslint/typescript-estree>typescript": "catalog:ts-eslint"
   "@typescript-eslint/utils>typescript": "catalog:ts-eslint"
 
-packages:
-  - "apps/*"
-  - "packages/*"
-  - "tooling/*"
+minimumReleaseAge: 0
 
 minimumReleaseAgeExclude:
   - "@dimah-s3/*"
   - "@orpc/*"
   - "@standard-server/*"
-
-minimumReleaseAge: 0
 
 allowBuilds:
   "@parcel/watcher": true

@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1169.0",
-    "@dimah-s3/core": "2.0.0-beta.8",
-    "@dimah-s3/db": "2.0.0-beta.8",
-    "@dimah-s3/react": "2.0.0-beta.8",
-    "@dimah-s3/server": "2.0.0-beta.8",
-    "@fuma-translate/react": "1.0.2",
+    "@dimah-s3/core": "catalog:",
+    "@dimah-s3/db": "catalog:",
+    "@dimah-s3/react": "catalog:",
+    "@dimah-s3/server": "catalog:",
+    "@fuma-translate/react": "catalog:",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/i18n": "workspace:*"
@@ -27,9 +27,9 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/react": "^19.3.0",
+    "@types/react": "catalog:",
     "eslint": "catalog:",
-    "react": "^19.3.1",
+    "react": "catalog:",
     "tsx": "^4.23.15",
     "typescript": "catalog:"
   },

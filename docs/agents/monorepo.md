@@ -22,6 +22,8 @@ Server lists: [dashboard.md § Server lists](./dashboard.md#server-lists).
 
 **Deps:** apps → packages OK. packages → packages OK if acyclic. packages → apps forbidden. app → app forbidden.
 
+**Versions:** a dependency used by more than one workspace package (or released in lockstep with one, like `@dimah-s3/*`) lives in the `catalog` of `pnpm-workspace.yaml` and is referenced as `catalog:`. Bump it there only. Single-package dependencies and `peerDependencies` ranges stay in that package.json.
+
 ```bash
 pnpm dev
 pnpm build

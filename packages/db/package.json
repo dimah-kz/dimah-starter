@@ -19,16 +19,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "drizzle-orm": "rc",
+    "drizzle-orm": "catalog:",
     "pg": "^8.23.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^26.6.6",
+    "@types/node": "catalog:",
     "@types/pg": "^8.23.1",
-    "dotenv": "^18.0.10",
-    "drizzle-kit": "rc",
+    "dotenv": "catalog:",
+    "drizzle-kit": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }
