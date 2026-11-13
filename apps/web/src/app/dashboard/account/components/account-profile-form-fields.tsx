@@ -7,6 +7,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@repo/ui/components/field"
+import { NAME_MAX_LENGTH } from "@/components/form/form-parse"
 import { Input } from "@repo/ui/components/input"
 import { useTranslations } from "next-intl"
 
@@ -53,6 +54,7 @@ export function AccountProfileFormFields({
           name="name"
           autoComplete="name"
           defaultValue={profile.name}
+          maxLength={NAME_MAX_LENGTH}
           required
         />
       </Field>

@@ -47,7 +47,6 @@ import { toast } from "@repo/ui/components/toast"
 import { useLocale, useTranslations } from "next-intl"
 
 type InvitationsTableProps = {
-  organizationId: string
   invitations: OrganizationInvitationItem[]
   page: number
   pageSize: number
@@ -58,7 +57,6 @@ type InvitationsTableProps = {
 }
 
 export function InvitationsTable({
-  organizationId,
   invitations,
   page,
   pageSize,
@@ -104,7 +102,6 @@ export function InvitationsTable({
 
     startTransition(async () => {
       const result = await cancelOrganizationInvitationAction({
-        organizationId,
         invitationId: cancelTarget.id,
       })
 

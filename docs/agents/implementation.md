@@ -42,7 +42,8 @@ Reference: `set-account-avatar-action.ts`, organization-logo siblings. Schema is
 
 ## Definition of done {#definition-of-done}
 
-- `pnpm format:check`, `pnpm lint`, `pnpm typecheck` pass (CI runs them plus `pnpm build`)
+- `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` pass (CI runs them plus `pnpm build` and a check that `packages/db/drizzle` matches the schema)
+- Pure logic you add or change (parsing, redirects, URL building) has a `*.test.ts` beside it
 - [Placement](./architecture.md#placement) — right app vs package
 - SSOT updated (routes, tags, labels)
 - Writes via `auth.api` or `createRouterClient`; `updateTag` when the actor must see the change

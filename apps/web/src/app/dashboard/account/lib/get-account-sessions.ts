@@ -1,3 +1,4 @@
+import { userAgentFromString } from "next/server"
 import { dashboardAuthHeaders } from "@/app/dashboard/lib/dashboard-session"
 import { getLocale, getTranslations } from "next-intl/server"
 import {
@@ -19,24 +20,6 @@ export type AccountSession = {
   summary: string
   signedInTitle: string
 }
-
-const BROWSER_PATTERNS: Array<[RegExp, string]> = [
-  [/Edg(?:e|A|iOS)?/i, "Edge"],
-  [/OPR/i, "Opera"],
-  [/SamsungBrowser/i, "Samsung Internet"],
-  [/CriOS|Chrome/i, "Chrome"],
-  [/FxiOS|Firefox/i, "Firefox"],
-  [/Safari/i, "Safari"],
-]
-
-const OS_PATTERNS: Array<[RegExp, string]> = [
-  [/iPhone|iPad|iPod/i, "iOS"],
-  [/Android/i, "Android"],
-  [/Windows NT/i, "Windows"],
-  [/Mac OS X|Macintosh/i, "macOS"],
-  [/CrOS/i, "Chrome OS"],
-  [/Linux/i, "Linux"],
-]
 
 export async function getAccountSessions(
   currentSessionId: string
@@ -100,36 +83,19 @@ function parseSessionUserAgent(userAgent: string | null): {
     return { kind: "unknown", browser: null, os: null }
   }
 
+  // Next's parser (ua-parser-js); `device.type` is unset for desktops.
+  const { browser, os, device } = userAgentFromString(userAgent)
+
   return {
-    kind: parseDeviceKind(userAgent),
-    browser: matchPattern(userAgent, BROWSER_PATTERNS),
-    os: matchPattern(userAgent, OS_PATTERNS),
+    kind:
+      device.type === "tablet"
+        ? "tablet"
+        : device.type === "mobile" || device.type === "wearable"
+          ? "mobile"
+          : "desktop",
+    browser: browser.name ?? null,
+    os: os.name ?? null,
   }
-}
-
-function parseDeviceKind(userAgent: string): AccountSessionDeviceKind {
-  if (
-    /iPad|Tablet|PlayBook|Silk/i.test(userAgent) ||
-    (/Android/i.test(userAgent) && !/Mobile/i.test(userAgent))
-  ) {
-    return "tablet"
-  }
-
-  if (/Mobi|iPhone|iPod|Android.*Mobile|webOS|BlackBerry/i.test(userAgent)) {
-    return "mobile"
-  }
-
-  return "desktop"
-}
-
-function matchPattern(value: string, patterns: Array<[RegExp, string]>) {
-  for (const [pattern, name] of patterns) {
-    if (pattern.test(value)) {
-      return name
-    }
-  }
-
-  return null
 }
 
 function sessionDeviceTitle(

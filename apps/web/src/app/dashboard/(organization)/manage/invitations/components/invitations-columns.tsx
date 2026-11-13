@@ -22,7 +22,7 @@ type TablesTranslator = {
 
 type CreateInvitationsColumnsOptions = {
   t: TablesTranslator
-  tManage: (key: "rowActions", values: { email: string }) => string
+  tManage: (key: "cancelFor", values: { email: string }) => string
   locale: Locale
   disabled?: boolean
   onCancel: (invitation: OrganizationInvitationItem) => void
@@ -72,7 +72,7 @@ export function createInvitationsColumns({
             type="button"
             size="icon-sm"
             variant="ghost"
-            aria-label={tManage("rowActions", { email: row.email })}
+            aria-label={tManage("cancelFor", { email: row.email })}
             disabled={disabled}
             onClick={() => onCancel(row)}
           >

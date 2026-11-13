@@ -74,7 +74,7 @@ The rules behind it — what to cache, which tag to expire, why sessions are nev
 | **Product API**   | [oRPC](https://orpc.dev) router in `@repo/api`, called in-process from Server Actions or over HTTP                |
 | **UI**            | [shadcn/ui](https://ui.shadcn.com) on Base UI, [ReUI](https://reui.io), Tailwind CSS 4, dark mode                 |
 | **SEO**           | Metadata, Open Graph image, sitemap, robots, JSON-LD and a public landing page                                    |
-| **Quality**       | Strict TypeScript, ESLint, Prettier, Turborepo caching, GitHub Actions CI                                         |
+| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest, Turborepo caching, GitHub Actions CI                                 |
 
 **Stack:** Next.js 16 · React 19 · TypeScript · Better Auth · Drizzle ORM · PostgreSQL · oRPC · Tailwind CSS 4 · shadcn/ui · next-intl · Resend · Turborepo · pnpm
 
@@ -108,11 +108,12 @@ flowchart LR
 
 ## Quick start
 
-**You need:** Node.js ≥ 22, pnpm 12, a PostgreSQL database and, for uploads, an S3-compatible bucket.
+**You need:** Node.js ≥ 22, pnpm 12, a PostgreSQL database (or Docker) and, for uploads, an S3-compatible bucket.
 
 ```bash
 pnpm install
-cp .env.example .env          # fill in DATABASE_URL, BETTER_AUTH_*, then the optional blocks
+cp .env.example .env          # fill in BETTER_AUTH_SECRET, then the optional blocks
+docker compose up -d --wait   # local Postgres; or point DATABASE_URL at your own
 pnpm --filter @repo/db db:migrate
 pnpm dev
 ```
@@ -125,12 +126,15 @@ Open [http://localhost:3000](http://localhost:3000). Without `RESEND_API_KEY`, v
 UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
 ```
 
+With the Compose database: `docker compose exec postgres psql -U postgres -d dimah_starter -c "…"`.
+
 Sign in again to see **Platform management** in the sidebar. Later admins are promoted from `/dashboard/admin/users`.
 
 | Command                                              | What it does                                    |
 | ---------------------------------------------------- | ----------------------------------------------- |
 | `pnpm dev`                                           | Run the web app                                 |
 | `pnpm format:check` · `lint` · `typecheck` · `build` | Quality gates (CI runs all of them)             |
+| `pnpm test` · `test:watch`                           | Unit tests (Vitest, `*.test.ts` beside source)  |
 | `pnpm --filter @repo/db db:generate` · `db:migrate`  | Create and apply migrations                     |
 | `pnpm --filter @repo/db db:studio`                   | Browse the database                             |
 | `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components             |
@@ -193,7 +197,7 @@ Billing, a marketing CMS and analytics are left to you, so you can pick the prov
 - **Public URL** — set `BETTER_AUTH_URL` to the public origin. `http://localhost:3000` is trusted only outside production.
 - **Postgres on serverless** — use a **pooled** `DATABASE_URL` (Neon pooler, PgBouncer, Supabase pooler). Direct `5432` connections run out under bursty functions.
 - **Session cookie cache** — `getSession` may use a cookie for up to **5 minutes**. After a ban or role change, the affected user can still look signed-in until that cache expires.
-- **Auth rate limit** — counters live in Postgres so they survive serverless. Better Auth limits its HTTP routes (`/api/auth`); the sign-in, sign-up and password-reset Server Actions call `consumeRateLimit` first. Behind more than one proxy, set Better Auth `advanced.ipAddress` so the client IP is right.
+- **Auth rate limit** — counters live in Postgres so they survive serverless. Better Auth limits its HTTP routes (`/api/auth`); the sign-in, sign-up, password-reset and Google Server Actions call `consumeRateLimit` first, per address and per account. Behind more than one proxy, set Better Auth `advanced.ipAddress` so the client IP is right.
 - **Security headers** — `next.config.ts` denies framing and sets `nosniff`, `Referrer-Policy`, `Permissions-Policy` and, in production, HSTS. Add a script CSP if you need one.
 - **SEO** — canonicals, `sitemap.xml`, `robots.txt`, `llms.txt` and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
 - **Email** — set `RESEND_API_KEY` and `EMAIL_FROM`. Without a key, development prints the message (including the link) to the server log.

@@ -15,8 +15,8 @@ catalog:
   "@types/node": ^26.6.6
 
   # Data
-  drizzle-orm: rc
-  drizzle-kit: rc
+  drizzle-orm: 1.0.0-rc.5
+  drizzle-kit: 1.0.0-rc.5
   dotenv: ^18.0.10
 
   # Storage

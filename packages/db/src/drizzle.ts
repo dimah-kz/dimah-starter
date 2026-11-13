@@ -5,6 +5,7 @@ export {
   eq,
   ilike,
   isNotNull,
+  isNull,
   like,
   not,
   or,

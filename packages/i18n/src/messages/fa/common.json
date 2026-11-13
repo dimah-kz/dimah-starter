@@ -33,7 +33,8 @@
     "unauthorized": "باید وارد شوید.",
     "invalidImageKey": "این فایل تصویر معتبری نیست.",
     "storagePublicUrlMissing": "آدرس عمومی ذخیره‌سازی تنظیم نشده است.",
-    "selectRole": "حداقل یک نقش انتخاب کنید."
+    "selectRole": "حداقل یک نقش انتخاب کنید.",
+    "nameInvalid": "نامی تا {max} نویسه وارد کنید."
   },
   "notFound": {
     "title": "صفحه پیدا نشد",

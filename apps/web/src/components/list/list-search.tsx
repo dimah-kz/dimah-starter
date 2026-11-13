@@ -52,17 +52,28 @@ export function ListSearch({ value, placeholder, onCommit }: ListSearchProps) {
   const searchPlaceholder = placeholder ?? t("search")
   const [draft, setDraft] = useState(value ?? "")
   const [syncedValue, setSyncedValue] = useState(value)
+  // Last query this input sent, or the URL's when that changed from outside.
+  const [committed, setCommitted] = useState(value)
   const timeoutRef = useRef<number>(undefined)
-  const normalizedValue = value?.trim() ?? ""
+  const normalizedCommitted = committed?.trim() ?? ""
 
-  // The URL changed from outside (back button, filter reset): show it.
   if (value !== syncedValue) {
     setSyncedValue(value)
-    setDraft(value ?? "")
+    setCommitted(value)
+    // Our own commit coming back keeps the draft (a trailing space, keys typed
+    // while the page loaded). Back button or a reset elsewhere replaces it.
+    if (value !== committed) {
+      setDraft(value ?? "")
+    }
+  }
+
+  const commit = (q: string | undefined) => {
+    setCommitted(q)
+    onCommit(q)
   }
 
   const commitDraft = useEffectEvent((nextDraft: string) => {
-    commitSearch(nextDraft, normalizedValue, onCommit)
+    commitSearch(nextDraft, normalizedCommitted, commit)
   })
 
   useEffect(() => {
@@ -76,8 +87,8 @@ export function ListSearch({ value, placeholder, onCommit }: ListSearchProps) {
   const handleClear = () => {
     window.clearTimeout(timeoutRef.current)
     setDraft("")
-    if (normalizedValue) {
-      onCommit(undefined)
+    if (normalizedCommitted) {
+      commit(undefined)
     }
   }
 
@@ -97,7 +108,7 @@ export function ListSearch({ value, placeholder, onCommit }: ListSearchProps) {
           }
           event.preventDefault()
           window.clearTimeout(timeoutRef.current)
-          commitSearch(draft, normalizedValue, onCommit)
+          commitSearch(draft, normalizedCommitted, commit)
         }}
         placeholder={searchPlaceholder}
         aria-label={searchPlaceholder}

@@ -96,7 +96,7 @@
     "cancelConfirm": "Cancel invitation",
     "canceled": "Invitation canceled.",
     "cancelFailed": "Could not cancel the invitation.",
-    "rowActions": "Actions for {email}"
+    "cancelFor": "Cancel invitation for {email}"
   },
   "accountSettings": {
     "back": "Back",

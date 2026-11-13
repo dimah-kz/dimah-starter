@@ -6,7 +6,6 @@ import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
 type CancelOrganizationInvitationInput = {
-  organizationId: string
   invitationId: string
 }
 
@@ -18,17 +17,21 @@ type CancelOrganizationInvitationResult = {
 export async function cancelOrganizationInvitationAction(
   input: CancelOrganizationInvitationInput
 ): Promise<CancelOrganizationInvitationResult> {
+  let organizationId: string | undefined
+
   try {
-    await auth.api.cancelInvitation({
+    const canceled = await auth.api.cancelInvitation({
       headers: await headers(),
       body: { invitationId: input.invitationId },
     })
+    organizationId = canceled?.organizationId
   } catch (error) {
     return { success: false, error: getAuthApiErrorMessage(error) }
   }
 
-  updateTag(
-    dashboardCacheTags.organizationInvitationsById(input.organizationId)
-  )
+  // The tag comes from the invitation, never from the client.
+  if (organizationId) {
+    updateTag(dashboardCacheTags.organizationInvitationsById(organizationId))
+  }
   return { success: true }
 }

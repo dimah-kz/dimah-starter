@@ -1,6 +1,7 @@
 "use server"
 
 import { redirect } from "next/navigation"
+import { revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { type AuthFormState } from "@/app/(auth)/lib/auth-form-state"
@@ -9,7 +10,12 @@ import {
   withAuthRedirect,
 } from "@/app/(auth)/lib/auth-redirect"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
-import { getFormPassword, getFormString } from "@/components/form/form-parse"
+import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import {
+  getFormPassword,
+  getFormString,
+  NAME_MAX_LENGTH,
+} from "@/components/form/form-parse"
 import { toAbsoluteAppUrl } from "@repo/auth/app-origin"
 import { auth, consumeRateLimit, getAuthApiErrorMessage } from "@repo/auth"
 
@@ -23,6 +29,12 @@ export async function signUpWithEmailAction(
     email: getFormString(formData, "email"),
   }
   const requestHeaders = await headers()
+
+  // Better Auth accepts any string, including the empty one.
+  if (!values.name || values.name.length > NAME_MAX_LENGTH) {
+    const t = await getTranslations("common.errors")
+    return { formError: t("nameInvalid", { max: NAME_MAX_LENGTH }), values }
+  }
 
   if (!(await consumeRateLimit("signUp", requestHeaders))) {
     const t = await getTranslations("auth.errors")
@@ -48,6 +60,9 @@ export async function signUpWithEmailAction(
       values,
     }
   }
+
+  // A new row in the admin users list.
+  revalidateTag(dashboardCacheTags.adminUsersPage(), "max")
 
   redirect(
     signedIn

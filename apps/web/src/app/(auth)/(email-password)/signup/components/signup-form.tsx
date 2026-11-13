@@ -13,6 +13,7 @@ import {
   InputGroupInput,
 } from "@repo/ui/components/input-group"
 import { Alert, AlertDescription } from "@repo/ui/components/alert"
+import { NAME_MAX_LENGTH } from "@/components/form/form-parse"
 import { FormSubmitButton } from "@/components/form/form-submit-button"
 import { PasswordInput } from "@/components/form/password-input"
 import { useTranslations } from "next-intl"
@@ -57,6 +58,7 @@ export function SignUpForm({
                 placeholder={t("namePlaceholder")}
                 autoComplete="name"
                 defaultValue={state.values?.name}
+                maxLength={NAME_MAX_LENGTH}
                 required
               />
               <InputGroupAddon>

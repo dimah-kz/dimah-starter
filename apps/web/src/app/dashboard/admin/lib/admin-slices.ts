@@ -18,5 +18,3 @@ export const adminSlices = [
     href: dashboardRoutes.adminOrganizations(),
   },
 ] as const
-
-export type AdminSliceKey = (typeof adminSlices)[number]["key"]

@@ -32,7 +32,6 @@ export function InvitationManagementPanel({
   return (
     <>
       <InvitationsTable
-        organizationId={organizationId}
         invitations={invitations}
         page={page}
         pageSize={pageSize}

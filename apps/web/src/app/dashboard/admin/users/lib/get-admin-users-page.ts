@@ -5,6 +5,7 @@ import {
   desc,
   eq,
   ilike,
+  isNull,
   not,
   or,
   type SQL,
@@ -39,10 +40,14 @@ function buildUsersWhere(
   if (filter === "admins") {
     conditions.push(roleColumnHasToken(user.role, "admin"))
   } else if (filter === "users") {
+    // A row without a role is shown as `user`, so it belongs here too.
     conditions.push(
-      and(
-        roleColumnHasToken(user.role, "user"),
-        not(roleColumnHasToken(user.role, "admin"))
+      or(
+        isNull(user.role),
+        and(
+          roleColumnHasToken(user.role, "user"),
+          not(roleColumnHasToken(user.role, "admin"))
+        )
       )!
     )
   } else if (filter === "banned") {

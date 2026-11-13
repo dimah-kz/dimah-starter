@@ -30,6 +30,7 @@ Read [`AGENTS.md`](./AGENTS.md) first. It is short, and it links to the guide fo
    pnpm format:check
    pnpm lint
    pnpm typecheck
+   pnpm test
    pnpm build
    ```
 

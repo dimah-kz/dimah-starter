@@ -52,18 +52,14 @@ async function getCachedAdminOrganizationsPage(
       slug: organization.slug,
       logo: organization.logo,
       createdAt: organization.createdAt,
-      memberCount: count(member.id),
+      // Counted per row of this page, not for every organization.
+      memberCount: db.$count(
+        member,
+        eq(member.organizationId, organization.id)
+      ),
     })
     .from(organization)
-    .leftJoin(member, eq(member.organizationId, organization.id))
     .where(where)
-    .groupBy(
-      organization.id,
-      organization.name,
-      organization.slug,
-      organization.logo,
-      organization.createdAt
-    )
     .orderBy(desc(organization.createdAt))
     .limit(query.pageSize)
     .offset((page - 1) * query.pageSize)

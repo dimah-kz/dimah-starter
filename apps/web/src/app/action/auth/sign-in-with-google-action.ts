@@ -11,7 +11,7 @@ import {
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { getFormString } from "@/components/form/form-parse"
 import { toAbsoluteAppUrl } from "@repo/auth/app-origin"
-import { auth, getAuthApiErrorMessage } from "@repo/auth"
+import { auth, consumeRateLimit, getAuthApiErrorMessage } from "@repo/auth"
 
 export async function signInWithGoogleAction(
   _prevState: AuthFormState,
@@ -22,11 +22,17 @@ export async function signInWithGoogleAction(
     getFormString(formData, "returnPath") === authRoutes.signup()
       ? authRoutes.signup()
       : authRoutes.login()
+  const requestHeaders = await headers()
   let url: string | undefined
+
+  if (!(await consumeRateLimit("socialSignIn", requestHeaders))) {
+    const t = await getTranslations("auth.errors")
+    return { formError: t("tooManyAttempts") }
+  }
 
   try {
     const result = await auth.api.signInSocial({
-      headers: await headers(),
+      headers: requestHeaders,
       body: {
         provider: "google",
         callbackURL: toAbsoluteAppUrl(redirectTo),

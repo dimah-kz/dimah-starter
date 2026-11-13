@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
-import { updateTag } from "next/cache"
+import { revalidateTag, updateTag } from "next/cache"
 import { getTranslations } from "next-intl/server"
 import { type AuthFormState } from "@/app/(auth)/lib/auth-form-state"
 import { getFormString } from "@/components/form/form-parse"
@@ -18,31 +18,25 @@ export async function acceptInvitationAction(
   const requestHeaders = await headers()
 
   try {
-    const invitation = await auth.api.getInvitation({
-      headers: requestHeaders,
-      query: { id: invitationId },
-    })
-
-    await auth.api.acceptInvitation({
+    const { member } = await auth.api.acceptInvitation({
       headers: requestHeaders,
       body: { invitationId },
     })
+    const { organizationId } = member
 
     try {
       await auth.api.setActiveOrganization({
         headers: requestHeaders,
-        body: { organizationId: invitation.organizationId },
+        body: { organizationId },
       })
     } catch {
       // Membership is already created. The dashboard can still open.
     }
 
-    updateTag(
-      dashboardCacheTags.organizationMembersById(invitation.organizationId)
-    )
-    updateTag(
-      dashboardCacheTags.organizationInvitationsById(invitation.organizationId)
-    )
+    updateTag(dashboardCacheTags.organizationMembersById(organizationId))
+    updateTag(dashboardCacheTags.organizationInvitationsById(organizationId))
+    // Member count in the admin organizations list.
+    revalidateTag(dashboardCacheTags.adminOrganizationsPage(), "max")
   } catch (error) {
     const t = await getTranslations("auth.acceptInvitation")
     return {

@@ -23,13 +23,10 @@ dist
 npm-debug.log*
 .pnpm-debug.log*
 
-# env files (.env.example is the committed template)
+# env files (.env.example is the committed template; keep the `!` line last)
 .env
 .env.*
 !.env.example
-.vercel
-.env*
-
 
 # OAuth client secrets downloaded from a provider console
 client_secret*.json

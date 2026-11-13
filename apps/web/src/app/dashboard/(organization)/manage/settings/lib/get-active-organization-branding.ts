@@ -1,6 +1,7 @@
 import { cacheLife, cacheTag } from "next/cache"
 import { eq } from "@repo/db/drizzle"
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
+import { requireOrganizationManager } from "@/app/dashboard/lib/dashboard-session"
 import { organization } from "@repo/db/schema"
 import { db } from "@repo/db"
 
@@ -11,7 +12,15 @@ export type OrganizationBranding = {
   logo: string | null
 }
 
-export async function getActiveOrganizationBranding(organizationId: string) {
+/** Organization managers only — checks the caller, then reads the cached row. */
+export async function getActiveOrganizationBranding() {
+  const { organizationId } = await requireOrganizationManager()
+  return getCachedBranding(organizationId)
+}
+
+async function getCachedBranding(
+  organizationId: string
+): Promise<OrganizationBranding | null> {
   "use cache"
 
   cacheLife("minutes")

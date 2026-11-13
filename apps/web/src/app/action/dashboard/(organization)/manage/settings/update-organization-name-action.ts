@@ -1,7 +1,7 @@
 "use server"
 
 import { headers } from "next/headers"
-import { updateTag } from "next/cache"
+import { revalidateTag, updateTag } from "next/cache"
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
 import { auth, getAuthApiErrorMessage } from "@repo/auth"
 
@@ -23,7 +23,7 @@ export async function updateOrganizationNameAction(
       headers: await headers(),
       body: {
         organizationId: input.organizationId,
-        data: { name: input.name.trim() },
+        data: { name: typeof input.name === "string" ? input.name.trim() : "" },
       },
     })
   } catch (error) {
@@ -31,5 +31,6 @@ export async function updateOrganizationNameAction(
   }
 
   updateTag(dashboardCacheTags.organizationBrandingById(input.organizationId))
+  revalidateTag(dashboardCacheTags.adminOrganizationsPage(), "max")
   return { success: true }
 }

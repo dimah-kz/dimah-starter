@@ -15,7 +15,8 @@ function ThemeProvider({
       disableTransitionOnChange
       {...props}
     >
-      <ThemeHotkey />
+      {/* A bare letter key fails WCAG 2.1.4, so the shortcut is for development only. */}
+      {process.env.NODE_ENV === "development" ? <ThemeHotkey /> : null}
       {children}
     </NextThemesProvider>
   )

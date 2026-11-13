@@ -96,7 +96,7 @@
     "cancelConfirm": "لغو دعوت",
     "canceled": "دعوت لغو شد.",
     "cancelFailed": "لغو دعوت ممکن نشد.",
-    "rowActions": "عملیات {email}"
+    "cancelFor": "لغو دعوت {email}"
   },
   "accountSettings": {
     "back": "بازگشت",

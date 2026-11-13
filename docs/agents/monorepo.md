@@ -8,7 +8,7 @@
 | Mobile    | `apps/mobile`    | Future; share via `@repo/*`                             |
 | Extension | `apps/extension` | Future; own UI shell, same core                         |
 
-Do not import across apps. Workspaces: `apps/*`, `packages/*`, `tooling/*`. Turbo: `build` / `dev` / `lint` / `typecheck`.
+Do not import across apps. Workspaces: `apps/*`, `packages/*`, `tooling/*`. Turbo: `build` / `dev` / `lint` / `typecheck` (`lint` and `typecheck` run in parallel through the `transit` task, which still re-runs them when a dependency changes). Vitest runs once from the root: `pnpm test` picks up every `src/**/*.test.ts`.
 
 | Layer       | Owns                                       | Does not                                        |
 | ----------- | ------------------------------------------ | ----------------------------------------------- |
@@ -29,6 +29,7 @@ pnpm dev
 pnpm build
 pnpm lint
 pnpm typecheck
+pnpm test
 pnpm --filter web dev
 pnpm --filter @repo/db db:migrate
 ```

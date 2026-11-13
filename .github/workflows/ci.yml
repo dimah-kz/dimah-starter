@@ -9,9 +9,12 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   check:
-    name: Format, lint, typecheck, build
+    name: Format, lint, typecheck, test, build
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -31,10 +34,19 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck
+      - run: pnpm test
+      - name: Migrations match the schema
+        run: |
+          pnpm --filter @repo/db db:generate
+          if [ -n "$(git status --porcelain -- packages/db/drizzle)" ]; then
+            echo "::error::The Drizzle schema has changes without a migration. Run 'pnpm --filter @repo/db db:generate' and commit the result."
+            git status --short -- packages/db/drizzle
+            exit 1
+          fi
       - run: pnpm build

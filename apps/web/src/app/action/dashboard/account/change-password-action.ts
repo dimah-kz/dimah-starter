@@ -24,7 +24,8 @@ export async function changePasswordAction(
   try {
     await auth.api.changePassword({
       headers: await headers(),
-      body: { currentPassword, newPassword, revokeOtherSessions: false },
+      // Like a reset: a stolen session must not outlive the old password.
+      body: { currentPassword, newPassword, revokeOtherSessions: true },
     })
   } catch (error) {
     return { success: false, error: getAuthApiErrorMessage(error) }

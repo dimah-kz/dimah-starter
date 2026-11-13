@@ -1,7 +1,7 @@
 "use server"
 
 import { headers } from "next/headers"
-import { updateTag } from "next/cache"
+import { revalidateTag, updateTag } from "next/cache"
 import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { dashboardCacheTags } from "@/app/dashboard/lib/cache-tags"
@@ -43,5 +43,6 @@ export async function removeOrganizationLogoAction(): Promise<RemoveOrganization
   )
 
   updateTag(dashboardCacheTags.organizationBrandingById(organizationId))
+  revalidateTag(dashboardCacheTags.adminOrganizationsPage(), "max")
   return { success: true }
 }

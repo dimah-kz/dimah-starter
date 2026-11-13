@@ -39,7 +39,7 @@ export async function createOrganizationAction(
   input: CreateOrganizationInput
 ): Promise<CreateOrganizationResult> {
   const requestHeaders = await headers()
-  const name = input.name.trim()
+  const name = typeof input.name === "string" ? input.name.trim() : ""
   const create = (slug: string) =>
     auth.api.createOrganization({
       headers: requestHeaders,

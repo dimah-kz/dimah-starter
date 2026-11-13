@@ -38,6 +38,8 @@
     "format:check": "prettier --check .",
     "lint": "turbo lint",
     "storage:purge": "pnpm --filter @repo/storage storage:purge",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "turbo typecheck",
     "ui:sync": "pnpm --filter @repo/ui sync"
   },
@@ -48,7 +50,9 @@
     "prettier-plugin-packagejson": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
     "turbo": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {

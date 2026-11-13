@@ -27,11 +27,11 @@ Teams stay off until you enable them in `organization()`.
 
 **Trusted origins** — `localhost` is not trusted in production. Set `BETTER_AUTH_URL`.
 
-**Rate limit** — `storage: "database"` (`auth.rate_limit`), so counters survive serverless. Better Auth applies it to its HTTP routes (`/api/auth`) only. Server Actions that call `auth.api` for sign-in, sign-up and password reset call `consumeRateLimit(rule, headers, email)` from `@repo/auth` first — same table, keyed by client IP (`advanced.ipAddress`) and email. Add a rule there for any new unauthenticated flow that sends mail or checks a password.
+**Rate limit** — `storage: "database"` (`auth.rate_limit`), so counters survive serverless. Better Auth applies it to its HTTP routes (`/api/auth`) only. Server Actions that call `auth.api` for sign-in, sign-up, password reset and Google sign-in call `consumeRateLimit(rule, headers, email)` from `@repo/auth` first — same table. A rule is a list of buckets keyed by client IP (`advanced.ipAddress`), email, or both, and passes only when every bucket does (sign-in: per account and per IP; reset: per account and per inbox). Add a rule there for any new unauthenticated flow that sends mail or checks a password.
 
 **Cookie cache** — 5 minutes. After a ban or role change, the actor may still look signed-in until that cache expires.
 
-**Email** — `@repo/email` (Resend). `auth.ts` sends verification, password reset, duplicate sign-up notice, and organization invitation mail. `requireEmailVerification` blocks email/password sign-in until the link is opened. Password reset revokes other sessions. Invitation links go to `/accept-invitation/[id]`; accepting requires a verified session (`requireEmailVerificationOnInvitation`). Mounted handler: `app/api/auth/[...all]` — that is the Better Auth HTTP surface for those links, not a product write route. In development, missing `RESEND_API_KEY` logs the message instead of sending.
+**Email** — `@repo/email` (Resend). `auth.ts` sends verification, password reset, duplicate sign-up notice, and organization invitation mail. `requireEmailVerification` blocks email/password sign-in until the link is opened. Password reset and password change both revoke other sessions. Invitation links go to `/accept-invitation/[id]`; accepting requires a verified session (`requireEmailVerificationOnInvitation`). Mounted handler: `app/api/auth/[...all]` — that is the Better Auth HTTP surface for those links, not a product write route. In development, missing `RESEND_API_KEY` logs the message instead of sending.
 
 ## Mutations (in an app)
 

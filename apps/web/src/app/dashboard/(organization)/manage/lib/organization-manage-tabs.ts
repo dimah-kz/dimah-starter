@@ -22,6 +22,3 @@ export const organizationManageTabs = [
     href: dashboardRoutes.organizationSettings(),
   },
 ] as const
-
-export type OrganizationManageTabKey =
-  (typeof organizationManageTabs)[number]["key"]

@@ -33,7 +33,8 @@
     "unauthorized": "You need to sign in.",
     "invalidImageKey": "That file is not a valid image.",
     "storagePublicUrlMissing": "Public storage URL is not configured.",
-    "selectRole": "Select at least one role."
+    "selectRole": "Select at least one role.",
+    "nameInvalid": "Enter a name of up to {max} characters."
   },
   "notFound": {
     "title": "Page not found",

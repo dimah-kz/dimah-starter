@@ -21,7 +21,7 @@
   },
   "password": {
     "title": "Password",
-    "description": "Change the password for this account.",
+    "description": "Change the password for this account. Other devices will be signed out.",
     "unavailable": "This account does not sign in with email and password, so there is no password to change here.",
     "mismatch": "Passwords do not match.",
     "current": "Current password",
@@ -29,7 +29,7 @@
     "confirm": "Confirm new password",
     "save": "Update password",
     "saving": "Updating…",
-    "saved": "Your password was updated.",
+    "saved": "Your password was updated. Other devices were signed out.",
     "saveFailed": "Could not update your password."
   },
   "sessions": {

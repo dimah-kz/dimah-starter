@@ -115,7 +115,8 @@ export function AccountSettingsPanel({
     <ResponsiveFormOverlay
       open={open}
       onOpenChange={(nextOpen) => {
-        if (!nextOpen) {
+        // Stay open while saving, so the result toast has its form behind it.
+        if (!nextOpen && !isPending) {
           onClose()
         }
       }}

@@ -9,7 +9,9 @@ const PLACEHOLDER_ORIGIN = "http://localhost"
  * Same-origin path from a `redirect` search param or `redirectTo` form field.
  * Anything else (missing, repeated, a file, an absolute URL) is `fallback`.
  * Browsers read `\` as `/` and drop tabs and newlines, so `/\evil.com` and
- * `/\t/evil.com` resolve off-site — the origin check catches them.
+ * `/\t/evil.com` resolve off-site — the origin check catches them. Dot
+ * segments collapse after that check (`/.//evil.com` → `//evil.com`), so the
+ * result must not start with `//` either: that is a protocol-relative URL.
  */
 export function normalizeAuthRedirectTarget(
   value: unknown,
@@ -21,9 +23,10 @@ export function normalizeAuthRedirectTarget(
 
   try {
     const url = new URL(value, PLACEHOLDER_ORIGIN)
+    const path = url.pathname + url.search + url.hash
 
-    return url.origin === PLACEHOLDER_ORIGIN
-      ? url.pathname + url.search + url.hash
+    return url.origin === PLACEHOLDER_ORIGIN && !path.startsWith("//")
+      ? path
       : fallback
   } catch {
     return fallback
