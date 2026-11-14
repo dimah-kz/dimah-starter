@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -13,7 +14,8 @@ permissions:
   contents: read
 
 env:
-  # Placeholders: neither job connects to them.
+  # The `check` job's Postgres service uses these credentials. Everything else
+  # is a placeholder that no job connects to.
   DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
   BETTER_AUTH_SECRET: ci-only-secret-at-least-32-characters-long
   BETTER_AUTH_URL: http://localhost:3000
@@ -27,17 +29,37 @@ env:
 
 jobs:
   check:
-    name: Format, lint, typecheck, test, build
+    name: Format, lint, typecheck, test, migrations, build
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d ci"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 15
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           cache: pnpm
+      - run: pnpm docs:check
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo/cache
+          key: turbo-${{ github.job }}-${{ github.sha }}
+          restore-keys: turbo-${{ github.job }}-
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck
@@ -50,6 +72,8 @@ jobs:
             git status --short -- packages/db/drizzle
             exit 1
           fi
+      - name: Migrations apply to an empty database
+        run: pnpm --filter @repo/db db:migrate
       - run: pnpm build
 
   e2e:
@@ -62,17 +86,22 @@ jobs:
       # `instant()` from `@next/playwright` needs the testing API in this build.
       EXPOSE_TESTING_API: "1"
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo/cache
+          key: turbo-${{ github.job }}-${{ github.sha }}
+          restore-keys: turbo-${{ github.job }}-
       - run: pnpm --filter web exec playwright install --with-deps chromium
       - run: pnpm build
       - run: pnpm test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:
           name: playwright-report

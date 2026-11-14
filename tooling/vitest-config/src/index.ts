@@ -1,3 +1,4 @@
+import { resolve } from "node:path"
 import { defineConfig, type ViteUserConfig } from "vitest/config"
 
 /**
@@ -11,6 +12,11 @@ const shared = {
   restoreMocks: true,
   unstubEnvs: true,
   unstubGlobals: true,
+  // Vitest keeps transformed modules in the workspace root by default and
+  // clears that folder when it starts, so packages tested in parallel by
+  // Turborepo would race on it. Each run gets the folder of the package it
+  // runs in.
+  fsModuleCachePath: resolve("node_modules/.vitest-cache"),
 } satisfies NonNullable<ViteUserConfig["test"]>
 
 /** Server-only packages: every test runs on Node. */

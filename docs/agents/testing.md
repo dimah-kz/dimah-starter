@@ -1,6 +1,6 @@
 # Testing
 
-> Rule: `.cursor/rules/testing.mdc`
+Read when you add or change tests, or logic that needs one.
 
 Two layers. **Vitest** for logic you can call without a server: parsing, permissions, actions with their dependencies replaced, Client Components. **Playwright** for what only the running app shows: redirects, streaming, headers, instant navigations. Async Server Components and `'use cache'` reads are not unit-tested — Vitest cannot render them; cover them end to end.
 
@@ -23,16 +23,16 @@ A test is `*.test.ts` (Node) or `*.test.tsx` (jsdom) **beside** the file it test
 
 A package gets tests with a `vitest.config.ts` (`nodeConfig()` or `reactConfig({ name })` from `@repo/vitest-config`), a `"test": "vitest run"` script, and `vitest` + `@repo/vitest-config` in `devDependencies`. The root `vitest.config.mts` picks the package up as a project. [tooling/vitest-config](../../tooling/vitest-config/README.md)
 
-| What                | How                                                                                              | Copy                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
-| Pure logic          | Call it; `it.each` for input tables                                                              | `apps/web/src/app/(auth)/lib/auth-redirect.test.ts`        |
-| Env-driven config   | `vi.stubEnv` — reset after each test                                                             | `packages/auth/src/app-origin.test.ts`                     |
-| Roles / permissions | A table of `resource:action` → role → allowed; update it on purpose when roles change            | `packages/auth/src/organization-access.test.ts`            |
-| oRPC procedure      | `call(procedure, input, { context })` or `createRouterClient`; mock `@repo/auth`                 | `packages/api/src/base.test.ts`                            |
-| Server Action       | `vi.mock` `next/headers`, `next/cache`, `next-intl/server`, `@repo/auth`; assert calls and tags  | `…/action/dashboard/account/update-profile-action.test.ts` |
-| Client Component    | `renderWithIntl` (`@/test/render`) + Testing Library + `user-event`; fake timers for debounce    | `apps/web/src/components/list/list-search.test.tsx`        |
-| Email               | Mock `./deliver`, render the captured React element                                              | `packages/email/src/messages.test.ts`                      |
-| Translations        | `packages/i18n/src/load-messages.test.ts` checks every locale has the same keys and placeholders | —                                                          |
+| What                | How                                                                                              | Copy                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| Pure logic          | Call it; `it.each` for input tables                                                              | `apps/web/src/app/(auth)/lib/auth-redirect.test.ts`                       |
+| Env-driven config   | `vi.stubEnv` — reset after each test                                                             | `packages/auth/src/app-origin.test.ts`                                    |
+| Roles / permissions | A table of `resource:action` → role → allowed; update it on purpose when roles change            | `packages/auth/src/organization-access.test.ts`                           |
+| oRPC procedure      | `call(procedure, input, { context })` or `createRouterClient`; mock `@repo/auth`                 | `packages/api/src/base.test.ts`                                           |
+| Server Action       | `vi.mock` `next/headers`, `next/cache`, `next-intl/server`, `@repo/auth`; assert calls and tags  | `apps/web/src/app/action/dashboard/account/update-profile-action.test.ts` |
+| Client Component    | `renderWithIntl` (`@/test/render`) + Testing Library + `user-event`; fake timers for debounce    | `apps/web/src/components/list/list-search.test.tsx`                       |
+| Email               | Mock `./deliver`, render the captured React element                                              | `packages/email/src/messages.test.ts`                                     |
+| Translations        | `packages/i18n/src/load-messages.test.ts` checks every locale has the same keys and placeholders | —                                                                         |
 
 Mock a workspace package (`vi.mock("@repo/auth", …)`) whenever importing it would build a client: `@repo/auth` creates Better Auth and a database pool, `@repo/storage` an S3 client. Mock at the boundary the code under test calls, not deeper.
 

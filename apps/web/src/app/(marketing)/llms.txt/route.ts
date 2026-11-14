@@ -15,7 +15,7 @@ export function GET() {
 
 > ${common.appDescription}
 
-Use it as a GitHub template (${siteLinks.template}). Everything runs on the server: pages read the Better Auth session in Server Components, lists come from tagged \`'use cache'\` reads, and every write is a Server Action that calls \`auth.api\` or the oRPC router. Built on Next.js 16 Cache Components and Partial Prefetching: reads are tagged cache entries, links prefetch each route's static shell, and actions expire exactly the tags they change with \`updateTag\`. Stack: Next.js 16, React 19, TypeScript, Better Auth, Drizzle ORM, PostgreSQL, oRPC, Tailwind CSS 4, shadcn/ui, next-intl, Turborepo, pnpm. License: MIT.
+Use it as a GitHub template (${siteLinks.template}). Everything runs on the server: pages read the Better Auth session in Server Components, lists come from tagged \`'use cache'\` reads, and every write is a Server Action that calls \`auth.api\` or the oRPC router. Built on Next.js 16 Cache Components and Partial Prefetching: reads are tagged cache entries, links prefetch each route's App Shell, and actions expire exactly the tags they change with \`updateTag\`. Stack: Next.js 16, React 19, TypeScript, Better Auth, Drizzle ORM, PostgreSQL, oRPC, Tailwind CSS 4, shadcn/ui, next-intl, Turborepo, pnpm. License: MIT.
 
 ## Docs
 
@@ -24,9 +24,10 @@ Use it as a GitHub template (${siteLinks.template}). Everything runs on the serv
 - [Architecture](${doc("docs/agents/architecture.md")}): where code belongs, single sources of truth, naming
 - [Dashboard](${doc("docs/agents/dashboard.md")}): adding dashboard pages, permission gates, server lists
 - [Better Auth](${doc("docs/agents/better-auth.md")}): auth config, permissions, rate limits, sessions
-- [Caching](${doc("docs/agents/caching.md")}): tagged reads and invalidation after writes
+- [Next.js and caching](${doc("docs/agents/nextjs.md")}): Cache Components, tagged reads, invalidation after writes
 - [Product API](${doc("docs/agents/api.md")}): oRPC procedures in \`@repo/api\`
 - [i18n](${doc("docs/agents/i18n.md")}): messages, locales, right-to-left
+- [Testing](${doc("docs/agents/testing.md")}): Vitest unit tests and Playwright end-to-end tests
 
 ## Optional
 

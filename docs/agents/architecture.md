@@ -1,43 +1,53 @@
 # Architecture
 
-> Rule: `.cursor/rules/architecture.mdc`
+Read when you add a file, a package or a dependency, or move code between the app and packages.
 
-Core lives in `packages/` (auth, db, product oRPC). Feature UI is a **removable subtree** in an app: `route` + matching `action/` + SSOT keys. Product procedures live in [`@repo/api`](../../packages/api) — [api.md](./api.md).
+## Workspace
 
-## Placement {#placement}
+pnpm workspaces `apps/*`, `packages/*` and `tooling/*`, run through Turborepo (`turbo.json`). `lint`, `typecheck` and `test` run per package in parallel. The `transit` task in `turbo.json` re-runs them when a dependency changes. `build` builds `apps/web`; packages ship TypeScript source and are compiled by the app (`transpilePackages` in `next.config.ts`), so they have no build step.
 
-Inline in the file you are editing.
+| Layer       | Owns                                                                 | Never holds                                     |
+| ----------- | -------------------------------------------------------------------- | ----------------------------------------------- |
+| `apps/web`  | Routes, layouts, Server Actions, feature UI, segment routes and tags | Auth config, schema, reusable primitives        |
+| `packages/` | Auth, database, product API, storage, mail, i18n, UI primitives      | Routes, pages, Server Actions, dashboard chrome |
+| `tooling/`  | ESLint, TypeScript and Vitest presets                                | Product code                                    |
 
-A **new file** only when something is reused in 2+ places, or it is segment SSOT (`*-routes.ts`, `cache-tags.ts`).
+Dependencies point one way: apps → packages, and packages → packages without cycles. A package never imports an app; an app never imports another app.
 
-~10–20 lines at one call site → do not extract.
+| Package         | Exports                                                                                               |
+| --------------- | ----------------------------------------------------------------------------------------------------- |
+| `@repo/auth`    | `auth`, `Session`, `consumeRateLimit`, `getAuthApiErrorMessage`; pure subpaths such as `/role-string` |
+| `@repo/db`      | `db` (`.`), tables (`/schema`), Drizzle operators (`/drizzle`)                                        |
+| `@repo/api`     | `router`, `createContext`, `createRouterClient`, `handleRequest`; `/client` for HTTP callers          |
+| `@repo/storage` | `s3`, `toOwnedPublicUrl`, `deleteRouteObjects`, `deleteOwnedObjects`; `/s3-client` for the browser    |
+| `@repo/email`   | `sendAuthMail`, `sendOrganizationInvitation`                                                          |
+| `@repo/i18n`    | `locales`, `loadMessages`, `resolveLocaleFromHeaders`, `formatDate`, …                                |
+| `@repo/ui`      | `/components/*`, `/hooks/*`, `/lib/*`, `/globals.css`                                                 |
 
-**Search up before creating a file**
+Each package's `package.json` `exports` is the full list. Import only what is exported there.
 
-- App: beside `page.tsx` → parent `components/` → segment `lib/` or `components/` → `src/components/` → `@repo/ui/components/*`
-- Package: beside the caller → package `src/` → an export already on `index.ts`
-- Product procedures: `packages/api/src/routers/<domain>/<procedure>.ts` — one file per procedure, even when short. [api.md](./api.md)
+## Placement
 
-**Deps:** sub-feature → segment `lib/` → `src/lib` / `src/components`. No cross-sibling feature imports. Apps import `@repo/*`. Packages never import apps.
+Search before you create: beside the caller, then the segment's `components/` or `lib/`, then `apps/web/src/components` or `src/lib`, then a package export.
 
-## App segment SSOT
+- Code used by one caller stays in that file, even when it is a helper.
+- A new file is for code a second caller needs, or for a segment's single source of truth (`*-routes.ts`, `cache-tags.ts`, `*-table-params.ts`).
+- A segment's `lib/` (routes, tags, helpers such as `auth-redirect.ts`) is its public surface: other segments may import it. Its `components/` stay inside it. UI two segments need moves up to `apps/web/src/components`.
+- Product procedures are the exception: one file per procedure in `packages/api/src/routers/<domain>/` — [api.md](./api.md).
+- A new package is for core code (auth, data) or code another app will share. Two importers in `apps/web` are not a reason.
 
-| Concern        | Pattern                                                                              |
-| -------------- | ------------------------------------------------------------------------------------ |
-| URLs           | `*-routes.ts`                                                                        |
-| Cache tags     | `cache-tags.ts`                                                                      |
-| Dashboard copy | `@repo/i18n` `dashboard.json`                                                        |
-| Writes         | `app/action/<segment>/` — one mutation per file → `auth.api` or `createRouterClient` |
-| Reads          | `get-*.ts` + `'use cache'`                                                           |
+A feature is removable: its route folder, its folder under `app/action/`, and its keys in the routes, tags and message files.
 
-Forbidden: `dashboard-access.ts`, custom RBAC modules, mutation Route Handlers. The only HTTP handlers are the mounted framework surfaces: `/api/rpc` (product oRPC), `/api/auth` (Better Auth links and callbacks) and `/api/s3` (upload tickets).
+## Naming
 
-## Naming {#naming}
+- **App reads:** `get-<thing>.ts`, exporting `get<Thing>`.
+- **App writes:** `<verb>-<thing>-action.ts`, exporting `<verb><Thing>Action`.
+- **Package functions:** `toX` / `fromX` / `parseX`, predicates `isX` / `xMatches`. Drop filler (`build`, `get`), don't repeat the package name, and don't shadow host APIs (`toPublicUrl`, not `publicUrl`).
 
-Package APIs (not app `get-*.ts`): `toX` / `fromX` / `parseX`; predicates `xMatches` / `isX`. Drop filler (`build`, `get`). Don’t repeat the package name. Don’t collide with host APIs (`toPublicUrl`, not `publicUrl`).
+## Versions
 
-Auth tables stay generated in `@repo/db`. Product tables = `@repo/db`. Product procedures = `@repo/api`.
+A dependency used by more than one workspace package, or released in lockstep with one (`@dimah-s3/*`, `@next/playwright` with `next`), lives in the `catalog` of `pnpm-workspace.yaml` and is referenced as `catalog:`. Bump it there. A single-package dependency or a `peerDependencies` range stays in that package's `package.json`.
 
-## Do not over-extract {#do-not-over-extract}
+## New package
 
-One importer is not reuse. No thin wrappers. A new package only if it is core (auth, db) or will be shared with `mobile` / `extension`.
+`packages/<name>/` with `"name": "@repo/<name>"`, `"private": true`, `"type": "module"`, `exports` pointing at `src/*.ts`, a `tsconfig.json` extending `@repo/typescript-config`, an `eslint.config.js` from `@repo/eslint-config`, and a short `README.md`. Add it to `transpilePackages` in `apps/web/next.config.ts` if the app imports it. Tests: [testing.md](./testing.md).

@@ -34,6 +34,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "docs:check": "node scripts/check-docs.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "turbo lint",

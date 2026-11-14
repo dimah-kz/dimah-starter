@@ -1,21 +1,13 @@
 ---
-description: Where code belongs — packages vs apps; open architecture.md for detail
-globs: apps/**/src/**/*,packages/**/src/**/*
+description: Workspace, packages, dependencies — open architecture.md
+globs: package.json,**/package.json,pnpm-workspace.yaml,turbo.json,**/tsconfig.json,apps/web/next.config.ts
 alwaysApply: false
 ---
 
 # Architecture
 
-**Core:** auth + db + product oRPC (`@repo/api`) in `packages/`. **Features:** removable subtrees in apps (`route` + `action/` + SSOT).
+- Dependencies point apps → packages. Routes, pages, actions and feature UI stay in `apps/web`.
+- A dependency used by two or more packages goes in the `catalog` of `pnpm-workspace.yaml` (`catalog:`).
+- New package: `@repo/<name>`, `exports` to `src/*.ts`, add it to `transpilePackages` if the app imports it.
 
-**Deps (app):** sub-feature → segment `lib/` → `src/lib` | `src/components`. No cross-sibling feature imports.
-
-**Action-first:** `app/<segment>/` + `app/action/<segment>/` (one mutation per file) → **`auth.api`** (auth) or **`createRouterClient`** (product). No mutation Route Handlers — only the mounted `/api/rpc`, `/api/auth`, `/api/s3`.
-
-**SSOT:** `*-routes.ts`, `cache-tags.ts` per segment. **No** `dashboard-access.ts` or custom RBAC modules.
-
-**Before new code:** search upward; inline by default; one call site (~10–20 lines) → no new file/module — [architecture.md § Placement](docs/agents/architecture.md#placement), [§ Do not over-extract](docs/agents/architecture.md#do-not-over-extract). Product procedures are the exception: one file under `packages/api/src/routers/<domain>/`.
-
-**Naming:** `toX` / `fromX` / `parseX`; no package-name prefix — [architecture.md § Naming](docs/agents/architecture.md#naming).
-
-**Detail (Read):** [docs/agents/architecture.md](docs/agents/architecture.md).
+Guide: [docs/agents/architecture.md](docs/agents/architecture.md)

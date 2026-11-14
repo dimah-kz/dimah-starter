@@ -9,3 +9,5 @@ Rate-limit counters live in Postgres (`auth.rate_limit`) so they survive serverl
 Session cookie cache is 5 minutes — ban/role changes can lag until it expires. `localhost` is not a trusted origin in production.
 
 After config changes: `auth:generate` → `db:generate` → `db:migrate`.
+
+`organization-access.test.ts` and `admin-access.test.ts` list what each role may do; update them on purpose when you change a role. Guide: [docs/agents/better-auth.md](../../docs/agents/better-auth.md).

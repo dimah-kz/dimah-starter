@@ -1,0 +1,13 @@
+---
+description: Upload routes and saving files — open storage.md
+globs: packages/storage/**,apps/web/src/components/form/avatar-upload-field.tsx,apps/web/src/app/action/**/*avatar*,apps/web/src/app/action/**/*logo*
+alwaysApply: false
+---
+
+# Storage
+
+- Every route names its owner in `routeOwners`; access rules are route guards throwing `s3Error`.
+- Saving: `toOwnedPublicUrl` (owner from the session) → write the URL → `after(() => deleteRouteObjects(…))`.
+- Reference: `apps/web/src/app/action/dashboard/account/set-account-avatar-action.ts`.
+
+Guide: [docs/agents/storage.md](docs/agents/storage.md)

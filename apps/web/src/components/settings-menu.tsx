@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { NavUserLocaleMenu } from "@/components/locale/locale-switcher"
+import { LocaleSwitcher } from "@/components/locale/locale-switcher"
 import { ThemeSwitchItem } from "@/components/theme/theme-switch-item"
 import { Button } from "@repo/ui/components/button"
 import {
@@ -48,7 +48,7 @@ export function SettingsMenu({
       <DropdownMenuContent align="end" sideOffset={4} className="min-w-56">
         <ThemeSwitchItem />
         <DropdownMenuGroup>
-          <NavUserLocaleMenu />
+          <LocaleSwitcher />
         </DropdownMenuGroup>
         {showHome ? (
           <>

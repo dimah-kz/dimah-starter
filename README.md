@@ -18,9 +18,9 @@ Most SaaS kits give you a client SDK, a data-fetching library and drop-in widget
 - **Server-first, end to end.** Pages read the session in Server Components, lists come from tagged `'use cache'` reads, and every write is a Server Action. No auth client, no React Query, no client data layer to keep in sync.
 - **Multi-tenant from day one.** Organizations, invitations, member roles and a platform admin panel are built and wired to [Better Auth](https://www.better-auth.com) — with permission checks on every page _and_ every data read, not just in layouts.
 - **Next.js 16 as it is meant to be used.** Built on [Cache Components](#built-on-nextjs-16-cache-components) and Partial Prefetching — not an older App Router kit with a version bump — plus React 19 with the React Compiler, and Turbopack.
-- **Production details already done.** Rate-limited auth, security headers, safe redirects, upload quotas, a stale-upload purge, CI, and a production checklist below.
+- **Production details already done.** Rate-limited auth, security headers, safe redirects, upload quotas, a stale-upload purge, unit and end-to-end tests, CI, and a production checklist below.
 - **Global from the start.** Every string lives in message files; English and Persian ship with a correct right-to-left layout.
-- **Made to be extended by AI agents.** [`AGENTS.md`](./AGENTS.md), task guides in [`docs/agents/`](./docs/agents) and [Cursor rules](./.cursor/rules) tell Claude Code, Cursor or Codex where code goes and which patterns to copy.
+- **Made to be extended by AI agents.** [`AGENTS.md`](./AGENTS.md) and the task guides in [`docs/agents/`](./docs/agents) tell Claude Code, Codex, Cursor or Copilot where code goes, which file to copy and how to check the result; with the [Next.js MCP server](./docs/agents/nextjs.md#where-to-check-an-api) connected, they can read the running app's errors too.
 
 ## Built on Next.js 16 Cache Components
 
@@ -29,7 +29,7 @@ Most SaaS kits give you a client SDK, a data-fetching library and drop-in widget
 | Next.js 16                                                    | In this starter                                                                                                                                                                                          |
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Cache Components** — `'use cache'`, `cacheTag`, `cacheLife` | Every list and profile read is a cache entry tagged per user or organization, e.g. the [members list](<./apps/web/src/app/dashboard/(organization)/manage/members/lib/get-organization-members-page.ts>) |
-| **Partial Prefetching**                                       | Links prefetch each route's static shell. Every dashboard page builds as a partial prerender: the frame shows at once, the signed-in parts stream in                                                     |
+| **Partial Prefetching**                                       | Links prefetch each route's App Shell, so a client navigation shows the next page's frame at once and the signed-in parts stream in. Playwright checks it with `instant()` from `@next/playwright`       |
 | **`updateTag`**                                               | A Server Action expires exactly the tags it changed, and the person who acted sees fresh data in the same response — no `router.refresh()`, no client cache                                              |
 | **`refresh()` · `after()`**                                   | Lists without a tag re-render from the action; storage cleanup runs after the response is sent                                                                                                           |
 | **Server Actions**                                            | Every write — auth, organizations, admin, uploads — is one file under `app/action/`, mirroring its route                                                                                                 |
@@ -58,7 +58,7 @@ export async function removeOrganizationMemberAction(input) {
 }
 ```
 
-The rules behind it — what to cache, which tag to expire, why sessions are never cached — are in [caching.md](./docs/agents/caching.md) and [implementation.md](./docs/agents/implementation.md).
+The rules behind it — what to cache, which tag to expire, why sessions are never cached — are in [nextjs.md](./docs/agents/nextjs.md).
 
 ## What's inside
 
@@ -140,6 +140,7 @@ Sign in again to see **Platform management** in the sidebar. Later admins are pr
 | `pnpm --filter @repo/db db:studio`                   | Browse the database                             |
 | `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components             |
 | `pnpm storage:purge`                                 | Clean up abandoned uploads (schedule it hourly) |
+| `pnpm docs:check`                                    | Check that links and paths in the docs exist    |
 
 ## Project structure
 
@@ -156,10 +157,11 @@ dimah-starter/
 │   ├── storage/             # dimah-s3 upload routes and object cleanup
 │   └── ui/                  # shadcn/ui, ReUI and Dimah components
 ├── tooling/                 # Shared ESLint, TypeScript and Vitest configs
-└── docs/agents/             # How-to guides for contributors and AI agents
+├── docs/agents/             # How-to guides for contributors and AI agents
+└── scripts/                 # Repository checks (docs links)
 ```
 
-Core logic lives in `packages/`, feature UI in `apps/`. `apps/mobile` and `apps/extension` are reserved slots: a future app reuses the same packages.
+Core logic lives in `packages/`, routes and feature UI in `apps/web`. Another app — mobile, a browser extension — would sit beside it in `apps/` and reuse the same packages.
 
 ## Build your product on it
 
@@ -167,8 +169,9 @@ Core logic lives in `packages/`, feature UI in `apps/`. `apps/mobile` and `apps/
 2. **Add a procedure** — one file per procedure in `packages/api/src/routers/<domain>/` ([api.md](./docs/agents/api.md)).
 3. **Add a page** — copy a sibling under `apps/web/src/app/dashboard/`, its action under `app/action/`, and register its URL, labels and cache tags ([dashboard.md](./docs/agents/dashboard.md)).
 4. **Add tables** — Drizzle schema in `packages/db`, then `db:generate` and `db:migrate`.
+5. **Test it** — a `*.test.ts` beside the logic, an e2e spec for a flow; each kind has a reference test to copy ([testing.md](./docs/agents/testing.md)).
 
-Working with an AI agent? Point it at [`AGENTS.md`](./AGENTS.md) first — it indexes the guides and the rules every change must follow.
+Working with an AI agent? Most read [`AGENTS.md`](./AGENTS.md) on their own: it holds the commands, the rules and which guide to open for each task.
 
 ## FAQ
 
@@ -202,7 +205,8 @@ Billing, a marketing CMS and analytics are left to you, so you can pick the prov
 - **Security headers** — `next.config.ts` denies framing and sets `nosniff`, `Referrer-Policy`, `Permissions-Policy` and, in production, HSTS. Add a script CSP if you need one.
 - **SEO** — canonicals, `sitemap.xml`, `robots.txt`, `llms.txt` and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
 - **Email** — set `RESEND_API_KEY` and `EMAIL_FROM`. Without a key, development prints the message (including the link) to the server log.
-- **Storage** — allow `GET`, `PUT` and `HEAD` from your origin in the bucket CORS, serve objects at `S3_PUBLIC_BASE_URL`, and schedule `pnpm storage:purge` hourly so uploads that never confirm leave the bucket and the database — [packages/storage](./packages/storage/README.md#purging-stale-uploads).
+- **Storage** — allow `GET`, `PUT` and `HEAD` from your origin in the bucket CORS, serve objects at `S3_PUBLIC_BASE_URL`, and schedule `pnpm storage:purge` hourly so uploads that never confirm leave the bucket and the database. [`storage-purge.yml`](./.github/workflows/storage-purge.yml) does it once you set the repository variable and secrets it lists — [packages/storage](./packages/storage/README.md#purging-stale-uploads).
+- **Testing API** — `EXPOSE_TESTING_API=1` is for the e2e build only. Never set it for a deployment.
 
 </details>
 

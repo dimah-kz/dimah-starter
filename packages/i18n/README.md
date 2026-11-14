@@ -1,5 +1,9 @@
 # @repo/i18n
 
-Shared locale config, message catalogs, and formatting helpers (`en` / `fa` today).
+Locale config, message catalogs and formatters for every app (`en` and `fa`, right-to-left included).
 
-Product copy lives here so every app speaks the same language — add or edit strings under `src/messages/`, not hardcoded in UI or Server Actions. Locale is cookie-based (`NEXT_LOCALE`, `localeCookieName`); Next.js wires catalogs through `next-intl`.
+- **Messages** — `src/messages/<locale>/<namespace>.json`. Product copy lives here, never hardcoded in UI or Server Actions. Every locale has the same keys and the same `{placeholders}`; `src/load-messages.test.ts` fails otherwise.
+- **Locale** — read from the `NEXT_LOCALE` cookie (`localeCookieName`), no URL prefix. `resolveLocaleFromHeaders` reads it outside Next (Better Auth mail).
+- **Formatting** — `formatDate`, `formatNumber`, `formatRelativeTime` over `Intl`.
+
+The web app wires the catalogs through `next-intl` in `apps/web/src/i18n/`. Adding or removing a locale: [docs/agents/i18n.md](../../docs/agents/i18n.md).

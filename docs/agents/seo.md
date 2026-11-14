@@ -1,6 +1,6 @@
 # SEO
 
-> Next metadata docs: `apps/web/node_modules/next/dist/docs/01-app/01-getting-started/14-metadata-and-og-images.md` and `03-api-reference/03-file-conventions/01-metadata/`
+Read when you add a public page or change metadata, the sitemap, robots rules or share images. Next.js reference: `01-app/01-getting-started/14-metadata-and-og-images.md` and `01-app/03-api-reference/03-file-conventions/01-metadata/` in the bundled docs ([nextjs.md](./nextjs.md)).
 
 Public origin = `appOrigin()` from `@repo/auth/app-origin` (`BETTER_AUTH_URL`). Canonicals, the sitemap, robots, and share images all read it — set it to the production URL.
 

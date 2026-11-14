@@ -1,38 +1,49 @@
 # Product API (`@repo/api`)
 
-oRPC v2 for **product** domain only. Auth stays on `auth.api`. Live router: [`packages/api/src`](../../packages/api/src).
+Read when you add or change product data operations — the domain of your SaaS, not auth.
+
+oRPC 2 beta. Auth, users, organizations and roles stay on `auth.api` ([better-auth.md](./better-auth.md)); procedures do not wrap Better Auth.
 
 ## Layout
 
-`src/router.ts` only composes domains. A domain is a folder; a procedure is a file in that folder. Copy `routers/health/`.
-
 ```
-src/
+packages/api/src/
   base.ts                 pub, authed, createContext
-  router.ts               { health, … }
+  router.ts               { health, … } — composes domains only
   routers/<domain>/
     index.ts              { ping, … }
-    <procedure>.ts
+    <procedure>.ts        one procedure per file
+    <procedure>.test.ts
 ```
 
-New procedure: add `<procedure>.ts` in that domain and export it from the domain `index.ts`. New domain: add a folder and one key on `router.ts`. Build from `pub` / `authed` in `base.ts`. Do not compose them in an app. Do not wrap Better Auth.
+- **New procedure:** add `<procedure>.ts` and export it from the domain's `index.ts`.
+- **New domain:** add a folder and one key in `router.ts`.
+- **Where helpers go:** a helper used by one procedure stays in its file, and one shared by a domain stays in its folder. A domain never imports another domain's procedures.
 
-A helper used by one procedure stays in that file. Something shared by one domain stays in that folder. Do not import another domain's procedures.
+Reference: `routers/health/ping.ts` and `ping.test.ts`.
 
-| Builder  | When                                                                                       |
-| -------- | ------------------------------------------------------------------------------------------ |
-| `pub`    | Session optional (`health.ping`). Call `await context.getSession()` only when you need it. |
-| `authed` | Requires `context.session`. A missing session throws `UNAUTHORIZED`.                       |
+| Builder  | Use                                                                       |
+| -------- | ------------------------------------------------------------------------- |
+| `pub`    | Session optional. Call `await context.getSession()` only when you need it |
+| `authed` | Requires a session (`context.session`); throws `UNAUTHORIZED` without one |
 
-`createContext(headers)` memoizes `auth.api.getSession` on that object. Reuse that same object for every procedure in the request, and for the action's own session read: `const context = createContext(headers)`, then `await context.getSession()` and `createRouterClient(router, { context })`. A separate `auth.api.getSession` in that action looks the session up again. Route and layout gates stay on `auth.api.getSession`. Permissions stay on `auth.api`.
+Validate input and output with Zod (`.input(z.object(…))`, `.output(…)`). Check product permissions inside the procedure. For organization-level rights, `auth.api.hasPermission({ headers: context.headers, body })` covers it.
 
-| Caller           | How                                                                                                         |
-| ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| Server Action    | `createRouterClient(router, { context: createContext(await headers()) })` — in-process                      |
-| Server Component | Same client, but `createContext(await dashboardAuthHeaders())` so the expiry `Date.now()` runs after `io()` |
-| Mobile / HTTP    | `createApiClient({ origin })` from `@repo/api/client` — never import `@repo/api` (pulls auth/db)            |
-| `'use cache'`    | Do not call `headers()` or `getSession` inside the cache function. Pass ids, or query the db in the app     |
+## Calling it
 
-Web mutations stay in `app/action/<segment>/`. Next cache APIs never belong in `@repo/api`.
+| Caller            | How                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| Server Action     | `createRouterClient(router, { context: createContext(await headers()) })`, in-process                         |
+| Server Component  | The same, with `createContext(await dashboardAuthHeaders())` so the session's clock read happens after `io()` |
+| Another app, HTTP | `createApiClient({ origin })` from `@repo/api/client`                                                         |
 
-The only product HTTP surface is `apps/web/src/app/api/rpc/[[...rest]]/route.ts`. `RPCHandler` only matches `POST`/`PUT`/`PATCH`/`DELETE` by default. Do not export `GET` or add it to `allowMethods` (cookie CSRF). Request bodies over 1 MiB are rejected with `PAYLOAD_TOO_LARGE`. Client components import `@repo/api/client` only.
+- **Reuse one context per request.** `createContext(headers)` memoizes the session on that object. Use the same object for every call, and for the action's own session read (`await context.getSession()`), so the session is looked up once.
+- **Don't call the router inside `'use cache'`.** It needs the request. Pass ids into a cached read in the app instead.
+- **Keep Next.js out of the package.** `updateTag` and friends belong in the calling action, not in `@repo/api`.
+
+## HTTP surface
+
+- **Endpoint:** `apps/web/src/app/api/rpc/[[...rest]]/route.ts` mounts `handleRequest` at `/api/rpc`.
+- **Methods:** it accepts `POST`, `PUT`, `PATCH` and `DELETE`. `GET` stays off because a cookie-authenticated `GET` is open to cross-site requests.
+- **Body size:** bodies over 1 MiB get `PAYLOAD_TOO_LARGE`. Files go through `@repo/storage`, not the API.
+- **Clients:** client components import `@repo/api/client` only. The package root pulls in auth and the database.

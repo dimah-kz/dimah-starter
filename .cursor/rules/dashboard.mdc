@@ -1,15 +1,13 @@
 ---
-description: Dashboard segment — routes & nav SSOT; open dashboard.md for detail
-globs: apps/**/src/app/dashboard/**/*
+description: Dashboard pages, gates, nav, server lists — open dashboard.md
+globs: apps/web/src/app/dashboard/**,apps/web/src/components/list/**
 alwaysApply: false
 ---
 
-# Dashboard segment
+# Dashboard
 
-**SSOT:** `dashboard-routes.ts`, `cache-tags.ts` (inside the app). Dashboard copy: `@repo/i18n` `dashboard.json`. **Mirror** a sibling feature when adding routes. Admin and organization manage nav lives in the sidebar only — no in-page subnav or shared section title.
+- Gate in `page.tsx` and in its `get-*.ts` (`requirePlatformAdmin`, `requireOrganizationManager`, `requireDashboardSession`); a layout gate is not enough.
+- URLs in `dashboard-routes.ts`, tags in `cache-tags.ts`, admin/manage nav in `admin-slices.ts` / `organization-manage-tabs.ts`.
+- Lists are URL-driven and server-rendered with `@/components/list`; copy `(organization)/manage/members/`.
 
-**Writes:** `action/dashboard/…` → `auth.api`. **Reads:** `get-*.ts` = `requirePlatformAdmin` / `requireOrganizationManager`, then `'use cache'` + tags — never rely on a layout gate alone.
-
-**Lists:** URL `list/` + `ListTable`; never ReUI DataGrid / TanStack Table for server pages.
-
-**Detail (Read):** [docs/agents/dashboard.md](docs/agents/dashboard.md).
+Guide: [docs/agents/dashboard.md](docs/agents/dashboard.md)

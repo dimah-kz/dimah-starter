@@ -1,15 +1,13 @@
 ---
-description: Vitest unit tests and Playwright e2e — open testing.md for detail
+description: Vitest unit tests and Playwright e2e — open testing.md
 globs: **/*.test.ts,**/*.test.tsx,**/vitest.config.ts,apps/web/e2e/**,apps/web/playwright.config.ts,tooling/vitest-config/**
 alwaysApply: false
 ---
 
 # Testing
 
-Unit: `*.test.ts` (Node) / `*.test.tsx` (jsdom) beside the file under `src/`; import from `vitest`, no globals. Mock workspace packages that build clients on import (`@repo/auth`, `@repo/storage`). No database. Client Components: `renderWithIntl` from `@/test/render`, query by role.
+- `*.test.ts` (Node) / `*.test.tsx` (jsdom) beside the code under `src/`; import from `vitest`; no database.
+- Mock packages that build clients on import (`@repo/auth`, `@repo/storage`); render Client Components with `renderWithIntl` and query by role.
+- E2E specs in `apps/web/e2e/` drive the app from outside (no `@repo/*` imports); `instant()` only for client navigations.
 
-E2E: `apps/web/e2e/*.spec.ts`, signed out, no `@repo/*` imports. `instant()` from `@next/playwright` for client navigations only.
-
-Test security rules, input parsing and shared contracts — not markup.
-
-**Detail (Read):** [docs/agents/testing.md](docs/agents/testing.md).
+Guide: [docs/agents/testing.md](docs/agents/testing.md)

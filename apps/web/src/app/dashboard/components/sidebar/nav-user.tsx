@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { logoutAction } from "@/app/action/dashboard/logout-action"
-import { NavUserLocaleMenu } from "@/components/locale/locale-switcher"
+import { LocaleSwitcher } from "@/components/locale/locale-switcher"
 import { ThemeSwitchItem } from "@/components/theme/theme-switch-item"
 import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"
 import {
@@ -91,7 +91,7 @@ export function NavUser({ user }: { user: NavUserProfile }) {
             <DropdownMenuSeparator />
             <ThemeSwitchItem />
             <DropdownMenuGroup>
-              <NavUserLocaleMenu />
+              <LocaleSwitcher />
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem

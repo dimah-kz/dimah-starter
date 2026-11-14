@@ -1,0 +1,48 @@
+name: Storage purge
+
+# Hourly `pnpm storage:purge`: removes uploads that never confirmed and prunes
+# old soft-deleted rows (packages/storage/README.md). Off until you enable it:
+#   1. Repository variable STORAGE_PURGE = true
+#   2. Secrets: DATABASE_URL, BETTER_AUTH_SECRET, DIMAH_S3_SECRET, S3_REGION,
+#      S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_BUCKET,
+#      S3_PUBLIC_BASE_URL — the production values.
+# Each run takes about a minute of Actions time; on a private repository that
+# counts toward the plan's minutes. A server crontab works just as well.
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: storage-purge
+  cancel-in-progress: false
+
+jobs:
+  purge:
+    if: ${{ vars.STORAGE_PURGE == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+      DIMAH_S3_SECRET: ${{ secrets.DIMAH_S3_SECRET }}
+      S3_REGION: ${{ secrets.S3_REGION }}
+      S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+      S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      S3_PUBLIC_BASE_URL: ${{ secrets.S3_PUBLIC_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      # Only the storage package and its workspace dependencies.
+      - run: pnpm install --frozen-lockfile --filter "@repo/storage..."
+      - run: pnpm storage:purge

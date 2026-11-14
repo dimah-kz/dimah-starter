@@ -1,17 +1,13 @@
 ---
-description: Better Auth — auth package + app actions; open better-auth.md for detail
-globs: packages/auth/**/*,apps/**/src/lib/auth/**/*,apps/**/src/app/action/**/*
+description: Better Auth config, auth writes, permissions — open better-auth.md
+globs: packages/auth/**,apps/web/src/app/action/**,apps/web/src/app/(auth)/**,apps/web/src/app/dashboard/lib/dashboard-session.ts
 alwaysApply: false
 ---
 
 # Better Auth
 
-**Config:** `packages/auth/`. Schema: `pnpm --filter @repo/db auth:generate` → `db:generate` + `db:migrate`. Teams off unless enabled in `organization()`.
+- Writes: a Server Action calls `auth.api.*` with `headers: await headers()`; Better Auth checks permissions. Return `getAuthApiErrorMessage(error)`.
+- Unauthenticated flows that send mail or check a password call `consumeRateLimit` first.
+- Config change → `pnpm --filter @repo/db auth:generate` then `db:generate`; never edit `auth.schema.ts` by hand.
 
-**Writes:** app `action/` → `auth.api` with `headers: await headers()`. Sign-in/up still pass `body`; `nextCookies()` sets cookies. Product copy via `getTranslations` — not hardcoded English.
-
-**Permissions:** extend `*-access.ts`; dashboard gates in `dashboard-session.ts` (`requirePlatformAdmin`, `requireOrganizationManager`). No `dashboard-access.ts`.
-
-`localhost` is not trusted in production. Rate limits live in `auth.rate_limit`: Better Auth limits `/api/auth`; sign-in, sign-up, reset and Google actions call `consumeRateLimit` first (buckets per IP, email, or both). Cookie cache is 5 minutes.
-
-**Detail (Read):** [docs/agents/better-auth.md](docs/agents/better-auth.md).
+Guide: [docs/agents/better-auth.md](docs/agents/better-auth.md)

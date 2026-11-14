@@ -23,7 +23,7 @@ function LocaleFlag({ locale }: { locale: Locale }) {
   return <Flag aria-hidden className="size-3.5 rounded-xs" />
 }
 
-export function NavUserLocaleMenu() {
+export function LocaleSwitcher() {
   const currentLocale = useLocale()
   const t = useTranslations("common")
   const [isPending, startTransition] = useTransition()

@@ -9,17 +9,16 @@ Thanks for helping improve Dimah Starter. Bug reports, fixes and documentation i
 
 ## Setup
 
-Follow [Quick start](./README.md#quick-start) to run the app locally with your own PostgreSQL database.
+Follow [Quick start](./README.md#quick-start). `docker compose up -d --wait` gives you a local PostgreSQL that matches `.env.example`.
 
 ## How the code is organized
 
-Read [`AGENTS.md`](./AGENTS.md) first. It is short, and it links to the guide for each area in [`docs/agents/`](./docs/agents). Those guides apply to people and AI agents alike:
+Read [`AGENTS.md`](./AGENTS.md) first: the commands, the rules every change follows, and which guide in [`docs/agents/`](./docs/agents/README.md) covers the area you are changing. The guides are written for people and AI agents alike. In short:
 
-- Core logic goes in `packages/`; routes, actions and feature UI go in `apps/web`.
-- Inline by default — add a file only when code is reused or is a segment's single source of truth.
-- Writes are Server Actions that call `auth.api` or the oRPC router; reads are `'use cache'` functions with tags.
+- Core logic goes in `packages/`; routes, Server Actions and feature UI go in `apps/web`.
+- Writes are Server Actions that call `auth.api` or the oRPC router. Reads of private data are gated, then go through tagged `'use cache'` functions.
 - UI copy goes in `packages/i18n/src/messages/` in **both** `en` and `fa`.
-- Next.js APIs: read the docs bundled in `apps/web/node_modules/next/dist/docs/` — this version is newer than most references online.
+- Next.js is 16.4 with Cache Components. Its docs for this exact version are in `apps/web/node_modules/next/dist/docs/`.
 
 ## Pull requests
 
@@ -28,6 +27,7 @@ Read [`AGENTS.md`](./AGENTS.md) first. It is short, and it links to the guide fo
 
    ```bash
    pnpm format:check
+   pnpm docs:check
    pnpm lint
    pnpm typecheck
    pnpm test
@@ -35,6 +35,7 @@ Read [`AGENTS.md`](./AGENTS.md) first. It is short, and it links to the guide fo
    pnpm test:e2e   # optional locally; CI runs it
    ```
 
-3. Update the matching guide in `docs/agents/` or a package README when you change how something works.
+3. Add a test for logic that would hurt if it broke silently — [testing.md](./docs/agents/testing.md).
+4. Update the matching guide in `docs/agents/` or the package README when you change how something works.
 
 By contributing, you agree that your contributions are licensed under the [MIT License](./LICENSE).

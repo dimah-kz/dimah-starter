@@ -1,13 +1,13 @@
 ---
-description: Messages and locale — open i18n.md for detail
-globs: packages/i18n/**/*.json,packages/i18n/src/**/*.ts,apps/**/src/i18n/**/*
+description: Messages, locales, right-to-left — open i18n.md
+globs: packages/i18n/**,apps/web/src/i18n/**,apps/web/src/components/locale/**
 alwaysApply: false
 ---
 
 # i18n
 
-Product copy in `@repo/i18n` — no hardcoded strings in UI or Server Actions. URLs stay English in `*-routes.ts`.
+- Every user-facing string is a message key; add it to `en` and `fa` in the same change.
+- Locale is the `NEXT_LOCALE` cookie; `lang`/`dir` only on `<html>`.
+- `pnpm typecheck` catches unknown keys; `pnpm --filter @repo/i18n test` catches a locale missing keys or placeholders.
 
-Cookie locale (`NEXT_LOCALE`); no `[locale]` segment. `lang`/`dir` on root layout only.
-
-**Detail (Read):** [docs/agents/i18n.md](docs/agents/i18n.md).
+Guide: [docs/agents/i18n.md](docs/agents/i18n.md)

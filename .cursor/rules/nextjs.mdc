@@ -1,15 +1,13 @@
 ---
-description: Next.js 16 — always read node_modules docs first; never web-search
-globs: apps/**/next.config.ts,apps/**/**/cache-tags.ts,apps/**/src/app/**/lib/get-*.ts
+description: Next.js 16.4 rendering and caching — open nextjs.md
+globs: apps/web/src/app/**/*.tsx,apps/web/src/app/**/lib/get-*.ts,apps/web/src/app/**/cache-tags.ts,apps/web/src/app/action/**,apps/web/next.config.ts
 alwaysApply: false
 ---
 
-# Next.js 16.4 (this repo)
+# Next.js
 
-**Cache Components** and **Partial Prefetching** are on. Dashboard routes stay request-time — do not set `ensureStatic = "navigation"` on a layout that reads the session.
+- Cache Components is on: no `export const dynamic` / `revalidate`, no `unstable_cache`. Check APIs in `apps/web/node_modules/next/dist/docs/`.
+- Request reads (`params`, `searchParams`, `cookies()`, `headers()`, session) go inside `<Suspense>`; nothing request-bound inside `'use cache'`.
+- After a write: `updateTag` for the actor, `revalidateTag(tag, "max")` for others, tags from `cache-tags.ts`.
 
-Training-data Next is **wrong** for this version.
-
-1. **Read first:** `apps/web` → `node_modules/next/dist/docs/` (see [apps/web/AGENTS.md](apps/web/AGENTS.md)).
-2. **Never** web-search Next.js APIs or guides.
-3. Repo conventions after that: [docs/agents/nextjs.md](docs/agents/nextjs.md), [docs/agents/caching.md](docs/agents/caching.md).
+Guide: [docs/agents/nextjs.md](docs/agents/nextjs.md)

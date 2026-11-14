@@ -5,6 +5,26 @@ body:
   - type: markdown
     attributes:
       value: Security issues go to a private advisory instead — see SECURITY.md.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Auth and sessions
+        - Organizations and roles
+        - Admin panel
+        - Dashboard and lists
+        - Uploads (storage)
+        - Email
+        - i18n and right-to-left
+        - UI components
+        - Product API (oRPC)
+        - Database and migrations
+        - Tooling, tests or CI
+        - Docs and agent guides
+        - Other
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:

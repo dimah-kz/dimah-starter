@@ -1,0 +1,13 @@
+---
+description: Public pages and metadata — open seo.md
+globs: apps/web/src/app/(marketing)/**,apps/web/src/app/layout.tsx,apps/web/src/app/sitemap.ts,apps/web/src/app/robots.ts,apps/web/src/app/opengraph-image.tsx,apps/web/src/app/manifest.ts
+alwaysApply: false
+---
+
+# SEO
+
+- Public pages go under `app/(marketing)/` with `title`, `description` and `alternates.canonical` in `generateMetadata`.
+- Don't set per-page `openGraph` / `twitter` objects: they replace the root ones and drop the share image.
+- Add indexable URLs to `sitemap.ts`; private pages get `robots: { index: false }`.
+
+Guide: [docs/agents/seo.md](docs/agents/seo.md)

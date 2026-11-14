@@ -70,4 +70,4 @@ Run it from any scheduler that has a checkout with dependencies installed:
 0 * * * * cd /srv/dimah-starter && pnpm storage:purge
 ```
 
-Serverless hosts such as Vercel only schedule HTTP requests. Use your platform's cron job, a server crontab, or a scheduled GitHub Actions workflow with the production `DATABASE_URL` and `S3_*` as secrets.
+Serverless hosts such as Vercel only schedule HTTP requests. Use a server crontab, your platform's cron job, or the included [`storage-purge.yml`](../../.github/workflows/storage-purge.yml) workflow: it runs hourly once the repository variable `STORAGE_PURGE` is `true` and the secrets it lists are set.

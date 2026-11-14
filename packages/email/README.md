@@ -3,3 +3,5 @@
 Transactional email for Better Auth. `sendAuthMail(kind, …)` sends the verification, password reset, and duplicate sign-up mail; `sendOrganizationInvitation` sends invitations. Sending goes through [Resend](https://resend.com); templates are React Email components with `en` / `fa` copy from `@repo/i18n` (`email.json`). Add product mail as another function in `src/messages.tsx`.
 
 In development, a missing `RESEND_API_KEY` prints the message to the server log instead of sending. Production needs `RESEND_API_KEY` and `EMAIL_FROM`.
+
+`src/messages.test.ts` renders every message in every locale and checks the link, the text direction and that no `{placeholder}` is left unfilled.
