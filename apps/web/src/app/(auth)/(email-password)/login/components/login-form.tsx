@@ -5,6 +5,7 @@ import { MailIcon } from "lucide-react"
 import { signInWithEmailAction } from "@/app/action/auth/sign-in-with-email-action"
 import { PasskeySignIn } from "@/app/(auth)/(email-password)/login/components/passkey-sign-in"
 import { AuthCrossLink } from "@/app/(auth)/components/auth-cross-link"
+import { OtherSignInMethods } from "@/app/(auth)/components/other-sign-in-methods"
 import { GoogleSignIn } from "@/app/(auth)/components/google-sign-in"
 import { AUTH_FORM_INITIAL_STATE } from "@/app/(auth)/lib/auth-form-state"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
@@ -110,18 +111,20 @@ export function LoginForm({
           ) : null}
         </div>
       </form>
-      <PasskeySignIn
-        redirectTo={redirectTo}
-        lastLoginMethod={lastLoginMethod}
-      />
-      {googleSignInEnabled ? (
-        <GoogleSignIn
+      <OtherSignInMethods>
+        <PasskeySignIn
           redirectTo={redirectTo}
-          returnPath={authRoutes.login()}
           lastLoginMethod={lastLoginMethod}
-          oauthError={oauthError}
         />
-      ) : null}
+        {googleSignInEnabled ? (
+          <GoogleSignIn
+            redirectTo={redirectTo}
+            returnPath={authRoutes.login()}
+            lastLoginMethod={lastLoginMethod}
+            oauthError={oauthError}
+          />
+        ) : null}
+      </OtherSignInMethods>
     </div>
   )
 }

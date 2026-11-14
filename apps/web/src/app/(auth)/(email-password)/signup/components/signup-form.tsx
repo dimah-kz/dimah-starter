@@ -4,6 +4,7 @@ import { useActionState } from "react"
 import { MailIcon, UserIcon } from "lucide-react"
 import { signUpWithEmailAction } from "@/app/action/auth/sign-up-with-email-action"
 import { GoogleSignIn } from "@/app/(auth)/components/google-sign-in"
+import { OtherSignInMethods } from "@/app/(auth)/components/other-sign-in-methods"
 import { AUTH_FORM_INITIAL_STATE } from "@/app/(auth)/lib/auth-form-state"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { Field, FieldGroup, FieldLabel } from "@repo/ui/components/field"
@@ -107,12 +108,14 @@ export function SignUpForm({
         />
       </form>
       {googleSignInEnabled ? (
-        <GoogleSignIn
-          redirectTo={redirectTo}
-          returnPath={authRoutes.signup()}
-          lastLoginMethod={lastLoginMethod}
-          oauthError={oauthError}
-        />
+        <OtherSignInMethods>
+          <GoogleSignIn
+            redirectTo={redirectTo}
+            returnPath={authRoutes.signup()}
+            lastLoginMethod={lastLoginMethod}
+            oauthError={oauthError}
+          />
+        </OtherSignInMethods>
       ) : null}
     </div>
   )

@@ -7,7 +7,6 @@ import { GoogleMark } from "@/components/google-mark"
 import { Alert, AlertDescription } from "@repo/ui/components/alert"
 import { Badge } from "@repo/ui/components/badge"
 import { Button } from "@repo/ui/components/button"
-import { Marker, MarkerContent } from "@repo/ui/components/marker"
 import { Spinner } from "@repo/ui/components/spinner"
 import { useTranslations } from "next-intl"
 
@@ -36,10 +35,7 @@ export function GoogleSignIn({
   const formError = state.formError ?? callbackError
 
   return (
-    <div className="flex flex-col gap-4 pt-1">
-      <Marker variant="separator">
-        <MarkerContent>{t("continueWith")}</MarkerContent>
-      </Marker>
+    <div className="flex flex-col gap-3">
       {formError ? (
         <Alert variant="destructive">
           <AlertDescription>{formError}</AlertDescription>
