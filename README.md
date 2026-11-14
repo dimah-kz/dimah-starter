@@ -62,19 +62,19 @@ The rules behind it — what to cache, which tag to expire, why sessions are nev
 
 ## What's inside
 
-| Area              | Included                                                                                                          |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Auth**          | Email + password, Google sign-in, email verification, password reset, session list and revoke, rate limiting      |
-| **Organizations** | Create and switch organizations, invite by email, owner / admin / member roles, organization logo, delete         |
-| **Admin panel**   | Search and filter users, ban / unban, platform roles, organizations overview                                      |
-| **Account**       | Profile and avatar, password change, active sessions                                                              |
-| **Uploads**       | Direct-to-bucket uploads on any S3-compatible storage (R2, S3, MinIO) with [dimah-s3](https://s3.dimah.dev)       |
-| **Email**         | Transactional email with [Resend](https://resend.com) and React Email; printed to the log in development          |
-| **i18n**          | [next-intl](https://next-intl.dev), English and Persian, RTL, localized dates and numbers, translated auth errors |
-| **Product API**   | [oRPC](https://orpc.dev) router in `@repo/api`, called in-process from Server Actions or over HTTP                |
-| **UI**            | [shadcn/ui](https://ui.shadcn.com) on Base UI, [ReUI](https://reui.io), Tailwind CSS 4, dark mode                 |
-| **SEO**           | Metadata, Open Graph image, sitemap, robots, JSON-LD and a public landing page                                    |
-| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest unit tests, Playwright e2e, Turborepo caching, GitHub Actions CI      |
+| Area              | Included                                                                                                                                              |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Auth**          | Email + password, Google sign-in, two-factor (authenticator app + backup codes), email verification, password reset, rate limiting                    |
+| **Organizations** | Create and switch organizations, invite by email, owner / admin / member roles, organization logo, delete                                             |
+| **Admin panel**   | Search and filter users, ban / unban, platform roles, organizations overview                                                                          |
+| **Account**       | Profile and avatar, email change, password change or set, two-factor setup, connected accounts, active sessions, theme and language, account deletion |
+| **Uploads**       | Direct-to-bucket uploads on any S3-compatible storage (R2, S3, MinIO) with [dimah-s3](https://s3.dimah.dev)                                           |
+| **Email**         | Transactional email with [Resend](https://resend.com) and React Email; printed to the log in development                                              |
+| **i18n**          | [next-intl](https://next-intl.dev), English and Persian, RTL, localized dates and numbers, translated auth errors                                     |
+| **Product API**   | [oRPC](https://orpc.dev) router in `@repo/api`, called in-process from Server Actions or over HTTP                                                    |
+| **UI**            | [shadcn/ui](https://ui.shadcn.com) on Base UI, [ReUI](https://reui.io), Tailwind CSS 4, dark mode                                                     |
+| **SEO**           | Metadata, Open Graph image, sitemap, robots, JSON-LD and a public landing page                                                                        |
+| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest unit tests, Playwright e2e, Turborepo caching, GitHub Actions CI                                          |
 
 **Stack:** Next.js 16 · React 19 · TypeScript · Better Auth · Drizzle ORM · PostgreSQL · oRPC · Tailwind CSS 4 · shadcn/ui · next-intl · Resend · Turborepo · pnpm
 
@@ -208,7 +208,7 @@ Billing, a marketing CMS and analytics are left to you, so you can pick the prov
 - **Public URL** — set `BETTER_AUTH_URL` to the public origin. `http://localhost:3000` is trusted only outside production.
 - **Postgres on serverless** — use a **pooled** `DATABASE_URL` (Neon pooler, PgBouncer, Supabase pooler). Direct `5432` connections run out under bursty functions.
 - **Session cookie cache** — `getSession` may use a cookie for up to **5 minutes**. After a ban or role change, the affected user can still look signed-in until that cache expires.
-- **Auth rate limit** — counters live in Postgres so they survive serverless. Better Auth limits its HTTP routes (`/api/auth`); the sign-in, sign-up, password-reset and Google Server Actions call `consumeRateLimit` first, per address and per account. Behind more than one proxy, set Better Auth `advanced.ipAddress` so the client IP is right.
+- **Auth rate limit** — counters live in Postgres so they survive serverless. Better Auth limits its HTTP routes (`/api/auth`); the sign-in, sign-up, password-reset, two-factor and Google Server Actions call `consumeRateLimit` first, per address and per account. Behind more than one proxy, set Better Auth `advanced.ipAddress` so the client IP is right.
 - **Security headers** — `next.config.ts` denies framing and sets `nosniff`, `Referrer-Policy`, `Permissions-Policy` and, in production, HSTS. Add a script CSP if you need one.
 - **SEO** — canonicals, `sitemap.xml`, `robots.txt`, `llms.txt` and the share image use `BETTER_AUTH_URL`. Set `GOOGLE_SITE_VERIFICATION`, then submit `/sitemap.xml` in Search Console. Public pages go in `apps/web/src/app/(marketing)/` — [seo.md](./docs/agents/seo.md).
 - **Email** — set `RESEND_API_KEY` and `EMAIL_FROM`. Without a key, development prints the message (including the link) to the server log.

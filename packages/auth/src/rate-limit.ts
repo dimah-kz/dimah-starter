@@ -27,6 +27,8 @@ const rules = {
   ],
   // Each call stores an OAuth state row.
   socialSignIn: [{ by: "ip", max: 10 }],
+  // Code guesses. Better Auth also locks an account after 10 failures in a row.
+  twoFactor: [{ by: "ip", max: 10 }],
 } as const satisfies Record<string, readonly Bucket[]>
 
 /**

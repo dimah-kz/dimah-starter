@@ -16,10 +16,22 @@ async function sentMail() {
 }
 
 describe.each(locales)("%s", (locale) => {
-  it.each(["verify", "reset", "signUpAttempt"] as const)(
+  it.each([
+    "verify",
+    "reset",
+    "signUpAttempt",
+    "changeEmailConfirm",
+    "changeEmailVerify",
+    "deleteAccount",
+  ] as const)(
     "%s mail carries the link in the locale's direction",
     async (kind) => {
-      await sendAuthMail(kind, { to: "ada@example.com", url, locale })
+      await sendAuthMail(kind, {
+        to: "ada@example.com",
+        newEmail: "ada@new.example.com",
+        url,
+        locale,
+      })
       const mail = await sentMail()
 
       expect(mail.to).toBe("ada@example.com")
@@ -30,6 +42,19 @@ describe.each(locales)("%s", (locale) => {
       expect(mail.html).toContain(`dir="${getLocaleDirection(locale)}"`)
     }
   )
+
+  it("email-change confirmation names the new address", async () => {
+    await sendAuthMail("changeEmailConfirm", {
+      to: "ada@example.com",
+      newEmail: "ada@new.example.com",
+      url,
+      locale,
+    })
+    const mail = await sentMail()
+
+    expect(mail.to).toBe("ada@example.com")
+    expect(mail.text).toContain("ada@new.example.com")
+  })
 
   it("invitation names the organization and the inviter", async () => {
     await sendOrganizationInvitation({

@@ -52,13 +52,24 @@ function actionMail(
   })
 }
 
-/** Better Auth link mail; `kind` picks the `email.json` copy. */
+type AuthMailKind =
+  | "verify"
+  | "reset"
+  | "signUpAttempt"
+  | "changeEmailConfirm"
+  | "changeEmailVerify"
+  | "deleteAccount"
+
+/**
+ * Better Auth link mail; `kind` picks the `email.json` copy. `newEmail` fills
+ * `{newEmail}` in the email-change confirmation sent to the current address.
+ */
 export function sendAuthMail(
-  kind: "verify" | "reset" | "signUpAttempt",
-  { to, url, locale }: ActionEmailInput
+  kind: AuthMailKind,
+  { to, url, locale, newEmail = to }: ActionEmailInput & { newEmail?: string }
 ) {
   const copy = emailMessages(locale)[kind]
-  const values = { app: appName(locale), email: to }
+  const values = { app: appName(locale), email: to, newEmail }
 
   return actionMail({
     to,

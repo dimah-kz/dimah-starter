@@ -2,11 +2,11 @@
   "nav": {
     "sidebar": {
       "dashboard": "داشبورد",
-      "account": "حساب کاربری",
       "platform": "پلتفرم",
       "organization": "سازمان",
       "organizationManagement": "مدیریت سازمان",
-      "platformManagement": "مدیریت پلتفرم"
+      "platformManagement": "مدیریت پلتفرم",
+      "accountSettings": "تنظیمات حساب"
     },
     "organizationSwitcher": {
       "personalAccount": "حساب شخصی",
@@ -29,6 +29,18 @@
     "members": "اعضا",
     "invitations": "دعوت‌ها",
     "settings": "تنظیمات"
+  },
+  "accountTabs": {
+    "profile": "نمایه",
+    "security": "امنیت",
+    "sessions": "نشست‌ها",
+    "preferences": "ترجیحات"
+  },
+  "accountTabDescriptions": {
+    "profile": "دیگران شما را چگونه می‌بینند و ما چگونه با شما در تماس هستیم.",
+    "security": "رمز عبور، ورود دومرحله‌ای و حساب‌های متصل.",
+    "sessions": "دستگاه‌هایی که وارد حساب شما شده‌اند.",
+    "preferences": "پوسته و زبان در این مرورگر."
   },
   "organizationManage": {
     "avatar": {
@@ -98,19 +110,6 @@
     "cancelFailed": "لغو دعوت ممکن نشد.",
     "cancelFor": "لغو دعوت {email}"
   },
-  "accountSettings": {
-    "back": "بازگشت",
-    "sections": {
-      "account": "حساب کاربری",
-      "security": "امنیت"
-    },
-    "security": "امنیت",
-    "securityDescription": "رمز عبور و دستگاه‌های واردشده",
-    "password": "رمز عبور",
-    "passwordDescription": "تغییر رمز عبور این حساب",
-    "sessions": "نشست‌های فعال",
-    "sessionsDescription": "دستگاه‌هایی که وارد حساب شده‌اند را ببینید"
-  },
   "adminUserManage": {
     "rowActions": "عملیات {name}",
     "changeRole": "تغییر نقش پلتفرم",
@@ -130,7 +129,11 @@
   "breadcrumbSegments": {
     "dashboard": "داشبورد",
     "account": "حساب کاربری",
+    "profile": "نمایه",
     "security": "امنیت",
+    "sessions": "نشست‌ها",
+    "preferences": "ترجیحات",
+    "delete": "حذف",
     "admin": "مدیریت",
     "users": "کاربران",
     "organizations": "سازمان‌ها",

@@ -34,7 +34,7 @@
     "react": "catalog:",
     "react-day-picker": "^10.0.2",
     "react-dom": "catalog:",
-    "react-resizable-panels": "^4.22.1",
+    "react-resizable-panels": "^4.23.0",
     "recharts": "3.10.1",
     "shadcn": "^4.23.0",
     "shiki": "^4.6.0",

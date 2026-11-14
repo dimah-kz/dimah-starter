@@ -1,6 +1,6 @@
 import { cache } from "react"
 import { io } from "next/cache"
-import { headers } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { withAuthRedirect } from "@/app/(auth)/lib/auth-redirect"
@@ -10,10 +10,28 @@ import { auth } from "@repo/auth"
 /**
  * Better Auth checks expiry with `Date.now()`. Partial Prefetching rejects that
  * clock read until the Dynamic stage, so render-time auth waits on `io()` first.
+ *
+ * The Cookie header is rebuilt from `cookies()`. When a Server Action's
+ * response re-renders the route, Next updates `cookies()` with what the action
+ * set but not the raw header, so a session Better Auth just replaced (turning
+ * two-factor on or off, changing the password) would read as the deleted one.
  */
 export async function dashboardAuthHeaders() {
   await io()
-  return headers()
+  const [requestHeaders, cookieStore] = await Promise.all([
+    headers(),
+    cookies(),
+  ])
+  const authHeaders = new Headers(requestHeaders)
+
+  authHeaders.set(
+    "cookie",
+    cookieStore
+      .getAll()
+      .map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
+      .join("; ")
+  )
+  return authHeaders
 }
 
 /** Request-scoped session read. Not Next `'use cache'` — never store session in the data cache. */

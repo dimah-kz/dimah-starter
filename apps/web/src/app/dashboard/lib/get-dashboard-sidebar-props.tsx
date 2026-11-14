@@ -1,4 +1,4 @@
-import { HomeIcon, UserCircleIcon } from "lucide-react"
+import { HomeIcon } from "lucide-react"
 import type { NavMainGroup } from "@/app/dashboard/components/sidebar/nav-main"
 import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import {
@@ -33,15 +33,8 @@ function buildNavGroups(input: {
     },
   ]
 
-  const mainItems = groups[0]!.items
-
+  // Account settings are in the user menu, so every organization reaches them.
   if (input.isPersonalAccount) {
-    mainItems.push({
-      titleKey: "nav.sidebar.account",
-      url: dashboardRoutes.account(),
-      icon: <UserCircleIcon className="size-4" />,
-    })
-
     if (input.canAccessAdmin) {
       groups.push({
         id: "platform",

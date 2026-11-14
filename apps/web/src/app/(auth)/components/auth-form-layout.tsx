@@ -23,6 +23,10 @@ const footers = {
     target: authRoutes.login(),
     link: "verifyEmail.backToSignIn",
   },
+  twoFactor: {
+    target: authRoutes.login(),
+    link: "twoFactor.backToSignIn",
+  },
 } as const
 
 type AuthFormSection = keyof typeof footers | "resetPassword"

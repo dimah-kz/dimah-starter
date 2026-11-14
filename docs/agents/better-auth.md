@@ -21,8 +21,12 @@ What the config in `auth.ts` means for the app:
 - **Email/password:** `requireEmailVerification` blocks sign-in until the link is opened. Password reset and password change both revoke the other sessions.
 - **Google:** on when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. `googleSignInEnabled` hides the button otherwise. The callback is `/api/auth/callback/google`.
 - **Sessions:** the cookie cache is 5 minutes, so a ban or role change can take that long to show for the affected user. `freshAge: 0` lets the account page list sessions.
+- **Two-factor:** an authenticator app (TOTP) with backup codes. Better Auth asks for it after email-and-password sign-in only; Google sign-in skips it, so the account page needs a password before it offers two-factor. `signInWithEmailAction` sends those accounts to `/two-factor`, where `verifyTwoFactorAction` checks the code. Better Auth locks an account for 15 minutes after 10 wrong codes in a row. Turning two-factor on or off replaces the session.
+- **Email change:** the current address confirms first (`changeEmailConfirm` mail), then the new one is verified (`changeEmailVerify`). The address changes in Better Auth's verify-email route, which no action follows, so the account page reads it from the session and cached reads that show it (the admin user list) catch up when their cache life ends.
+- **Account deletion:** the mail links to `/dashboard/account/delete`, which asks once more before `deleteAccountAction` deletes; a mail scanner opening the link deletes nothing. `beforeDelete` refuses while the user is an organization's only owner (`listSoleOwnedOrganizations`).
+- **Connected accounts:** the security page links and unlinks Google (`linkSocialAccount`, `unlinkAccount`). Better Auth refuses to link an account with a different email or to unlink the last way to sign in.
 - **Origins:** `BETTER_AUTH_URL` is the trusted origin; `http://localhost:3000` is trusted only outside production.
-- **Mail:** verification, reset, duplicate sign-up and invitation mail go through `@repo/email`. Without `RESEND_API_KEY`, development prints them to the server log.
+- **Mail:** verification, reset, duplicate sign-up, email-change, account-deletion and invitation mail go through `@repo/email`. Without `RESEND_API_KEY`, development prints them to the server log.
 
 After changing the instance config (plugins, fields), regenerate the tables:
 
@@ -52,6 +56,7 @@ Better Auth limits its own HTTP routes (`/api/auth`) with counters in `auth.rate
 - **Sign-in:** per account and per IP.
 - **Reset:** per account and per inbox.
 - **Sign-up and Google sign-in:** per IP.
+- **Two-factor code:** per IP, on top of Better Auth's own lock per account.
 
 A new unauthenticated flow that sends mail or checks a password gets a rule. Behind more than one proxy, set `advanced.ipAddress` so the IP is the client's.
 
@@ -65,4 +70,4 @@ Default roles: organization `owner` / `admin` / `member`, platform `admin` / `us
 
 ## Sessions
 
-At render time, read the session with `auth.api.getSession({ headers: await dashboardAuthHeaders() })` — [nextjs.md § Session at render time](./nextjs.md#session-at-render-time). In a Server Action, use `auth.api.getSession({ headers: await headers() })`, or `createContext(headers).getSession()` when the action also calls the oRPC router, so the session is read once. `Session` is exported from `@repo/auth`.
+At render time, read the session with `auth.api.getSession({ headers: await dashboardAuthHeaders() })` — [nextjs.md § Session at render time](./nextjs.md#session-at-render-time). It rebuilds the Cookie header from `cookies()`: after an action that replaced the session (two-factor, password change), the re-render in the same response would otherwise send the deleted session. In a Server Action, use `auth.api.getSession({ headers: await headers() })`, or `createContext(headers).getSession()` when the action also calls the oRPC router, so the session is read once. `Session` is exported from `@repo/auth`.

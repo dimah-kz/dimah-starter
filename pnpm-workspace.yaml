@@ -30,7 +30,7 @@ catalog:
   tailwindcss: ^4.3.5
   "@tailwindcss/turbopack": ^4.3.5
   cn: ^0.5.2
-  lucide-react: ^1.72.0
+  lucide-react: ^1.73.0
   "@fuma-translate/react": 1.0.2
 
   # Testing

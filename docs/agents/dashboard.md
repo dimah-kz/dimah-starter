@@ -4,24 +4,24 @@ Read when you add or change a page under `apps/web/src/app/dashboard/`, its side
 
 ## Single sources of truth
 
-| What                       | Where (`apps/web/src/app/dashboard/…`)                                                                     |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| URLs                       | `lib/dashboard-routes.ts` (`dashboardRoutes`, `dashboardRouteSegments`)                                    |
-| Breadcrumb labels          | `dashboardRouteSegments` + `dashboard.breadcrumbSegments` in `packages/i18n/src/messages/*/dashboard.json` |
-| Cache tags                 | `lib/cache-tags.ts`                                                                                        |
-| Gates                      | `lib/dashboard-session.ts`                                                                                 |
-| Admin / manage nav entries | `admin/lib/admin-slices.ts`, `(organization)/manage/lib/organization-manage-tabs.ts`                       |
-| Sidebar sections           | `lib/sidebar-nav-sections.ts`, built from the two registries above                                         |
-| Copy                       | `packages/i18n/src/messages/*/dashboard.json`, `tables.json`, `account.json`                               |
+| What                | Where (`apps/web/src/app/dashboard/…`)                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| URLs                | `lib/dashboard-routes.ts` (`dashboardRoutes`, `dashboardRouteSegments`)                                             |
+| Breadcrumb labels   | `dashboardRouteSegments` + `dashboard.breadcrumbSegments` in `packages/i18n/src/messages/*/dashboard.json`          |
+| Cache tags          | `lib/cache-tags.ts`                                                                                                 |
+| Gates               | `lib/dashboard-session.ts`                                                                                          |
+| Section nav entries | `admin/lib/admin-slices.ts`, `(organization)/manage/lib/organization-manage-tabs.ts`, `account/lib/account-tabs.ts` |
+| Sidebar sections    | `lib/sidebar-nav-sections.ts`, built from the three registries above                                                |
+| Copy                | `packages/i18n/src/messages/*/dashboard.json`, `tables.json`, `account.json`                                        |
 
-The sidebar is the only navigation for the admin and manage areas: a page shows its own content, without a repeated tab bar or section title.
+The sidebar is the only navigation for the admin, manage and account areas: a page shows its own content, without a repeated tab bar or section title. Account settings open from the user menu (`components/sidebar/nav-user.tsx`), so they are reachable whichever organization is active.
 
 ## Add a page
 
-Copy the closest sibling: `admin/users/` for a platform-admin list, `(organization)/manage/members/` for an organization list, `account/` for the signed-in user's own settings.
+Copy the closest sibling: `admin/users/` for a platform-admin list, `(organization)/manage/members/` for an organization list, `account/security/` for the signed-in user's own settings. A setting is a `SettingsCard` (`apps/web/src/components/settings/settings-card.tsx`): title, control, and a footer with a hint and the action.
 
 1. **Route:** add the folder, then its URL in `dashboard-routes.ts` and its breadcrumb label in both locales.
-2. **Nav:** for an admin or manage page, add an entry with `icon`, `labelKey` and `href` to its registry.
+2. **Nav:** for an admin, manage or account page, add an entry with `icon`, `labelKey` and `href` to its registry.
 3. **Gate the page and its data.** `page.tsx` calls `requirePlatformAdmin()`, `requireOrganizationManager()` or `requireDashboardSession()`, inside `<Suspense>`. Its `get-*.ts` calls the same gate before the cached read. The layout gate only redirects; it does not keep the page's data out of the response.
 4. **Read:** `lib/get-*.ts` gates, then calls a `'use cache'` function tagged from `cache-tags.ts` — [nextjs.md](./nextjs.md#cached-reads).
 5. **Write:** one action per mutation in `apps/web/src/app/action/dashboard/<same path>/` — [better-auth.md § Writes](./better-auth.md#writes).

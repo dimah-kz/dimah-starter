@@ -1,0 +1,331 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "4a200235-826c-4bbd-bba7-e5f77ef23f02",
+  "prevIds": [
+    "75db1491-a37d-464a-a491-8e72d50a17b3"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "auth",
+        "two_factor"
+      ],
+      "writes": [
+        "s|tbl|auth.two_factor",
+        "n|tbl|auth.two_factor",
+        "e|tbl|auth.two_factor",
+        "n|rel|auth.two_factor",
+        "n|type|auth.two_factor",
+        "n|rel|auth.two_factor_pkey"
+      ],
+      "reads": [
+        "n|sch|auth"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "auth",
+        "user",
+        "two_factor_enabled"
+      ],
+      "writes": [
+        "s|col|auth.user.two_factor_enabled",
+        "n|col|auth.user.two_factor_enabled",
+        "e|col|auth.user.two_factor_enabled"
+      ],
+      "reads": [
+        "n|tbl|auth.user",
+        "n|sch|auth"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "two_factor",
+        "twoFactor_secret_idx"
+      ],
+      "writes": [
+        "s|idx|auth.twoFactor_secret_idx",
+        "n|idx|auth.twoFactor_secret_idx",
+        "e|idx|auth.twoFactor_secret_idx",
+        "n|rel|auth.twoFactor_secret_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.two_factor",
+        "n|sch|auth",
+        "n|col|auth.two_factor.secret"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "two_factor",
+        "twoFactor_userId_idx"
+      ],
+      "writes": [
+        "s|idx|auth.twoFactor_userId_idx",
+        "n|idx|auth.twoFactor_userId_idx",
+        "e|idx|auth.twoFactor_userId_idx",
+        "n|rel|auth.twoFactor_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.two_factor",
+        "n|sch|auth",
+        "n|col|auth.two_factor.user_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "auth",
+        "two_factor"
+      ],
+      "writes": [
+        "s|fk|auth.two_factor.two_factor_user_id_user_id_fkey",
+        "n|fk|auth.two_factor.two_factor_user_id_user_id_fkey",
+        "e|fk|auth.two_factor.two_factor_user_id_user_id_fkey",
+        "n|con|auth.two_factor.two_factor_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.two_factor",
+        "n|sch|auth",
+        "n|tbl|auth.user",
+        "n|sch|auth",
+        "n|col|auth.two_factor.user_id",
+        "n|col|auth.user.id",
+        "e|uniqueness|auth.user.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "name": "two_factor",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "secret",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "backup_codes",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "user_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "verified",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": "true",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "failed_verification_count",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "locked_until",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "user",
+        "name": "two_factor_enabled",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "twoFactor_secret_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "secret",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "twoFactor_userId_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "two_factor_user_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "user_id"
+        ],
+        "schemaTo": "auth",
+        "tableTo": "user",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "two_factor",
+        "name": "two_factor_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    }
+  ]
+}

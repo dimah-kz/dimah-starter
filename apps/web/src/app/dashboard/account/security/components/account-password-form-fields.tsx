@@ -7,26 +7,31 @@ import { useTranslations } from "next-intl"
 
 type AccountPasswordFormFieldsProps = {
   formId: string
+  /** `set` adds a first password, so there is no current one to ask for. */
+  mode: "change" | "set"
 }
 
 export function AccountPasswordFormFields({
   formId,
+  mode,
 }: AccountPasswordFormFieldsProps) {
   const t = useTranslations("account.password")
 
   return (
     <FieldGroup>
-      <Field>
-        <FieldLabel htmlFor={`${formId}-currentPassword`}>
-          {t("current")}
-        </FieldLabel>
-        <PasswordInput
-          id={`${formId}-currentPassword`}
-          name="currentPassword"
-          autoComplete="current-password"
-          required
-        />
-      </Field>
+      {mode === "change" ? (
+        <Field>
+          <FieldLabel htmlFor={`${formId}-currentPassword`}>
+            {t("current")}
+          </FieldLabel>
+          <PasswordInput
+            id={`${formId}-currentPassword`}
+            name="currentPassword"
+            autoComplete="current-password"
+            required
+          />
+        </Field>
+      ) : null}
       <Field>
         <FieldLabel htmlFor={`${formId}-newPassword`}>{t("new")}</FieldLabel>
         <PasswordInput

@@ -13,10 +13,12 @@ import { CheckIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useTransition } from "react"
 
-const localeOptions: Record<Locale, { label: string; Flag: typeof IR }> = {
-  en: { label: "English", Flag: US },
-  fa: { label: "فارسی", Flag: IR },
-}
+/** Each locale's own name and flag; the account preferences list them too. */
+export const localeOptions: Record<Locale, { label: string; Flag: typeof IR }> =
+  {
+    en: { label: "English", Flag: US },
+    fa: { label: "فارسی", Flag: IR },
+  }
 
 function LocaleFlag({ locale }: { locale: Locale }) {
   const { Flag } = localeOptions[locale]

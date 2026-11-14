@@ -4,7 +4,11 @@ import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import { getTranslations } from "next-intl/server"
 import { type AuthFormState } from "@/app/(auth)/lib/auth-form-state"
-import { normalizeAuthRedirectTarget } from "@/app/(auth)/lib/auth-redirect"
+import {
+  normalizeAuthRedirectTarget,
+  withAuthRedirect,
+} from "@/app/(auth)/lib/auth-redirect"
+import { authRoutes } from "@/app/(auth)/lib/auth-routes"
 import { getFormPassword, getFormString } from "@/components/form/form-parse"
 import { toAbsoluteAppUrl } from "@repo/auth/app-origin"
 import { auth, consumeRateLimit, getAuthApiErrorMessage } from "@repo/auth"
@@ -22,8 +26,10 @@ export async function signInWithEmailAction(
     return { formError: t("tooManyAttempts"), values: { email } }
   }
 
+  let needsSecondFactor: boolean
+
   try {
-    await auth.api.signInEmail({
+    const result = await auth.api.signInEmail({
       headers: requestHeaders,
       body: {
         email,
@@ -32,6 +38,8 @@ export async function signInWithEmailAction(
         rememberMe: true,
       },
     })
+    // Two-factor accounts get a short-lived challenge cookie, not a session.
+    needsSecondFactor = "twoFactorRedirect" in result
   } catch (error) {
     const t = await getTranslations("auth.errors")
     return {
@@ -40,5 +48,9 @@ export async function signInWithEmailAction(
     }
   }
 
-  redirect(redirectTo)
+  redirect(
+    needsSecondFactor
+      ? withAuthRedirect(authRoutes.twoFactor(), redirectTo)
+      : redirectTo
+  )
 }

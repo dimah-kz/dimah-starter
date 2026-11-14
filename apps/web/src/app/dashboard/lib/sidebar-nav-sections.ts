@@ -1,3 +1,4 @@
+import { accountTabs } from "@/app/dashboard/account/lib/account-tabs"
 import { adminSlices } from "@/app/dashboard/admin/lib/admin-slices"
 import { organizationManageTabs } from "@/app/dashboard/(organization)/manage/lib/organization-manage-tabs"
 import type { NavMainItem } from "@/app/dashboard/components/sidebar/nav-main"
@@ -36,6 +37,16 @@ export const platformNavSection: SidebarNavSection = {
   items: adminSlices.map(sliceToNavItem),
 }
 
+/** Every signed-in user has it, whichever organization is active. */
+export const accountNavSection: SidebarNavSection = {
+  id: "account",
+  pathPrefix: dashboardRoutes.accountRoot(),
+  titleKey: "nav.sidebar.accountSettings",
+  entryUrl: dashboardRoutes.accountProfile(),
+  backUrl: dashboardRoutes.home(),
+  items: accountTabs.map(sliceToNavItem),
+}
+
 export const organizationNavSection: SidebarNavSection = {
   id: "organization",
   pathPrefix: dashboardRoutes.organizationManageRoot(),
@@ -49,7 +60,7 @@ export function buildSidebarNavSections(input: {
   canAccessAdmin: boolean
   canManageActiveOrganization: boolean
 }): SidebarNavSection[] {
-  const sections: SidebarNavSection[] = []
+  const sections: SidebarNavSection[] = [accountNavSection]
 
   if (input.canAccessAdmin) {
     sections.push(platformNavSection)

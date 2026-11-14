@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffectEvent, useLayoutEffect, type ReactNode } from "react"
+import type { ReactNode } from "react"
+import { useCloseOnHide } from "@/lib/use-close-on-hide"
 import {
   Sheet,
   SheetContent,
@@ -27,17 +28,7 @@ export function ResponsiveFormOverlay({
   footer,
   children,
 }: ResponsiveFormOverlayProps) {
-  const closeOnHide = useEffectEvent(() => {
-    if (open) {
-      onOpenChange(false)
-    }
-  })
-
-  useLayoutEffect(() => {
-    return () => {
-      closeOnHide()
-    }
-  }, [])
+  useCloseOnHide(open, () => onOpenChange(false))
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

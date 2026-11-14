@@ -40,7 +40,7 @@ Blog posts and answers written for Next.js 13–15 describe a different caching 
 
 ## Session at render time
 
-Use `auth.api.getSession({ headers: await dashboardAuthHeaders() })`, or the gates in `apps/web/src/app/dashboard/lib/dashboard-session.ts`, which already do. `dashboardAuthHeaders()` awaits `io()` before `headers()`: Better Auth checks expiry with `Date.now()`, and Partial Prefetching rejects a clock read before the dynamic stage. Server Actions use `await headers()` directly. `React.cache()` around a session read is request-scoped and fine.
+Use `auth.api.getSession({ headers: await dashboardAuthHeaders() })`, or the gates in `apps/web/src/app/dashboard/lib/dashboard-session.ts`, which already do. `dashboardAuthHeaders()` awaits `io()` before `headers()`: Better Auth checks expiry with `Date.now()`, and Partial Prefetching rejects a clock read before the dynamic stage. It also rebuilds the Cookie header from `cookies()`, because after a Server Action Next updates `cookies()` with what the action set but not `headers()`. Server Actions use `await headers()` directly. `React.cache()` around a session read is request-scoped and fine.
 
 ## Cached reads
 

@@ -24,6 +24,7 @@ type LoginFormProps = {
   googleSignInEnabled: boolean
   lastLoginMethod?: string | null
   passwordReset?: boolean
+  accountDeleted?: boolean
   oauthError?: string | null
 }
 
@@ -32,6 +33,7 @@ export function LoginForm({
   googleSignInEnabled,
   lastLoginMethod = null,
   passwordReset = false,
+  accountDeleted = false,
   oauthError = null,
 }: LoginFormProps) {
   const t = useTranslations("auth.login")
@@ -50,9 +52,11 @@ export function LoginForm({
             <AlertDescription>{state.formError}</AlertDescription>
           </Alert>
         ) : null}
-        {passwordReset && !state.formError ? (
+        {(passwordReset || accountDeleted) && !state.formError ? (
           <Alert>
-            <AlertDescription>{t("passwordReset")}</AlertDescription>
+            <AlertDescription>
+              {passwordReset ? t("passwordReset") : t("accountDeleted")}
+            </AlertDescription>
           </Alert>
         ) : null}
         <FieldGroup>

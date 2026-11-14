@@ -34,5 +34,29 @@
     "body": "Someone tried to create an account using {email}. If this was you, sign in instead.",
     "action": "Sign in",
     "footer": "If this was not you, you can ignore this email."
+  },
+  "changeEmailConfirm": {
+    "subject": "Confirm your new email",
+    "preview": "Approve moving your {app} account to {newEmail}",
+    "heading": "Confirm the email change",
+    "body": "You asked to change the email of your {app} account from {email} to {newEmail}. Confirm, then open the link we send to the new address.",
+    "action": "Confirm change",
+    "footer": "If you did not ask for this, ignore this email and consider changing your password."
+  },
+  "changeEmailVerify": {
+    "subject": "Verify your new email",
+    "preview": "One last step to use {email} with {app}",
+    "heading": "Verify your new email",
+    "body": "Open this link to start signing in to {app} with {email}.",
+    "action": "Verify email",
+    "footer": "If you did not ask for this, you can ignore this email."
+  },
+  "deleteAccount": {
+    "subject": "Confirm account deletion",
+    "preview": "Confirm that you want to delete your {app} account",
+    "heading": "Delete your account",
+    "body": "You asked to delete the {app} account for {email}. Open the link to confirm. Deleting it removes your profile, sessions and memberships, and cannot be undone.",
+    "action": "Review and delete",
+    "footer": "If you did not ask for this, ignore this email and change your password. The link expires in one hour."
   }
 }

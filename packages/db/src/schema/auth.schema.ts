@@ -28,6 +28,7 @@ export const user = authSchema.table("user", {
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
   lastLoginMethod: text("last_login_method"),
+  twoFactorEnabled: boolean("two_factor_enabled").default(false),
 })
 
 export const session = authSchema.table(
@@ -145,6 +146,25 @@ export const invitation = authSchema.table(
   ]
 )
 
+export const twoFactor = authSchema.table(
+  "two_factor",
+  {
+    id: text("id").primaryKey(),
+    secret: text("secret").notNull(),
+    backupCodes: text("backup_codes").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    verified: boolean("verified").default(true),
+    failedVerificationCount: integer("failed_verification_count").default(0),
+    lockedUntil: timestamp("locked_until"),
+  },
+  (table) => [
+    index("twoFactor_secret_idx").on(table.secret),
+    index("twoFactor_userId_idx").on(table.userId),
+  ]
+)
+
 export const rateLimit = authSchema.table("rate_limit", {
   id: text("id").primaryKey(),
   key: text("key").notNull().unique(),
@@ -161,6 +181,7 @@ export const authRelations = defineRelationsPart(
     organization,
     member,
     invitation,
+    twoFactor,
     rateLimit,
   },
   (r) => ({
@@ -180,6 +201,10 @@ export const authRelations = defineRelationsPart(
       invitations: r.many.invitation({
         from: r.user.id,
         to: r.invitation.inviterId,
+      }),
+      twoFactors: r.many.twoFactor({
+        from: r.user.id,
+        to: r.twoFactor.userId,
       }),
     },
     session: {
@@ -221,6 +246,12 @@ export const authRelations = defineRelationsPart(
       }),
       user: r.one.user({
         from: r.invitation.inviterId,
+        to: r.user.id,
+      }),
+    },
+    twoFactor: {
+      user: r.one.user({
+        from: r.twoFactor.userId,
         to: r.user.id,
       }),
     },

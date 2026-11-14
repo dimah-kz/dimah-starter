@@ -2,11 +2,11 @@
   "nav": {
     "sidebar": {
       "dashboard": "Dashboard",
-      "account": "Account",
       "platform": "Platform",
       "organization": "Organization",
       "organizationManagement": "Organization management",
-      "platformManagement": "Platform management"
+      "platformManagement": "Platform management",
+      "accountSettings": "Account settings"
     },
     "organizationSwitcher": {
       "personalAccount": "Personal account",
@@ -29,6 +29,18 @@
     "members": "Members",
     "invitations": "Invitations",
     "settings": "Settings"
+  },
+  "accountTabs": {
+    "profile": "Profile",
+    "security": "Security",
+    "sessions": "Sessions",
+    "preferences": "Preferences"
+  },
+  "accountTabDescriptions": {
+    "profile": "How you appear to others and how we reach you.",
+    "security": "Your password, two-factor authentication and connected accounts.",
+    "sessions": "The devices signed in to your account.",
+    "preferences": "Theme and language for this browser."
   },
   "organizationManage": {
     "avatar": {
@@ -98,19 +110,6 @@
     "cancelFailed": "Could not cancel the invitation.",
     "cancelFor": "Cancel invitation for {email}"
   },
-  "accountSettings": {
-    "back": "Back",
-    "sections": {
-      "account": "Account",
-      "security": "Security"
-    },
-    "security": "Security",
-    "securityDescription": "Password and signed-in devices",
-    "password": "Password",
-    "passwordDescription": "Change the password for this account",
-    "sessions": "Active sessions",
-    "sessionsDescription": "Review devices signed in to your account"
-  },
   "adminUserManage": {
     "rowActions": "Actions for {name}",
     "changeRole": "Change platform role",
@@ -130,7 +129,11 @@
   "breadcrumbSegments": {
     "dashboard": "Dashboard",
     "account": "Account",
+    "profile": "Profile",
     "security": "Security",
+    "sessions": "Sessions",
+    "preferences": "Preferences",
+    "delete": "Delete",
     "admin": "Admin",
     "users": "Users",
     "organizations": "Organizations",

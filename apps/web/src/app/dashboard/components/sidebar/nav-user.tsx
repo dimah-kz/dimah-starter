@@ -6,6 +6,7 @@ import { logoutAction } from "@/app/action/dashboard/logout-action"
 import { LocaleSwitcher } from "@/components/locale/locale-switcher"
 import { ThemeSwitchItem } from "@/components/theme/theme-switch-item"
 import { useSidebarFlyoutSide } from "@/app/dashboard/components/sidebar/sidebar-side"
+import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import {
   Identity,
   IdentityAvatar,
@@ -28,7 +29,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@repo/ui/components/sidebar"
-import { ChevronsUpDownIcon, HomeIcon, LogOutIcon } from "lucide-react"
+import {
+  ChevronsUpDownIcon,
+  HomeIcon,
+  LogOutIcon,
+  UserRoundCogIcon,
+} from "lucide-react"
 import { useTranslations } from "next-intl"
 
 export type NavUserProfile = {
@@ -83,6 +89,12 @@ export function NavUser({ user }: { user: NavUserProfile }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+              <DropdownMenuItem
+                render={<Link href={dashboardRoutes.accountProfile()} />}
+              >
+                <UserRoundCogIcon />
+                {t("dashboard.nav.sidebar.accountSettings")}
+              </DropdownMenuItem>
               <DropdownMenuItem render={<Link href="/" />}>
                 <HomeIcon />
                 {t("common.goHome")}
