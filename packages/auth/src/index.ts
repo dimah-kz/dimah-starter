@@ -4,6 +4,5 @@ export {
   lastLoginMethodCookieName,
   type Session,
 } from "./auth"
-export { getAuthApiErrorMessage } from "./auth-api-error"
+export { getAuthApiErrorMessage, isAuthApiError } from "./auth-api-error"
 export { consumeRateLimit } from "./rate-limit"
-export { listSoleOwnedOrganizations } from "./sole-owned-organizations"

@@ -22,7 +22,6 @@ describe.each(locales)("%s", (locale) => {
     "signUpAttempt",
     "changeEmailConfirm",
     "changeEmailVerify",
-    "deleteAccount",
   ] as const)(
     "%s mail carries the link in the locale's direction",
     async (kind) => {

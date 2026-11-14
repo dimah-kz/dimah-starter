@@ -8,11 +8,11 @@
 | `scope.ts`            | Owner → scope: `user:{id}` or `org:{id}`                                                           |
 | `routes/index.ts`     | Flat route map and `routeOwners` (every route names its owner)                                     |
 | `routes/<group>/*.ts` | One file per route, grouped like `@repo/api`                                                       |
-| `objects.ts`          | `toOwnedPublicUrl`, `deleteRouteObjects`, `deleteOwnedObjects`                                     |
+| `objects.ts`          | `toOwnedPublicUrl`, `deleteRouteObjects`                                                           |
 | `public-url.ts`       | `toPublicUrl` / `fromPublicUrl` over `S3_PUBLIC_BASE_URL`                                          |
 | `s3-client.tsx`       | `S3ClientProvider`. Route names are inferred from `s3`                                             |
 
-Exports: `s3` (for the `/api/s3` handler), `toOwnedPublicUrl`, `deleteRouteObjects`, `deleteOwnedObjects`, `fromPublicUrl`, `type RouteName`; `@repo/storage/s3-client` exports `S3ClientProvider`.
+Exports: `s3` (for the `/api/s3` handler), `toOwnedPublicUrl`, `deleteRouteObjects`, `fromPublicUrl`, `type RouteName`; `@repo/storage/s3-client` exports `S3ClientProvider`.
 
 ## Routes
 
@@ -38,8 +38,6 @@ Remove is the same without `keep`. Cleanup runs after the write, so the record n
 1. Add `routes/<group>/<name>.ts` and spread the group into `routes/index.ts`.
 2. Name its owner in `routeOwners` (a missing owner is a type error).
 3. Use it from `useUpload({ route })`. The client picks the name up from `s3`.
-
-Deleting an owner (`deleteOrganizationAction`) calls `deleteOwnedObjects(owner, id)`, which removes every object in that scope as a `system` call. Both delete helpers page through the rows and log a failed batch without stopping.
 
 ## Environment
 

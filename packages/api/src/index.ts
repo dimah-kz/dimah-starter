@@ -1,10 +1,11 @@
-import { onError } from "@orpc/server"
+import { onError, ORPCError } from "@orpc/server"
 import { RPCHandler } from "@orpc/server/fetch"
 import {
   RequestLimitHandlerPlugin,
   SignalSyncHandlerPlugin,
 } from "@orpc/server/plugins"
-import { createContext } from "./base"
+import { consumeRateLimit } from "@repo/auth"
+import { createContext, type Context } from "./base"
 import { prefix } from "./prefix"
 import { router } from "./router"
 
@@ -16,11 +17,31 @@ export { router }
 /** Product JSON stays under 1 MiB. Object bytes go through `@repo/storage`. */
 const maxBodySize = 1024 * 1024
 
-const handler = new RPCHandler(router, {
+const handler = new RPCHandler<Context>(router, {
   interceptors: [
     onError((error) => {
-      console.error(error)
+      // Refusals (input, auth, limits) are the caller's; log what broke here.
+      if (
+        !(error instanceof ORPCError) ||
+        error.code === "INTERNAL_SERVER_ERROR"
+      ) {
+        console.error(error)
+      }
     }),
+    async ({ context, next }) => {
+      // Browsers label requests another site makes. The API serves this site
+      // and non-browser clients; to serve another site's browser app, add
+      // `CORSHandlerPlugin` for its origin and let it through here.
+      if (context.headers.get("sec-fetch-site") === "cross-site") {
+        throw new ORPCError("FORBIDDEN")
+      }
+
+      if (!(await consumeRateLimit("api", context.headers))) {
+        throw new ORPCError("TOO_MANY_REQUESTS")
+      }
+
+      return next()
+    },
   ],
   plugins: [
     new RequestLimitHandlerPlugin({ maxBodySize }),

@@ -3,7 +3,7 @@ import type { S3ServerCallOptions } from "@dimah-s3/server"
 import { toPublicUrl } from "./public-url"
 import { routeOwners, type RouteName } from "./routes"
 import { bucket, s3 } from "./s3"
-import { toScope, type Owner } from "./scope"
+import { toScope } from "./scope"
 
 /**
  * Public URL of `key` when it is an active `route` object of `ownerId`. The
@@ -59,29 +59,12 @@ export async function deleteRouteObjects(input: {
 }
 
 /**
- * Deletes every object of an owner that no longer exists, such as a deleted
- * organization. Nobody can pass its route guards any more, so this runs as a
- * `system` call. Never throws; failures are logged.
- */
-export async function deleteOwnedObjects(owner: Owner, ownerId: string) {
-  await deleteScopeObjects(
-    { scope: toScope(owner, ownerId) },
-    {
-      locals:
-        owner === "organization"
-          ? { system: true, organizationId: ownerId }
-          : { system: true, userId: ownerId },
-    }
-  )
-}
-
-/**
- * Deletes the active objects of `scope` (of one `route` when given) except
- * `keep`, one page per `deleteMany`. A failed batch is logged and the sweep
+ * Deletes the active `route` objects of `scope` except `keep`, one page per
+ * `deleteMany`. A failed batch is logged and the sweep
  * goes on; a failed listing ends it.
  */
 async function deleteScopeObjects(
-  filter: { scope: string; route?: RouteName; keep?: string },
+  filter: { scope: string; route: RouteName; keep?: string },
   options: S3ServerCallOptions
 ) {
   const { scope, route, keep } = filter

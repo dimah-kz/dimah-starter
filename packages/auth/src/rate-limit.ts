@@ -31,6 +31,9 @@ const rules = {
   twoFactor: [{ by: "ip", max: 10 }],
   // Each call stores a WebAuthn challenge row; a challenge works once.
   passkeySignIn: [{ by: "ip", max: 10 }],
+  // HTTP calls to the product API (`/api/rpc`). In-process calls from Server
+  // Actions do not count.
+  api: [{ by: "ip", max: 300 }],
 } as const satisfies Record<string, readonly Bucket[]>
 
 /**

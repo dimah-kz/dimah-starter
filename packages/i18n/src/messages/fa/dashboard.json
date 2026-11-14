@@ -54,8 +54,7 @@
   },
   "organizationSettings": {
     "sections": {
-      "general": "عمومی",
-      "delete": "حذف"
+      "general": "عمومی"
     },
     "profile": {
       "title": "پروفایل سازمان",
@@ -67,16 +66,6 @@
       "saving": "در حال ذخیره…",
       "saved": "پروفایل سازمان به‌روزرسانی شد.",
       "saveFailed": "به‌روزرسانی پروفایل سازمان ممکن نشد."
-    },
-    "delete": {
-      "title": "حذف سازمان",
-      "navDescription": "حذف دائمی این سازمان",
-      "confirmTitle": "حذف سازمان",
-      "confirmDescription": "«{name}» برای همیشه حذف می‌شود. این کار قابل بازگشت نیست.",
-      "confirm": "حذف سازمان",
-      "deleting": "در حال حذف…",
-      "deleted": "سازمان حذف شد.",
-      "failed": "حذف سازمان ممکن نشد."
     }
   },
   "memberManage": {
@@ -133,7 +122,6 @@
     "security": "امنیت",
     "sessions": "نشست‌ها",
     "preferences": "ترجیحات",
-    "delete": "حذف",
     "admin": "مدیریت",
     "users": "کاربران",
     "organizations": "سازمان‌ها",

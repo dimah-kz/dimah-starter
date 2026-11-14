@@ -54,8 +54,7 @@
   },
   "organizationSettings": {
     "sections": {
-      "general": "General",
-      "delete": "Delete"
+      "general": "General"
     },
     "profile": {
       "title": "Organization profile",
@@ -67,16 +66,6 @@
       "saving": "Saving…",
       "saved": "Organization profile updated.",
       "saveFailed": "Could not update the organization profile."
-    },
-    "delete": {
-      "title": "Delete organization",
-      "navDescription": "Permanently remove this organization",
-      "confirmTitle": "Delete organization",
-      "confirmDescription": "“{name}” will be permanently deleted. This cannot be undone.",
-      "confirm": "Delete organization",
-      "deleting": "Deleting…",
-      "deleted": "Organization deleted.",
-      "failed": "Could not delete the organization."
     }
   },
   "memberManage": {
@@ -133,7 +122,6 @@
     "security": "Security",
     "sessions": "Sessions",
     "preferences": "Preferences",
-    "delete": "Delete",
     "admin": "Admin",
     "users": "Users",
     "organizations": "Organizations",

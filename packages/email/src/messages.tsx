@@ -58,7 +58,6 @@ type AuthMailKind =
   | "signUpAttempt"
   | "changeEmailConfirm"
   | "changeEmailVerify"
-  | "deleteAccount"
 
 /**
  * Better Auth link mail; `kind` picks the `email.json` copy. `newEmail` fills

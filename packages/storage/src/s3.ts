@@ -34,7 +34,6 @@ export const s3 = dimahS3({
   // Reads the session once per call. Route guards and `resolveScope` use `locals`.
   guard: async ({ request, locals }) => {
     if (!configuredBucket) throw new Error("[storage] S3_BUCKET is not set")
-    if (locals.system) return
     const session = await auth.api.getSession({ headers: request.headers })
     if (!session) throw s3Error("UNAUTHORIZED")
     return {

@@ -22,12 +22,16 @@ packages/api/src/
 
 Reference: `routers/health/ping.ts` and `ping.test.ts`.
 
-| Builder  | Use                                                                       |
-| -------- | ------------------------------------------------------------------------- |
-| `pub`    | Session optional. Call `await context.getSession()` only when you need it |
-| `authed` | Requires a session (`context.session`); throws `UNAUTHORIZED` without one |
+| Builder                     | Use                                                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `pub`                       | Session optional. Call `await context.getSession()` only when you need it                                           |
+| `authed`                    | Requires a session (`context.session`); throws `UNAUTHORIZED` without one                                           |
+| `member`                    | Requires an active organization the caller belongs to (`context.organizationId`); throws `FORBIDDEN` otherwise      |
+| `.use(requirePermission())` | On `member`: the caller's role must grant the actions, e.g. `member.use(requirePermission({ member: ["update"] }))` |
 
-Validate input and output with Zod (`.input(z.object(…))`, `.output(…)`). Check product permissions inside the procedure. For organization-level rights, `auth.api.hasPermission({ headers: context.headers, body })` covers it.
+Validate input and output with Zod (`.input(z.object(…))`, `.output(…)`).
+
+**Tenancy.** Organization data goes through `member`. Read and write it by `context.organizationId`, never by an organization id from the input, and check any record id from the input against that organization in the same query. That is what keeps one tenant out of another's data; a test beside the procedure should prove it. Role checks use `requirePermission` with the statements in `packages/auth/src/organization-access.ts`; add a resource there before you check it.
 
 ## Calling it
 
@@ -46,4 +50,7 @@ Validate input and output with Zod (`.input(z.object(…))`, `.output(…)`). Ch
 - **Endpoint:** `apps/web/src/app/api/rpc/[[...rest]]/route.ts` mounts `handleRequest` at `/api/rpc`.
 - **Methods:** it accepts `POST`, `PUT`, `PATCH` and `DELETE`. `GET` stays off because a cookie-authenticated `GET` is open to cross-site requests.
 - **Body size:** bodies over 1 MiB get `PAYLOAD_TOO_LARGE`. Files go through `@repo/storage`, not the API.
+- **Other sites:** a browser request another site makes (`Sec-Fetch-Site: cross-site`) gets `FORBIDDEN`. Sessions are `SameSite=Lax` cookies, so such requests carry no session anyway; this also keeps public procedures to this site. Non-browser clients send no such header. To serve another site's browser app, add `CORSHandlerPlugin` for its origin and allow it in the interceptor in `src/index.ts`.
+- **Rate limit:** 300 requests a minute per IP (the `api` rule in `packages/auth/src/rate-limit.ts`), then `TOO_MANY_REQUESTS`. In-process calls from Server Actions do not count.
+- **Errors:** refusals (`BAD_REQUEST`, `UNAUTHORIZED`, `FORBIDDEN`, …) go back to the caller without a log line. Anything else is logged and returned as `INTERNAL_SERVER_ERROR` without its message.
 - **Clients:** client components import `@repo/api/client` only. The package root pulls in auth and the database.

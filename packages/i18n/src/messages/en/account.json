@@ -35,30 +35,6 @@
       "saveFailed": "Could not start the email change."
     }
   },
-  "delete": {
-    "title": "Delete account",
-    "description": "Permanently delete your account and everything tied to it: your profile, sessions and organization memberships.",
-    "hint": "We email you a link to confirm. This cannot be undone.",
-    "action": "Delete account",
-    "blockedTitle": "You still own organizations",
-    "blocked": "You are the only owner of {organizations}. Make someone else an owner, or delete them, before you delete your account.",
-    "dialogTitle": "Delete your account?",
-    "dialogDescription": "We will send a confirmation link to {email}. Your account is deleted only after you open it and confirm.",
-    "send": "Send confirmation link",
-    "sending": "Sending…",
-    "sent": "Check {email} for the confirmation link.",
-    "sendFailed": "Could not send the confirmation link.",
-    "confirmTitle": "Delete your account permanently",
-    "confirmDescription": "This deletes the account for {email} right away. It cannot be undone.",
-    "consequenceProfile": "Your profile and photo are removed.",
-    "consequenceSessions": "Every device is signed out.",
-    "consequenceMemberships": "You leave every organization you belong to.",
-    "confirm": "Delete my account",
-    "deleting": "Deleting…",
-    "failed": "Could not delete your account. The link may have expired; request a new one from your profile.",
-    "missingToken": "This link is incomplete. Request a new one from your profile.",
-    "keep": "Keep my account"
-  },
   "password": {
     "title": "Password",
     "description": "Sign in with your email address and a password.",

@@ -24,7 +24,6 @@ The Server Action that saves the key — reference `apps/web/src/app/action/dash
 4. **Expire caches** — [nextjs.md § After a write](./nextjs.md#after-a-write).
 
 - **Remove an image:** write `""`, then make the same cleanup call without `keep`.
-- **Delete an owner** (for example an organization): `after(() => deleteOwnedObjects("organization", id))` deletes everything in that scope as a system call.
 
 ## Operations
 

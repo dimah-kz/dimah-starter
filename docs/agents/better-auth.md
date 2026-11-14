@@ -18,16 +18,18 @@ Better Auth 1.7 runs on the server only. The web app has no auth client: pages r
 
 What the config in `auth.ts` means for the app:
 
-- **Email/password:** `requireEmailVerification` blocks sign-in until the link is opened. Password reset and password change both revoke the other sessions.
+- **Email/password:** `requireEmailVerification` blocks sign-in until the link is opened. Password reset and password change both revoke the other sessions. `haveIBeenPwned` rejects a new password that appears in a known breach; only the first 5 characters of its SHA-1 leave the server, and sign-up or a password change fails while that service is unreachable.
+- **Secret:** `BETTER_AUTH_SECRET` signs sessions and encrypts the two-factor secrets and the stored Google tokens (`encryptOAuthTokens`). To rotate it, set `BETTER_AUTH_SECRETS` (`.env.example`) so data the old secret encrypted stays readable.
 - **Google:** on when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. `googleSignInEnabled` hides the button otherwise. The callback is `/api/auth/callback/google`.
 - **Sessions:** the cookie cache is 5 minutes, so a ban or role change can take that long to show for the affected user. `freshAge: 0` lets the account page list sessions.
 - **Two-factor:** an authenticator app (TOTP) with backup codes. Better Auth asks for it after email-and-password sign-in only; Google sign-in skips it, so the account page needs a password before it offers two-factor. `signInWithEmailAction` sends those accounts to `/two-factor`, where `verifyTwoFactorAction` checks the code. Better Auth locks an account for 15 minutes after 10 wrong codes in a row. Turning two-factor on or off replaces the session.
 - **Passkeys:** the `@better-auth/passkey` plugin. The relying party is the host and origin of `BETTER_AUTH_URL`, so a passkey made on one domain does not work on another. Each ceremony is two Server Actions around `@simplewebauthn/browser` in the page: one returns the WebAuthn options (Better Auth keeps the challenge in a signed cookie), the other verifies the browser's answer. Passkey sign-in skips the two-factor step: the passkey already is something you have plus your fingerprint, face or PIN. New passkeys are named after their authenticator (`getAuthenticatorName`) until renamed.
 - **Email change:** the current address confirms first (`changeEmailConfirm` mail), then the new one is verified (`changeEmailVerify`). The address changes in Better Auth's verify-email route, which no action follows, so the account page reads it from the session and cached reads that show it (the admin user list) catch up when their cache life ends.
-- **Account deletion:** the mail links to `/dashboard/account/delete`, which asks once more before `deleteAccountAction` deletes; a mail scanner opening the link deletes nothing. `beforeDelete` refuses while the user is an organization's only owner (`listSoleOwnedOrganizations`).
 - **Connected accounts:** the security page links and unlinks Google (`linkSocialAccount`, `unlinkAccount`). Better Auth refuses to link an account with a different email or to unlink the last way to sign in.
+- **Not included:** deleting an account or an organization. `disableOrganizationDeletion` keeps the endpoint off, and `user.deleteUser` is not enabled. Add either with its own confirmation flow, and decide what happens to an organization whose last owner leaves.
+- **Error text:** the i18n plugin translates Better Auth's messages. Plugin errors it does not cover (two-factor, passkeys, breached passwords) are in `auth.errorCodes` in the message files, merged in by error code; `auth-error-codes.test.ts` fails when an upgrade renames a code.
 - **Origins:** `BETTER_AUTH_URL` is the trusted origin; `http://localhost:3000` is trusted only outside production.
-- **Mail:** verification, reset, duplicate sign-up, email-change, account-deletion and invitation mail go through `@repo/email`. Without `RESEND_API_KEY`, development prints them to the server log.
+- **Mail:** verification, reset, duplicate sign-up, email-change and invitation mail go through `@repo/email`. Without `RESEND_API_KEY`, development prints them to the server log.
 
 After changing the instance config (plugins, fields), regenerate the tables:
 

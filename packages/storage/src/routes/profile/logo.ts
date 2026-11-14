@@ -8,7 +8,6 @@ import { imageObject, imageUpload } from "./image"
  */
 export const logo = route({
   guard: async ({ request, locals, operation }) => {
-    if (locals.system) return
     const organizationId = locals.organizationId
     if (!organizationId) throw s3Error("FORBIDDEN")
     if (operation === "download" || operation === "file") return

@@ -1,25 +1,12 @@
 "use client"
 
 import { useId, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { ChevronRightIcon, Trash2Icon } from "lucide-react"
-import { deleteOrganizationAction } from "@/app/action/dashboard/(organization)/manage/settings/delete-organization-action"
+import { ChevronRightIcon } from "lucide-react"
 import { updateOrganizationNameAction } from "@/app/action/dashboard/(organization)/manage/settings/update-organization-name-action"
 import { OrganizationProfileFormFields } from "@/app/dashboard/(organization)/manage/settings/components/organization-profile-form-fields"
 import type { OrganizationBranding } from "@/app/dashboard/(organization)/manage/settings/lib/get-active-organization-branding"
-import { dashboardRoutes } from "@/app/dashboard/lib/dashboard-routes"
 import { ResponsiveFormOverlay } from "@/components/form/responsive-form-overlay"
 import { SettingsSection } from "@/components/settings/settings-section"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@repo/ui/components/alert-dialog"
 import { Button } from "@repo/ui/components/button"
 import {
   Identity,
@@ -28,37 +15,24 @@ import {
   IdentityDescription,
   IdentityTitle,
 } from "@repo/ui/components/dimah/identity"
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@repo/ui/components/item"
-import { IconTile } from "@repo/ui/components/reui/icon-tile"
+import { Item, ItemActions } from "@repo/ui/components/item"
 import { toast } from "@repo/ui/components/toast"
 import { useTranslations } from "next-intl"
 
 type OrganizationSettingsHubProps = {
   organization: OrganizationBranding & { logoKey: string | null }
   canEdit: boolean
-  canDelete: boolean
 }
 
 export function OrganizationSettingsHub({
   organization,
   canEdit,
-  canDelete,
 }: OrganizationSettingsHubProps) {
   const t = useTranslations("dashboard.organizationSettings")
   const tCommon = useTranslations("common")
-  const router = useRouter()
   const formId = useId()
   const [profileOpen, setProfileOpen] = useState(false)
-  const [deleteOpen, setDeleteOpen] = useState(false)
   const [isSaving, startSaveTransition] = useTransition()
-  const [isDeleting, startDeleteTransition] = useTransition()
 
   const handleSave = (formData: FormData) => {
     const name = String(formData.get("name") ?? "").trim()
@@ -82,26 +56,6 @@ export function OrganizationSettingsHub({
 
       toast.add({ title: t("profile.saved"), type: "success" })
       setProfileOpen(false)
-    })
-  }
-
-  const handleDelete = () => {
-    startDeleteTransition(async () => {
-      const result = await deleteOrganizationAction({
-        organizationId: organization.id,
-      })
-
-      if (!result.success) {
-        toast.add({
-          title: result.error ?? t("delete.failed"),
-          type: "error",
-        })
-        return
-      }
-
-      toast.add({ title: t("delete.deleted"), type: "success" })
-      setDeleteOpen(false)
-      router.replace(dashboardRoutes.home())
     })
   }
 
@@ -143,39 +97,6 @@ export function OrganizationSettingsHub({
             ) : null}
           </Item>
         </SettingsSection>
-
-        {canDelete ? (
-          <SettingsSection label={t("sections.delete")}>
-            <Item
-              className="rounded-none hover:bg-destructive/5"
-              render={
-                <button
-                  type="button"
-                  className="flex w-full min-w-0 items-center gap-2.5 text-start"
-                  onClick={() => setDeleteOpen(true)}
-                />
-              }
-            >
-              <ItemMedia>
-                <IconTile variant="soft" size="sm" className="text-destructive">
-                  <Trash2Icon aria-hidden />
-                </IconTile>
-              </ItemMedia>
-              <ItemContent className="min-w-0">
-                <ItemTitle className="text-sm text-destructive">
-                  {t("delete.title")}
-                </ItemTitle>
-                <ItemDescription>{t("delete.navDescription")}</ItemDescription>
-              </ItemContent>
-              <ItemActions className="shrink-0 text-destructive/60">
-                <ChevronRightIcon
-                  className="size-4 rtl:rotate-180"
-                  aria-hidden
-                />
-              </ItemActions>
-            </Item>
-          </SettingsSection>
-        ) : null}
       </div>
 
       {canEdit ? (
@@ -219,38 +140,6 @@ export function OrganizationSettingsHub({
             />
           </form>
         </ResponsiveFormOverlay>
-      ) : null}
-
-      {canDelete ? (
-        <AlertDialog
-          open={deleteOpen}
-          onOpenChange={(open) => {
-            if (!open && !isDeleting) {
-              setDeleteOpen(false)
-            }
-          }}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{t("delete.confirmTitle")}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("delete.confirmDescription", { name: organization.name })}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>
-                {tCommon("cancel")}
-              </AlertDialogCancel>
-              <AlertDialogAction
-                variant="destructive"
-                disabled={isDeleting}
-                onClick={handleDelete}
-              >
-                {isDeleting ? t("delete.deleting") : t("delete.confirm")}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       ) : null}
     </>
   )

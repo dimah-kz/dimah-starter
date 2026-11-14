@@ -7,7 +7,12 @@ import { APIError } from "better-auth"
  * driver internals.
  */
 export function getAuthApiErrorMessage(error: unknown): string | undefined {
-  if (error instanceof APIError) return error.message || undefined
+  if (isAuthApiError(error)) return error.message || undefined
   console.error(error)
   return undefined
+}
+
+/** A refusal from Better Auth (no session, not a member, …), not a failure. */
+export function isAuthApiError(error: unknown): error is APIError {
+  return error instanceof APIError
 }

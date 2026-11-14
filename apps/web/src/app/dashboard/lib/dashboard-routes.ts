@@ -1,5 +1,3 @@
-import { accountDeletionPath } from "@repo/auth/paths"
-
 const DASHBOARD_BASE_PATH = "/dashboard"
 
 /** Path segment literals — keep in sync with `src/app/dashboard/` route tree. */
@@ -11,7 +9,6 @@ export const dashboardRouteSegments = {
   security: "security",
   sessions: "sessions",
   preferences: "preferences",
-  delete: "delete",
   manage: "manage",
   members: "members",
   invitations: "invitations",
@@ -50,8 +47,6 @@ export const dashboardRoutes = {
   accountSecurity: () => accountPath(dashboardRouteSegments.security),
   accountSessions: () => accountPath(dashboardRouteSegments.sessions),
   accountPreferences: () => accountPath(dashboardRouteSegments.preferences),
-  /** The account-deletion mail links here (`@repo/auth/paths`). */
-  accountDelete: () => accountDeletionPath,
   organizationManageRoot: () => managePath(),
   organizationMembers: () => managePath(dashboardRouteSegments.members),
   organizationInvitations: () => managePath(dashboardRouteSegments.invitations),

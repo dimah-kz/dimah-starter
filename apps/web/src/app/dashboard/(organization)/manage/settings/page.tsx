@@ -21,24 +21,16 @@ export default function OrganizationSettingsPage() {
 async function OrganizationSettingsPageContent() {
   const { organizationId } = await requireOrganizationManager()
   const requestHeaders = await dashboardAuthHeaders()
-  const [organization, { success: canEdit }, { success: canDelete }] =
-    await Promise.all([
-      getActiveOrganizationBranding(),
-      auth.api.hasPermission({
-        headers: requestHeaders,
-        body: {
-          organizationId,
-          permissions: { organization: ["update"] },
-        },
-      }),
-      auth.api.hasPermission({
-        headers: requestHeaders,
-        body: {
-          organizationId,
-          permissions: { organization: ["delete"] },
-        },
-      }),
-    ])
+  const [organization, { success: canEdit }] = await Promise.all([
+    getActiveOrganizationBranding(),
+    auth.api.hasPermission({
+      headers: requestHeaders,
+      body: {
+        organizationId,
+        permissions: { organization: ["update"] },
+      },
+    }),
+  ])
 
   if (!organization) {
     notFound()
@@ -51,7 +43,6 @@ async function OrganizationSettingsPageContent() {
         logoKey: organization.logo ? fromPublicUrl(organization.logo) : null,
       }}
       canEdit={canEdit}
-      canDelete={canDelete}
     />
   )
 }

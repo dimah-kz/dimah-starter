@@ -50,7 +50,6 @@ async function LoginPageContent({ searchParams }: LoginPageProps) {
       googleSignInEnabled={googleSignInEnabled}
       lastLoginMethod={cookieStore.get(lastLoginMethodCookieName)?.value}
       passwordReset={params.notice === "password-reset"}
-      accountDeleted={params.notice === "account-deleted"}
       oauthError={typeof params.error === "string" ? params.error : null}
     />
   )

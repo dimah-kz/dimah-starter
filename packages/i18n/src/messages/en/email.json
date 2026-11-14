@@ -50,13 +50,5 @@
     "body": "Open this link to start signing in to {app} with {email}.",
     "action": "Verify email",
     "footer": "If you did not ask for this, you can ignore this email."
-  },
-  "deleteAccount": {
-    "subject": "Confirm account deletion",
-    "preview": "Confirm that you want to delete your {app} account",
-    "heading": "Delete your account",
-    "body": "You asked to delete the {app} account for {email}. Open the link to confirm. Deleting it removes your profile, sessions and memberships, and cannot be undone.",
-    "action": "Review and delete",
-    "footer": "If you did not ask for this, ignore this email and change your password. The link expires in one hour."
   }
 }
