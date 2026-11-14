@@ -20,7 +20,11 @@ type PasskeySignInProps = {
   lastLoginMethod?: string | null
 }
 
-/** The browser lists the passkeys it holds for this site; no email needed. */
+/**
+ * The browser lists the passkeys it holds for this site; no email needed.
+ * Renders grid items for `OtherSignInMethods`: the button joins the row of
+ * sign-in buttons, and an error spans the row below them.
+ */
 export function PasskeySignIn({
   redirectTo,
   lastLoginMethod = null,
@@ -63,13 +67,8 @@ export function PasskeySignIn({
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      {error ? (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      ) : null}
-      <div className="relative">
+    <>
+      <div className="relative order-first">
         <Button
           type="button"
           variant="outline"
@@ -83,7 +82,7 @@ export function PasskeySignIn({
           ) : (
             <FingerprintIcon data-icon="inline-start" aria-hidden />
           )}
-          {isPending ? t("signingIn") : t("signIn")}
+          {t("signIn")}
         </Button>
         {lastLoginMethod === "passkey" ? (
           <Badge
@@ -94,6 +93,11 @@ export function PasskeySignIn({
           </Badge>
         ) : null}
       </div>
-    </div>
+      {error ? (
+        <Alert variant="destructive" className="col-span-full">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      ) : null}
+    </>
   )
 }

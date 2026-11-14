@@ -111,7 +111,7 @@ export function LoginForm({
           ) : null}
         </div>
       </form>
-      <OtherSignInMethods>
+      <OtherSignInMethods columns={googleSignInEnabled ? 2 : 1}>
         <PasskeySignIn
           redirectTo={redirectTo}
           lastLoginMethod={lastLoginMethod}

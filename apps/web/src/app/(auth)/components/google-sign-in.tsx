@@ -19,6 +19,7 @@ type GoogleSignInProps = {
   oauthError?: string | null
 }
 
+/** Grid items for `OtherSignInMethods`, like `PasskeySignIn`. */
 export function GoogleSignIn({
   redirectTo,
   returnPath,
@@ -35,13 +36,8 @@ export function GoogleSignIn({
   const formError = state.formError ?? callbackError
 
   return (
-    <div className="flex flex-col gap-3">
-      {formError ? (
-        <Alert variant="destructive">
-          <AlertDescription>{formError}</AlertDescription>
-        </Alert>
-      ) : null}
-      <form action={formAction} className="relative">
+    <>
+      <form action={formAction} className="relative order-first">
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <input type="hidden" name="returnPath" value={returnPath} />
         <Button
@@ -69,6 +65,11 @@ export function GoogleSignIn({
           </Badge>
         ) : null}
       </form>
-    </div>
+      {formError ? (
+        <Alert variant="destructive" className="col-span-full">
+          <AlertDescription>{formError}</AlertDescription>
+        </Alert>
+      ) : null}
+    </>
   )
 }
