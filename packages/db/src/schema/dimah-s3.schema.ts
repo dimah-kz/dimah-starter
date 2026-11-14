@@ -23,6 +23,7 @@ export const storageObject = storageSchema.table(
     route: varchar("route", { length: 255 }).notNull(),
     folderId: varchar("folder_id", { length: 255 }),
     filename: varchar("filename", { length: 255 }).notNull(),
+    searchName: varchar("search_name", { length: 1024 }).notNull(),
     contentType: varchar("content_type", { length: 255 }),
     size: bigint("size", { mode: "bigint" }),
     declaredSize: bigint("declared_size", { mode: "bigint" }),
@@ -76,6 +77,7 @@ export const storageFolder = storageSchema.table(
     scope: varchar("scope", { length: 255 }).notNull(),
     parentId: varchar("parent_id", { length: 255 }).notNull().default(""),
     name: varchar("name", { length: 255 }).notNull(),
+    searchName: varchar("search_name", { length: 1024 }).notNull(),
     path: varchar("path", { length: 1024 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -92,7 +94,7 @@ export const storageFolder = storageSchema.table(
 
 export const private_dimah_s3_settings = pgTable("private_dimah_s3_settings", {
   key: varchar("key", { length: 255 }).primaryKey().notNull(),
-  version: text("value").notNull().default("2.1.0"),
+  version: text("value").notNull().default("2.2.0"),
 })
 
 export const relations = defineRelations({
