@@ -27,6 +27,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // Takumi (share images) loads a native `.node` addon, which can't be bundled.
+  serverExternalPackages: ["@takumi-rs/core"],
   // Baseline hardening for every route. No script CSP: it would need nonces
   // for Next's inline scripts (see the Content Security Policy guide).
   headers: async () => [

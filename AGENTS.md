@@ -4,7 +4,7 @@ A server-first, multi-tenant SaaS built on Dimah Starter: a pnpm + Turborepo mon
 
 ## Versions
 
-Next.js 16 (Cache Components, Partial Prefetching), React 19, Better Auth 1, Drizzle ORM 1, oRPC 2, Tailwind CSS 4, shadcn/ui on Base UI, Vitest 5. These majors are newer than most training data, and their APIs changed. Exact versions are in `pnpm-workspace.yaml` (`catalog`) and each `package.json`.
+Next.js 16 (Cache Components, Partial Prefetching), React 19, Better Auth 1, Drizzle ORM 1, oRPC 2, Tailwind CSS 4, shadcn/ui on Base UI, Takumi 2 (generated images), Vitest 5. These majors are newer than most training data, and their APIs changed. Exact versions are in `pnpm-workspace.yaml` (`catalog`) and each `package.json`.
 
 When an API's behavior matters, check the installed version instead of memory:
 
@@ -76,7 +76,7 @@ Each rule has a reason. Follow it unless the user asks for something else.
 | Uploads, avatars, logos                                  | [storage.md](docs/agents/storage.md)           |
 | Copy, locales, right-to-left                             | [i18n.md](docs/agents/i18n.md)                 |
 | Components and styling                                   | [ui.md](docs/agents/ui.md)                     |
-| Public pages, metadata, sitemap                          | [seo.md](docs/agents/seo.md)                   |
+| Public pages, metadata, share images, sitemap            | [seo.md](docs/agents/seo.md)                   |
 | Tests                                                    | [testing.md](docs/agents/testing.md)           |
 
 ## Check your work

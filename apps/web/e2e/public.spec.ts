@@ -33,6 +33,20 @@ test("every response carries the security headers", async ({ request }) => {
   expect(response.headers()).not.toHaveProperty("x-powered-by")
 })
 
+test("the landing page links a PNG share image", async ({ page, request }) => {
+  await page.goto("/")
+
+  // The tag holds an absolute URL on `BETTER_AUTH_URL`; fetch its path here.
+  const content = await page
+    .locator('meta[property="og:image"]')
+    .getAttribute("content")
+  const { pathname, search } = new URL(content ?? "")
+  const image = await request.get(pathname + search)
+
+  expect(image.ok()).toBe(true)
+  expect(image.headers()["content-type"]).toBe("image/png")
+})
+
 test("robots.txt keeps the app surfaces out of search", async ({ request }) => {
   const robots = await (await request.get("/robots.txt")).text()
 

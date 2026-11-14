@@ -73,10 +73,10 @@ The rules behind it — what to cache, which tag to expire, why sessions are nev
 | **i18n**          | [next-intl](https://next-intl.dev), English and Persian, RTL, localized dates and numbers, translated auth errors                             |
 | **Product API**   | [oRPC](https://orpc.dev) router in `@repo/api`, called in-process from Server Actions or over HTTP                                            |
 | **UI**            | [shadcn/ui](https://ui.shadcn.com) on Base UI, [ReUI](https://reui.io), Tailwind CSS 4, dark mode                                             |
-| **SEO**           | Metadata, Open Graph image, sitemap, robots, JSON-LD and a public landing page                                                                |
+| **SEO**           | Metadata, Open Graph image with right-to-left text ([Takumi](https://takumi.kane.tw)), sitemap, robots, JSON-LD and a public landing page     |
 | **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest unit tests, Playwright e2e, Turborepo caching, GitHub Actions CI                                  |
 
-**Stack:** Next.js 16 · React 19 · TypeScript · Better Auth · Drizzle ORM · PostgreSQL · oRPC · Tailwind CSS 4 · shadcn/ui · next-intl · Resend · Turborepo · pnpm
+**Stack:** Next.js 16 · React 19 · TypeScript · Better Auth · Drizzle ORM · PostgreSQL · oRPC · Tailwind CSS 4 · shadcn/ui · next-intl · Takumi · Resend · Turborepo · pnpm
 
 ## How it works
 

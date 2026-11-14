@@ -1,11 +1,22 @@
-import { ImageResponse } from "next/og"
+import { cacheLife } from "next/cache"
 import { brandMarkPath } from "@/components/brand-mark"
+import { renderImage } from "@/components/og/render-image"
 
 export const size = { width: 180, height: 180 }
 export const contentType = "image/png"
 
-export default function AppleIcon() {
-  return new ImageResponse(
+export default async function AppleIcon() {
+  return new Response(await renderAppleIcon(), {
+    headers: { "Content-Type": contentType },
+  })
+}
+
+// Cached, so the build prerenders it.
+async function renderAppleIcon() {
+  "use cache"
+  cacheLife("max")
+
+  return renderImage(
     <div
       style={{
         display: "flex",

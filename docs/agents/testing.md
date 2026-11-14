@@ -19,7 +19,7 @@ Test what would hurt if it broke silently: security rules (redirects, scopes, pe
 
 ## Unit tests (Vitest)
 
-A test is `*.test.ts` (Node) or `*.test.tsx` (jsdom) **beside** the file it tests, under `src/`. Import `describe` / `it` / `expect` / `vi` from `vitest` — there are no globals. Mocks, `vi.stubEnv` and `vi.stubGlobal` reset between tests (`@repo/vitest-config`).
+A test is `*.test.ts` (Node) or `*.test.tsx` (jsdom) **beside** the file it tests, under `src/`. Import `describe` / `it` / `expect` / `vi` from `vitest` — there are no globals. Mocks, `vi.stubEnv` and `vi.stubGlobal` reset between tests (`@repo/vitest-config`). `apps/web` tests run with the app folder as the working directory (`apps/web/vitest.cwd.ts`), as Next.js does, so code that reads files from `process.cwd()` works from the repository root too.
 
 A package gets tests with a `vitest.config.ts` (`nodeConfig()` or `reactConfig({ name })` from `@repo/vitest-config`), a `"test": "vitest run"` script, and `vitest` + `@repo/vitest-config` in `devDependencies`. The root `vitest.config.mts` picks the package up as a project. [tooling/vitest-config](../../tooling/vitest-config/README.md)
 
