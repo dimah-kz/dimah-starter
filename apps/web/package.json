@@ -24,6 +24,7 @@
     "@repo/i18n": "workspace:*",
     "@repo/storage": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@simplewebauthn/browser": "^13.3.0",
     "cn": "catalog:",
     "country-flag-icons": "1.6.20",
     "dotenv": "catalog:",

@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 import { AccountConnectionsCard } from "@/app/dashboard/account/security/components/account-connections-card"
+import { AccountPasskeysCard } from "@/app/dashboard/account/security/components/account-passkeys-card"
 import { AccountPasswordCard } from "@/app/dashboard/account/security/components/account-password-card"
 import { AccountTwoFactorCard } from "@/app/dashboard/account/security/components/account-two-factor-card"
 import { getAccountSecurity } from "@/app/dashboard/account/lib/get-account-security"
@@ -40,6 +41,7 @@ async function AccountSecurityPageContent({
         email={security.email}
         hasPassword={security.hasPassword}
       />
+      <AccountPasskeysCard passkeys={security.passkeys} />
       <AccountTwoFactorCard
         enabled={security.twoFactorEnabled}
         hasPassword={security.hasPassword}

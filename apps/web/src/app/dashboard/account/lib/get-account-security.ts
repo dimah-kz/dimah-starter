@@ -1,7 +1,7 @@
-import { eq, isNotNull } from "@repo/db/drizzle"
+import { desc, eq, isNotNull } from "@repo/db/drizzle"
 import { requireDashboardSession } from "@/app/dashboard/lib/dashboard-session"
 import { googleSignInEnabled } from "@repo/auth"
-import { account, user } from "@repo/db/schema"
+import { account, passkey, user } from "@repo/db/schema"
 import { db } from "@repo/db"
 
 const CREDENTIAL_PROVIDER_ID = "credential"
@@ -24,15 +24,15 @@ const providerEnabled: Record<AccountConnectionProvider, boolean> = {
 }
 
 /**
- * Sign-in methods and two-factor state of the signed-in user. Read per
- * request, not cached: linking Google finishes in Better Auth's OAuth
+ * Sign-in methods, passkeys and two-factor state of the signed-in user. Read
+ * per request, not cached: linking Google finishes in Better Auth's OAuth
  * callback, which has no action to expire a tag.
  */
 export async function getAccountSecurity() {
   const session = await requireDashboardSession()
   const userId = session.user.id
 
-  const [accounts, [row]] = await Promise.all([
+  const [accounts, passkeys, [row]] = await Promise.all([
     db
       .select({
         id: account.id,
@@ -42,6 +42,17 @@ export async function getAccountSecurity() {
       })
       .from(account)
       .where(eq(account.userId, userId)),
+    db
+      .select({
+        id: passkey.id,
+        name: passkey.name,
+        createdAt: passkey.createdAt,
+        // Synced by a password manager or the platform, not bound to one device.
+        backedUp: passkey.backedUp,
+      })
+      .from(passkey)
+      .where(eq(passkey.userId, userId))
+      .orderBy(desc(passkey.createdAt)),
     db
       .select({ twoFactorEnabled: user.twoFactorEnabled })
       .from(user)
@@ -79,6 +90,7 @@ export async function getAccountSecurity() {
     /** Better Auth refuses to unlink the last one. */
     signInMethodCount: accounts.length,
     connections,
+    passkeys,
   }
 }
 

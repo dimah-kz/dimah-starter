@@ -1,0 +1,361 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "6c970757-04cc-4874-a433-0a7385ccf94a",
+  "prevIds": [
+    "4a200235-826c-4bbd-bba7-e5f77ef23f02"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "auth",
+        "passkey"
+      ],
+      "writes": [
+        "s|tbl|auth.passkey",
+        "n|tbl|auth.passkey",
+        "e|tbl|auth.passkey",
+        "n|rel|auth.passkey",
+        "n|type|auth.passkey",
+        "n|rel|auth.passkey_pkey"
+      ],
+      "reads": [
+        "n|sch|auth"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "passkey",
+        "passkey_userId_idx"
+      ],
+      "writes": [
+        "s|idx|auth.passkey_userId_idx",
+        "n|idx|auth.passkey_userId_idx",
+        "e|idx|auth.passkey_userId_idx",
+        "n|rel|auth.passkey_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.passkey",
+        "n|sch|auth",
+        "n|col|auth.passkey.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "auth",
+        "passkey",
+        "passkey_credentialID_idx"
+      ],
+      "writes": [
+        "s|idx|auth.passkey_credentialID_idx",
+        "n|idx|auth.passkey_credentialID_idx",
+        "e|idx|auth.passkey_credentialID_idx",
+        "n|rel|auth.passkey_credentialID_idx"
+      ],
+      "reads": [
+        "n|tbl|auth.passkey",
+        "n|sch|auth",
+        "n|col|auth.passkey.credential_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "auth",
+        "passkey"
+      ],
+      "writes": [
+        "s|fk|auth.passkey.passkey_user_id_user_id_fkey",
+        "n|fk|auth.passkey.passkey_user_id_user_id_fkey",
+        "e|fk|auth.passkey.passkey_user_id_user_id_fkey",
+        "n|con|auth.passkey.passkey_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|auth.passkey",
+        "n|sch|auth",
+        "n|tbl|auth.user",
+        "n|sch|auth",
+        "n|col|auth.passkey.user_id",
+        "n|col|auth.user.id",
+        "e|uniqueness|auth.user.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "name": "passkey",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "public_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "user_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "credential_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "counter",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "device_type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "backed_up",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "transports",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "created_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "aaguid",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "passkey_userId_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "passkey_credentialID_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "credential_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "passkey_user_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "user_id"
+        ],
+        "schemaTo": "auth",
+        "tableTo": "user",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "auth",
+        "table": "passkey",
+        "name": "passkey_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    }
+  ]
+}

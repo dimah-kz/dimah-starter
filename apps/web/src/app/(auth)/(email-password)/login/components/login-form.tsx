@@ -3,6 +3,7 @@
 import { useActionState } from "react"
 import { MailIcon } from "lucide-react"
 import { signInWithEmailAction } from "@/app/action/auth/sign-in-with-email-action"
+import { PasskeySignIn } from "@/app/(auth)/(email-password)/login/components/passkey-sign-in"
 import { AuthCrossLink } from "@/app/(auth)/components/auth-cross-link"
 import { GoogleSignIn } from "@/app/(auth)/components/google-sign-in"
 import { AUTH_FORM_INITIAL_STATE } from "@/app/(auth)/lib/auth-form-state"
@@ -113,6 +114,10 @@ export function LoginForm({
           ) : null}
         </div>
       </form>
+      <PasskeySignIn
+        redirectTo={redirectTo}
+        lastLoginMethod={lastLoginMethod}
+      />
       {googleSignInEnabled ? (
         <GoogleSignIn
           redirectTo={redirectTo}

@@ -22,6 +22,7 @@ What the config in `auth.ts` means for the app:
 - **Google:** on when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. `googleSignInEnabled` hides the button otherwise. The callback is `/api/auth/callback/google`.
 - **Sessions:** the cookie cache is 5 minutes, so a ban or role change can take that long to show for the affected user. `freshAge: 0` lets the account page list sessions.
 - **Two-factor:** an authenticator app (TOTP) with backup codes. Better Auth asks for it after email-and-password sign-in only; Google sign-in skips it, so the account page needs a password before it offers two-factor. `signInWithEmailAction` sends those accounts to `/two-factor`, where `verifyTwoFactorAction` checks the code. Better Auth locks an account for 15 minutes after 10 wrong codes in a row. Turning two-factor on or off replaces the session.
+- **Passkeys:** the `@better-auth/passkey` plugin. The relying party is the host and origin of `BETTER_AUTH_URL`, so a passkey made on one domain does not work on another. Each ceremony is two Server Actions around `@simplewebauthn/browser` in the page: one returns the WebAuthn options (Better Auth keeps the challenge in a signed cookie), the other verifies the browser's answer. Passkey sign-in skips the two-factor step: the passkey already is something you have plus your fingerprint, face or PIN. New passkeys are named after their authenticator (`getAuthenticatorName`) until renamed.
 - **Email change:** the current address confirms first (`changeEmailConfirm` mail), then the new one is verified (`changeEmailVerify`). The address changes in Better Auth's verify-email route, which no action follows, so the account page reads it from the session and cached reads that show it (the admin user list) catch up when their cache life ends.
 - **Account deletion:** the mail links to `/dashboard/account/delete`, which asks once more before `deleteAccountAction` deletes; a mail scanner opening the link deletes nothing. `beforeDelete` refuses while the user is an organization's only owner (`listSoleOwnedOrganizations`).
 - **Connected accounts:** the security page links and unlinks Google (`linkSocialAccount`, `unlinkAccount`). Better Auth refuses to link an account with a different email or to unlink the last way to sign in.
@@ -57,6 +58,7 @@ Better Auth limits its own HTTP routes (`/api/auth`) with counters in `auth.rate
 - **Reset:** per account and per inbox.
 - **Sign-up and Google sign-in:** per IP.
 - **Two-factor code:** per IP, on top of Better Auth's own lock per account.
+- **Passkey sign-in:** per IP, when the challenge is made; each challenge verifies once.
 
 A new unauthenticated flow that sends mail or checks a password gets a rule. Behind more than one proxy, set `advanced.ipAddress` so the IP is the client's.
 

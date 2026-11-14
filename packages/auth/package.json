@@ -21,6 +21,7 @@
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.25",
     "@better-auth/i18n": "1.7.25",
+    "@better-auth/passkey": "1.7.25",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
     "@repo/i18n": "workspace:*",

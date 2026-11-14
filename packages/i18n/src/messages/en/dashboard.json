@@ -38,7 +38,7 @@
   },
   "accountTabDescriptions": {
     "profile": "How you appear to others and how we reach you.",
-    "security": "Your password, two-factor authentication and connected accounts.",
+    "security": "Your password, passkeys, two-factor authentication and connected accounts.",
     "sessions": "The devices signed in to your account.",
     "preferences": "Theme and language for this browser."
   },

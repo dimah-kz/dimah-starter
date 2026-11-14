@@ -2,6 +2,7 @@ import { after } from "next/server"
 import { APIError } from "better-auth"
 import { betterAuth } from "better-auth/minimal"
 import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2"
+import { getAuthenticatorName, passkey } from "@better-auth/passkey"
 import { i18n, locales as authErrorLocales } from "@better-auth/i18n"
 import { nextCookies } from "better-auth/next-js"
 import type { AccessControl } from "better-auth/plugins/access"
@@ -206,6 +207,17 @@ export const auth = betterAuth({
     // Authenticator app (TOTP) with backup codes. It asks for the second step
     // after email-and-password sign-in only; Google sign-in skips it.
     twoFactor(),
+    // Relying party: the host and origin of `BETTER_AUTH_URL`. A passkey is a
+    // second factor in itself (device plus fingerprint, face or PIN), so
+    // passkey sign-in does not ask for the two-factor code.
+    passkey({
+      registration: {
+        // "iCloud Keychain", "Windows Hello", … until the user renames it.
+        afterVerification: ({ verification }) => ({
+          name: getAuthenticatorName(verification.registrationInfo?.aaguid),
+        }),
+      },
+    }),
     nextCookies(),
   ],
 })

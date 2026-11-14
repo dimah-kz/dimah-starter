@@ -29,6 +29,8 @@ const rules = {
   socialSignIn: [{ by: "ip", max: 10 }],
   // Code guesses. Better Auth also locks an account after 10 failures in a row.
   twoFactor: [{ by: "ip", max: 10 }],
+  // Each call stores a WebAuthn challenge row; a challenge works once.
+  passkeySignIn: [{ by: "ip", max: 10 }],
 } as const satisfies Record<string, readonly Bucket[]>
 
 /**
