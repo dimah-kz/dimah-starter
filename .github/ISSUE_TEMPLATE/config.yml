@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a vulnerability
+    url: https://github.com/dimah-kz/dimah-starter/security/advisories/new
+    about: Privately, as described in SECURITY.md.

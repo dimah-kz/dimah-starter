@@ -8,12 +8,12 @@
 | Mobile    | `apps/mobile`    | Future; share via `@repo/*`                             |
 | Extension | `apps/extension` | Future; own UI shell, same core                         |
 
-Do not import across apps. Workspaces: `apps/*`, `packages/*`, `tooling/*`. Turbo: `build` / `dev` / `lint` / `typecheck` (`lint` and `typecheck` run in parallel through the `transit` task, which still re-runs them when a dependency changes). Vitest runs once from the root: `pnpm test` picks up every `src/**/*.test.ts`.
+Do not import across apps. Workspaces: `apps/*`, `packages/*`, `tooling/*`. Turbo: `build` / `dev` / `lint` / `typecheck` (`lint` and `typecheck` run in parallel through the `transit` task, which still re-runs them when a dependency changes). `test` runs each package's Vitest suite the same way; the root `vitest.config.mts` serves `pnpm test:watch` and `pnpm test:coverage` across packages — [testing.md](./testing.md).
 
 | Layer       | Owns                                       | Does not                                        |
 | ----------- | ------------------------------------------ | ----------------------------------------------- |
 | `packages/` | Auth, Drizzle, oRPC, storage, i18n, shadcn | Routes, pages, Server Actions, dashboard chrome |
-| `tooling/`  | eslint / tsconfig presets                  | Product code                                    |
+| `tooling/`  | eslint / tsconfig / vitest presets         | Product code                                    |
 | `apps/`     | Routes, layouts, actions, feature UI, SSOT | Auth/db logic that belongs in a package         |
 
 `@repo/ui` = shadcn + ReUI + Dimah. App-composed UI (`list/`, dashboard chrome) stays in the app.

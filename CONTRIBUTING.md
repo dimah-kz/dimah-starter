@@ -32,6 +32,7 @@ Read [`AGENTS.md`](./AGENTS.md) first. It is short, and it links to the guide fo
    pnpm typecheck
    pnpm test
    pnpm build
+   pnpm test:e2e   # optional locally; CI runs it
    ```
 
 3. Update the matching guide in `docs/agents/` or a package README when you change how something works.

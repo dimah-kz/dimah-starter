@@ -15,6 +15,7 @@ How-to pages — **not** a map of the repo. Explore code for what exists. Read a
 | [ui-design.md](./ui-design.md)           | `@repo/ui`, logical Tailwind                   |
 | [i18n.md](./i18n.md)                     | Messages, locale, RTL                          |
 | [seo.md](./seo.md)                       | Metadata, sitemap, public pages                |
+| [testing.md](./testing.md)               | Vitest unit tests, Playwright e2e              |
 
 Skip these pages for a one-line bugfix, a “where is X?” grep, or a rename — the matching `.cursor/rules/*.mdc` is enough.
 
@@ -28,5 +29,6 @@ Skip these pages for a one-line bugfix, a “where is X?” grep, or a rename �
 | Cache tags  | `apps/web/src/app/dashboard/lib/cache-tags.ts`                             |
 | UI copy     | `packages/i18n/src/messages/en/dashboard.json`                             |
 | Server list | `…/members/components/members-table.tsx` + `members-columns.tsx` + `list/` |
+| Tests       | [testing.md](./testing.md) — one reference test per kind                   |
 
 Entry: [AGENTS.md](../../AGENTS.md) · Next managed block: [apps/web/AGENTS.md](../../apps/web/AGENTS.md)

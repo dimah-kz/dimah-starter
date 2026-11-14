@@ -11,6 +11,7 @@
     "lint": "eslint",
     "storage:generate": "tsx scripts/dimah-s3.ts generate latest -o ../db/src/schema/dimah-s3.schema.ts && pnpm -w exec prettier --write packages/db/src/schema/dimah-s3.schema.ts",
     "storage:purge": "tsx --env-file-if-exists=../../.env scripts/purge.ts",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -27,11 +28,13 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/react": "catalog:",
     "eslint": "catalog:",
     "react": "catalog:",
     "tsx": "^4.23.15",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.0.0"

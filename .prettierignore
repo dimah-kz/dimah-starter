@@ -5,6 +5,9 @@ out/
 build/
 .turbo/
 coverage/
+test-results/
+playwright-report/
+blob-report/
 .pnpm-store/
 pnpm-lock.yaml
 next-env.d.ts

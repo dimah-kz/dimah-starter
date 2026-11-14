@@ -8,6 +8,8 @@
     "dev": "next dev",
     "lint": "eslint",
     "start": "next start",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
@@ -33,14 +35,23 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@next/playwright": "catalog:",
+    "@playwright/test": "^1.65.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@tailwindcss/turbopack": "catalog:",
+    "@testing-library/dom": "catalog:",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "^14.6.10",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "eslint": "catalog:",
+    "jsdom": "catalog:",
     "tailwindcss": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

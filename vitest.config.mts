@@ -1,16 +1,24 @@
-import { fileURLToPath } from "node:url"
 import { defineConfig } from "vitest/config"
 
-// Unit tests sit beside their source as `*.test.ts`. Keep them to pure logic:
-// anything that needs a request, a session or the database belongs in an
-// end-to-end test against the running app.
+/**
+ * Every package with a `vitest.config.ts` is one project here. `pnpm test`
+ * runs each package through Turborepo, which caches results; this file serves
+ * `pnpm test:watch` and `pnpm test:coverage` across the whole repo.
+ */
 export default defineConfig({
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./apps/web/src", import.meta.url)),
-    },
-  },
   test: {
-    include: ["{apps,packages}/*/src/**/*.test.ts"],
+    projects: ["{apps,packages}/*/vitest.config.ts"],
+    coverage: {
+      provider: "v8",
+      include: ["{apps,packages}/*/src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.test.{ts,tsx}",
+        "**/*.d.ts",
+        // Generated: `pnpm ui:sync`, `auth:generate`, `storage:generate`.
+        "packages/ui/src/components/**",
+        "packages/db/src/schema/**",
+      ],
+      reporter: ["text-summary", "html", "lcov"],
+    },
   },
 })

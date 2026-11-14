@@ -74,7 +74,7 @@ The rules behind it — what to cache, which tag to expire, why sessions are nev
 | **Product API**   | [oRPC](https://orpc.dev) router in `@repo/api`, called in-process from Server Actions or over HTTP                |
 | **UI**            | [shadcn/ui](https://ui.shadcn.com) on Base UI, [ReUI](https://reui.io), Tailwind CSS 4, dark mode                 |
 | **SEO**           | Metadata, Open Graph image, sitemap, robots, JSON-LD and a public landing page                                    |
-| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest, Turborepo caching, GitHub Actions CI                                 |
+| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest unit tests, Playwright e2e, Turborepo caching, GitHub Actions CI      |
 
 **Stack:** Next.js 16 · React 19 · TypeScript · Better Auth · Drizzle ORM · PostgreSQL · oRPC · Tailwind CSS 4 · shadcn/ui · next-intl · Resend · Turborepo · pnpm
 
@@ -134,7 +134,8 @@ Sign in again to see **Platform management** in the sidebar. Later admins are pr
 | ---------------------------------------------------- | ----------------------------------------------- |
 | `pnpm dev`                                           | Run the web app                                 |
 | `pnpm format:check` · `lint` · `typecheck` · `build` | Quality gates (CI runs all of them)             |
-| `pnpm test` · `test:watch`                           | Unit tests (Vitest, `*.test.ts` beside source)  |
+| `pnpm test` · `test:watch` · `test:coverage`         | Unit tests (Vitest, beside the code they test)  |
+| `pnpm test:e2e`                                      | End-to-end tests (Playwright, `apps/web/e2e`)   |
 | `pnpm --filter @repo/db db:generate` · `db:migrate`  | Create and apply migrations                     |
 | `pnpm --filter @repo/db db:studio`                   | Browse the database                             |
 | `pnpm ui:sync`                                       | Regenerate shadcn / ReUI components             |
@@ -154,7 +155,7 @@ dimah-starter/
 │   ├── i18n/                # Messages, locales and formatters
 │   ├── storage/             # dimah-s3 upload routes and object cleanup
 │   └── ui/                  # shadcn/ui, ReUI and Dimah components
-├── tooling/                 # Shared ESLint and TypeScript configs
+├── tooling/                 # Shared ESLint, TypeScript and Vitest configs
 └── docs/agents/             # How-to guides for contributors and AI agents
 ```
 

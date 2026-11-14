@@ -38,7 +38,9 @@
     "format:check": "prettier --check .",
     "lint": "turbo lint",
     "storage:purge": "pnpm --filter @repo/storage storage:purge",
-    "test": "vitest run",
+    "test": "turbo test",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "pnpm --filter web test:e2e",
     "test:watch": "vitest",
     "typecheck": "turbo typecheck",
     "ui:sync": "pnpm --filter @repo/ui sync"
@@ -46,13 +48,15 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@vitest/coverage-v8": "^5.1.0",
+    "jsdom": "catalog:",
     "prettier": "catalog:",
     "prettier-plugin-packagejson": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
-    "vite": "^8.3.8",
-    "vitest": "^5.1.0"
+    "vite": "catalog:",
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {

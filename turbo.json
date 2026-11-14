@@ -19,10 +19,12 @@
     "GOOGLE_SITE_VERIFICATION",
     "NODE_ENV"
   ],
+  "globalPassThroughEnv": ["CI", "E2E_PORT", "E2E_BROWSER_CHANNEL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "env": ["EXPOSE_TESTING_API"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "transit": {
@@ -32,6 +34,9 @@
       "dependsOn": ["transit"]
     },
     "typecheck": {
+      "dependsOn": ["transit"]
+    },
+    "test": {
       "dependsOn": ["transit"]
     },
     "dev": {

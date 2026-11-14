@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     turbopackRustReactCompiler: true,
+    // `instant()` from `@next/playwright` in e2e runs against a production
+    // build. Set EXPOSE_TESTING_API=1 for that build only, never for a deploy.
+    exposeTestingApiInProductionBuild: process.env.EXPOSE_TESTING_API === "1",
   },
   // Tailwind via the Turbopack loader (create-next-app default). No PostCSS
   // config: a postcss.config.mjs would compile the same CSS a second time.

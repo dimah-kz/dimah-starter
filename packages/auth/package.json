@@ -15,6 +15,7 @@
   "scripts": {
     "auth:generate": "auth generate --config ./src/auth.ts --output ../db/src/schema/auth.schema.ts -y && pnpm -w exec prettier --write packages/db/src/schema/auth.schema.ts",
     "lint": "eslint",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -29,11 +30,13 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/node": "catalog:",
     "auth": "1.7.23",
     "eslint": "catalog:",
     "next": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "next": "^16.0.0"
