@@ -3,17 +3,11 @@
   "version": "9",
   "dialect": "postgres",
   "id": "6c970757-04cc-4874-a433-0a7385ccf94a",
-  "prevIds": [
-    "4a200235-826c-4bbd-bba7-e5f77ef23f02"
-  ],
+  "prevIds": ["4a200235-826c-4bbd-bba7-e5f77ef23f02"],
   "footprints": [
     {
       "statementType": "create_table",
-      "statementTarget": [
-        "table",
-        "auth",
-        "passkey"
-      ],
+      "statementTarget": ["table", "auth", "passkey"],
       "writes": [
         "s|tbl|auth.passkey",
         "n|tbl|auth.passkey",
@@ -22,18 +16,11 @@
         "n|type|auth.passkey",
         "n|rel|auth.passkey_pkey"
       ],
-      "reads": [
-        "n|sch|auth"
-      ]
+      "reads": ["n|sch|auth"]
     },
     {
       "statementType": "create_index",
-      "statementTarget": [
-        "index",
-        "auth",
-        "passkey",
-        "passkey_userId_idx"
-      ],
+      "statementTarget": ["index", "auth", "passkey", "passkey_userId_idx"],
       "writes": [
         "s|idx|auth.passkey_userId_idx",
         "n|idx|auth.passkey_userId_idx",
@@ -68,11 +55,7 @@
     },
     {
       "statementType": "create_fk",
-      "statementTarget": [
-        "table",
-        "auth",
-        "passkey"
-      ],
+      "statementTarget": ["table", "auth", "passkey"],
       "writes": [
         "s|fk|auth.passkey.passkey_user_id_user_id_fkey",
         "n|fk|auth.passkey.passkey_user_id_user_id_fkey",
@@ -331,14 +314,10 @@
         "table": "passkey",
         "name": "passkey_user_id_user_id_fkey",
         "nameExplicit": false,
-        "columns": [
-          "user_id"
-        ],
+        "columns": ["user_id"],
         "schemaTo": "auth",
         "tableTo": "user",
-        "columnsTo": [
-          "id"
-        ],
+        "columnsTo": ["id"],
         "onUpdate": "NO ACTION",
         "onDelete": "CASCADE",
         "entityType": "fks"
@@ -350,9 +329,7 @@
         "schema": "auth",
         "table": "passkey",
         "name": "passkey_pkey",
-        "columns": [
-          "id"
-        ],
+        "columns": ["id"],
         "nameExplicit": false,
         "entityType": "pks"
       }
