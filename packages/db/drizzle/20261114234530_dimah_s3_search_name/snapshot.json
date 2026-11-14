@@ -1,0 +1,86 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "c100095b-c807-497c-b466-830cc55360a9",
+  "prevIds": ["6c970757-04cc-4874-a433-0a7385ccf94a"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "storage", "storage_folder", "search_name"],
+      "writes": [
+        "s|col|storage.storage_folder.search_name",
+        "n|col|storage.storage_folder.search_name",
+        "e|col|storage.storage_folder.search_name"
+      ],
+      "reads": ["n|tbl|storage.storage_folder", "n|sch|storage"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "storage", "storage_object", "search_name"],
+      "writes": [
+        "s|col|storage.storage_object.search_name",
+        "n|col|storage.storage_object.search_name",
+        "e|col|storage.storage_object.search_name"
+      ],
+      "reads": ["n|tbl|storage.storage_object", "n|sch|storage"]
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "private_dimah_s3_settings",
+        "value"
+      ],
+      "writes": ["s|colprop|public.private_dimah_s3_settings.value.default"],
+      "reads": [
+        "n|tbl|public.private_dimah_s3_settings",
+        "n|sch|public",
+        "n|col|public.private_dimah_s3_settings.value"
+      ],
+      "sqlHash": "2705844b5b6d1406"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "storage",
+        "table": "storage_folder",
+        "name": "search_name",
+        "type": "varchar(1024)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "storage",
+        "table": "storage_object",
+        "name": "search_name",
+        "type": "varchar(1024)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"private_dimah_s3_settings\",\"value\"]",
+      "set": {
+        "default": "'2.2.0'"
+      }
+    }
+  ]
+}

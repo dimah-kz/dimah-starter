@@ -1,6 +1,6 @@
 # @repo/storage
 
-[dimah-s3](https://s3.dimah.dev) 2.0 beta (`2.0.0-beta.8`). The browser uploads straight to the bucket; this package owns the routes, who may call them, and the object rows.
+[dimah-s3](https://s3.dimah.dev) 2.0 beta (`2.0.0-beta.9`). The browser uploads straight to the bucket; this package owns the routes, who may call them, and the object rows.
 
 | File                  | Owns                                                                                               |
 | --------------------- | -------------------------------------------------------------------------------------------------- |
@@ -21,7 +21,7 @@ Exports: `s3` (for the `/api/s3` handler), `toOwnedPublicUrl`, `deleteRouteObjec
 - `avatar` — the signed-in user (`user:{id}`)
 - `logo` — the active organization (`org:{id}`). Members can read it; upload and delete need `organization:update`.
 
-`@dimah-s3/db` binds every upload to the caller's scope, so a key from another scope is `OBJECT_NOT_FOUND`. Each scope is capped at 10 files and 20 MiB (`scopeQuota` in `s3.ts`). `PATCH /db/object` and the folder endpoints are refused: nothing renames objects or uses folders. Keys are `{route}/{ownerId}/{uuid}/{name}` and never reused, so public URLs are cached as immutable.
+`@dimah-s3/db` binds every upload to the caller's scope, so a key from another scope is `OBJECT_NOT_FOUND`. Each scope is capped at 10 files and 20 MiB (`scopeQuota` in `s3.ts`). `PATCH /db/object` and the folder endpoints are refused: nothing renames objects or uses folders, so a `recursive` listing covers the same scope as a plain one and `authorize` leaves it allowed. Keys are `{route}/{ownerId}/{uuid}/{name}` and never reused, so public URLs are cached as immutable.
 
 ## Saving an image
 
@@ -47,7 +47,7 @@ Importing the package never throws: without `S3_BUCKET`, every storage call fail
 
 ## Production
 
-- Rows live in the `storage` PostgreSQL schema (schema 2.1.0, `@repo/db`). `scripts/dimah-s3.ts` runs the FumaDB CLI of `@dimah-s3/db` with the same `storage` schema as `s3.ts`: after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`.
+- Rows live in the `storage` PostgreSQL schema (schema 2.2.0, `@repo/db`). `scripts/dimah-s3.ts` runs the FumaDB CLI of `@dimah-s3/db` with the same `storage` schema as `s3.ts`: after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`. `@dimah-s3/db` does not upgrade an existing database itself, so read the generated migration first: a new required column needs a backfill for the rows already there, as `20261114234530_dimah_s3_search_name` does for `search_name`.
 - Deletes are soft: the object leaves S3, the row stays as `deleted`.
 - An upload that never confirms leaves a `pending` row, and can leave an object or an unfinished multipart upload. Schedule `pnpm storage:purge` hourly to clean them up.
 - An `AbortIncompleteMultipartUpload` lifecycle rule on the bucket is a good backstop.

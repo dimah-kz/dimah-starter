@@ -6,6 +6,7 @@ import type { Translations } from "@dimah-s3/react"
  */
 export const fa = {
   "1 file(object list usage)": "۱ فایل",
+  "1 result(object list search)": "۱ نتیجه",
   "A file checksum is required(API error)": "جمع‌آزمایی فایل لازم است",
   "A file with this name already exists(API error)":
     "فایلی با این نام از قبل وجود دارد",
@@ -138,6 +139,10 @@ export const fa = {
   "Not found(API error)": "پیدا نشد",
   "Nothing in this folder matches “{search}”.(object list)":
     "در این پوشه چیزی با «{search}» هم‌خوانی ندارد.",
+  "Nothing in “{folder}” or its folders matches “{search}”.(object list search)":
+    "در «{folder}» و پوشه‌های آن چیزی با «{search}» هم‌خوانی ندارد.",
+  "Nothing matches “{search}”.(object list search)":
+    "چیزی با «{search}» هم‌خوانی ندارد.",
   "Nothing to delete(object list selection)": "چیزی برای حذف نیست",
   "Object key is invalid(API error)": "کلید شیء نامعتبر است",
   "PB(file size unit)": "پتابایت",
@@ -153,12 +158,19 @@ export const fa = {
   "Retry {name}(attachment action)": "تلاش دوباره {name}",
   "Retry(object list)": "تلاش دوباره",
   "Retry(toast action)": "تلاش دوباره",
+  "Search all files(object list search)": "جستجو در همه فایل‌ها",
+  "Search everywhere(object list search)": "جستجو در همه‌جا",
   "Search files(object list)": "جستجوی فایل‌ها",
+  "Search in “{folder}”(object list search)": "جستجو در «{folder}»",
+  "Search in(object list search)": "جستجو در",
+  "Searching(object list search)": "در حال جستجو",
+  "Searching…(object list search)": "در حال جستجو…",
   "Select all(object list selection)": "انتخاب همه",
   "Select this page(object list selection)": "انتخاب این صفحه",
   "Select {name}(object list selection)": "انتخاب {name}",
   "Selected folders stay in the list.(object list selection)":
     "پوشه‌های انتخاب‌شده در فهرست می‌مانند.",
+  "Show in folder(object list menu)": "نمایش در پوشه",
   "Size(object list sort)": "حجم",
   "Some operations failed(API error)": "بعضی عملیات‌ها ناموفق بودند",
   "Something went wrong(API error)": "خطایی رخ داد",
@@ -214,9 +226,11 @@ export const fa = {
   "{count} files were rejected(toast)": "{count} فایل رد شد",
   "{count} files(object list usage)": "{count} فایل",
   "{count} of {max} files(object list usage)": "{count} از {max} فایل",
+  "{count} results(object list search)": "{count} نتیجه",
   "{count} selected on this page(object list selection)":
     "{count} مورد در این صفحه انتخاب شده",
   "{count} selected(object list selection)": "{count} مورد انتخاب شده",
+  "{count}+ results(object list search)": "بیش از {count} نتیجه",
   "{done} of {total} files uploaded(upload progress)":
     "{done} از {total} فایل آپلود شد",
   "{failed} of {total} failed(API error)": "{failed} از {total} ناموفق",
