@@ -14,17 +14,7 @@ pnpm workspaces `apps/*`, `packages/*` and `tooling/*`, run through Turborepo (`
 
 Dependencies point one way: apps → packages, and packages → packages without cycles. A package never imports an app; an app never imports another app.
 
-| Package         | Exports                                                                                               |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| `@repo/auth`    | `auth`, `Session`, `consumeRateLimit`, `getAuthApiErrorMessage`; pure subpaths such as `/role-string` |
-| `@repo/db`      | `db` (`.`), tables (`/schema`), Drizzle operators (`/drizzle`)                                        |
-| `@repo/api`     | `router`, `createContext`, `createRouterClient`, `handleRequest`; `/client` for HTTP callers          |
-| `@repo/storage` | `s3`, `toOwnedPublicUrl`, `deleteRouteObjects`, `deleteOwnedObjects`; `/s3-client` for the browser    |
-| `@repo/email`   | `sendAuthMail`, `sendOrganizationInvitation`                                                          |
-| `@repo/i18n`    | `locales`, `loadMessages`, `resolveLocaleFromHeaders`, `formatDate`, …                                |
-| `@repo/ui`      | `/components/*`, `/hooks/*`, `/lib/*`, `/globals.css`                                                 |
-
-Each package's `package.json` `exports` is the full list. Import only what is exported there.
+Each package's README says what it is for, and its `package.json` `exports` lists what it exposes. Import only those entry points.
 
 ## Placement
 

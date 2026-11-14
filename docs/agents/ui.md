@@ -29,7 +29,6 @@ The style is `base-mira` on Base UI, not Radix: props such as `render` replace R
 - **Logical properties only:** `ms-*` / `me-*`, `ps-*` / `pe-*`, `start-*` / `end-*`, `text-start`, `border-s`. The app also runs right-to-left (`fa`). Set direction on `<html>` alone — [i18n.md](./i18n.md).
 - **Prefer `variant` and `size` props.** Add `className` only for what that call site needs; don't restate the radius, padding or colors the primitive already sets.
 - **Colors come from theme tokens** (`bg-muted`, `text-muted-foreground`, `border-border`), so dark mode works. Dark mode is `next-themes` with a `class` on `<html>`.
-- **Copy comes from `@repo/i18n`**, including `aria-label`s.
 
 ## Feedback and forms
 

@@ -165,7 +165,14 @@ Core logic lives in `packages/`, routes and feature UI in `apps/web`. Another ap
 
 ## Build your product on it
 
-1. **Brand it** — app name and description in `packages/i18n/src/messages/*/common.json`, colors in `packages/ui/src/styles/globals.css`, the landing page in `apps/web/src/app/(marketing)/`.
+1. **Make it yours** —
+   - **Brand:** app name and description in `packages/i18n/src/messages/*/common.json`, colors in `packages/ui/src/styles/globals.css`, and the landing page, FAQ and `llms.txt` in `apps/web/src/app/(marketing)/` (with their copy in `marketing.json`).
+   - **Repository files** that still describe this starter:
+     - `apps/web/src/lib/site.ts` (links, author)
+     - the root `package.json` metadata
+     - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`
+     - the copyright line in `LICENSE`
+   - **Private vulnerability reporting:** enable it under **Settings → Security**.
 2. **Add a procedure** — one file per procedure in `packages/api/src/routers/<domain>/` ([api.md](./docs/agents/api.md)).
 3. **Add a page** — copy a sibling under `apps/web/src/app/dashboard/`, its action under `app/action/`, and register its URL, labels and cache tags ([dashboard.md](./docs/agents/dashboard.md)).
 4. **Add tables** — Drizzle schema in `packages/db`, then `db:generate` and `db:migrate`.

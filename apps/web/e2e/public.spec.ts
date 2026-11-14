@@ -13,7 +13,8 @@ test("the landing page opens instantly from sign in", async ({ page }) => {
   await page.goto("/login")
 
   await instant(page, async () => {
-    await page.getByRole("link", { name: "Dimah Starter" }).click()
+    // The brand link; its name is the app title, which changes when you rebrand.
+    await page.locator('a[href="/"]').first().click()
     await page.waitForURL((url) => url.pathname === "/")
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
   })

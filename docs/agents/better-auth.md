@@ -16,7 +16,7 @@ Better Auth 1.7 runs on the server only. The web app has no auth client: pages r
 
 ## Configuration
 
-Plugins: `admin`, `organization` (teams off), `lastLoginMethod`, `i18n` (error messages in the `NEXT_LOCALE` locale), `nextCookies`.
+What the config in `auth.ts` means for the app:
 
 - **Email/password:** `requireEmailVerification` blocks sign-in until the link is opened. Password reset and password change both revoke the other sessions.
 - **Google:** on when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. `googleSignInEnabled` hides the button otherwise. The callback is `/api/auth/callback/google`.

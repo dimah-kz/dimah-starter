@@ -6,7 +6,7 @@ alwaysApply: false
 
 # i18n
 
-- Every user-facing string is a message key; add it to `en` and `fa` in the same change.
+- Every user-facing string is a message key; add it to every locale in the same change.
 - Locale is the `NEXT_LOCALE` cookie; `lang`/`dir` only on `<html>`.
 - `pnpm typecheck` catches unknown keys; `pnpm --filter @repo/i18n test` catches a locale missing keys or placeholders.
 

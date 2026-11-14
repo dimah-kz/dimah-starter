@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report security issues **privately** through [GitHub's private vulnerability reporting](https://github.com/dimah-kz/dimah-starter/security/advisories/new) — not in a public issue or pull request.
+Please report security issues **privately**: open this repository's **Security** tab and choose **Report a vulnerability** (GitHub private vulnerability reporting). Do not use a public issue or pull request.
 
 Include what is affected, how to reproduce it, and the impact you expect. You will get a reply as soon as possible, and credit in the fix unless you prefer otherwise.
 

@@ -46,7 +46,7 @@ No database in unit tests. A query that needs Postgres belongs in an end-to-end 
 
 - Prefer user-facing locators (`getByRole`, `getByLabel`) and web-first assertions (`await expect(locator).toBeVisible()`).
 - `instant()` from `@next/playwright` asserts what a **client navigation** shows before dynamic content streams in — copy `e2e/auth.spec.ts`. Direct visits stream into the root layout's fallback, because the locale comes from a cookie; assert those without `instant()`.
-- E2E files drive the app from outside: no imports from `@repo/*` or `@/`.
+- E2E files test the app from outside, through the browser and HTTP. Don't import `@repo/*` or `@/` into them: Playwright's loader cannot load the message catalogs' JSON imports, and a test that shares the app's code also shares its bugs.
 - Signed-in flows need a user: create one in a Playwright `globalSetup` against a test database and save `storageState`. Not included yet.
 
 ## In CI

@@ -1,5 +1,3 @@
+# GitHub adds a "Report a security vulnerability" link here on its own,
+# pointing at SECURITY.md and private vulnerability reporting.
 blank_issues_enabled: false
-contact_links:
-  - name: Report a vulnerability
-    url: https://github.com/dimah-kz/dimah-starter/security/advisories/new
-    about: Privately, as described in SECURITY.md.

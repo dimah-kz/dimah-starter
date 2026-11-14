@@ -1,19 +1,6 @@
 # Guides for contributors and agents
 
-Each guide covers one area: how it works here, the steps to change it, and a real file to copy. Read the one for the area you are changing; [AGENTS.md](../../AGENTS.md) holds the rules that apply everywhere. The code is the source of truth for what exists — these pages explain how to extend it.
-
-| Guide                                | Covers                                                                           |
-| ------------------------------------ | -------------------------------------------------------------------------------- |
-| [architecture.md](./architecture.md) | Workspace, package roles, dependency direction, file placement, naming, versions |
-| [nextjs.md](./nextjs.md)             | Next.js 16.4 docs, rendering, Suspense, `'use cache'`, tags, invalidation        |
-| [better-auth.md](./better-auth.md)   | Auth config, auth writes, rate limits, roles and permissions, sessions           |
-| [dashboard.md](./dashboard.md)       | Dashboard pages, gates, nav registries, server-rendered lists                    |
-| [api.md](./api.md)                   | Product procedures in `@repo/api` (oRPC)                                         |
-| [storage.md](./storage.md)           | Upload routes, saving and removing files, purge                                  |
-| [i18n.md](./i18n.md)                 | Messages, locales, right-to-left                                                 |
-| [ui.md](./ui.md)                     | `@repo/ui` primitives, styling, forms                                            |
-| [seo.md](./seo.md)                   | Public pages, metadata, sitemap, robots                                          |
-| [testing.md](./testing.md)           | Vitest and Playwright, one reference test per kind                               |
+Each guide covers one area: how it works here, the steps to change it, and a real file to copy. [AGENTS.md](../../AGENTS.md) holds the rules that apply everywhere and says which guide to read for which change. The code is the source of truth for what exists; these pages explain how to extend it.
 
 ## Copy these
 

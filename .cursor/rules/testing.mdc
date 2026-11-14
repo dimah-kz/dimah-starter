@@ -8,6 +8,6 @@ alwaysApply: false
 
 - `*.test.ts` (Node) / `*.test.tsx` (jsdom) beside the code under `src/`; import from `vitest`; no database.
 - Mock packages that build clients on import (`@repo/auth`, `@repo/storage`); render Client Components with `renderWithIntl` and query by role.
-- E2E specs in `apps/web/e2e/` drive the app from outside (no `@repo/*` imports); `instant()` only for client navigations.
+- E2E specs in `apps/web/e2e/` test from outside (no `@repo/*` or `@/` imports); `instant()` only for client navigations.
 
 Guide: [docs/agents/testing.md](docs/agents/testing.md)
