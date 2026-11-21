@@ -1,5 +1,5 @@
-import { instant } from "@next/playwright"
 import { expect, test, type Page } from "@playwright/test"
+import { instantAfterPrefetch } from "./instant"
 
 test("the dashboard sends signed-out visitors to sign in", async ({ page }) => {
   await page.goto("/dashboard")
@@ -13,7 +13,7 @@ test("the dashboard sends signed-out visitors to sign in", async ({ page }) => {
 test("sign up opens instantly from sign in", async ({ page }) => {
   await page.goto("/login")
 
-  await instant(page, async () => {
+  await instantAfterPrefetch(page, async () => {
     await page.getByRole("link", { name: "Sign up" }).click()
     await page.waitForURL((url) => url.pathname === "/signup")
     await expect(page.getByRole("heading", { name: "Sign up" })).toBeVisible()

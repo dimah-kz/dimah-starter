@@ -1,5 +1,5 @@
-import { instant } from "@next/playwright"
 import { expect, test } from "@playwright/test"
+import { instantAfterPrefetch } from "./instant"
 
 test("the landing page renders its headline", async ({ page }) => {
   await page.goto("/")
@@ -12,7 +12,7 @@ test("the landing page renders its headline", async ({ page }) => {
 test("the landing page opens instantly from sign in", async ({ page }) => {
   await page.goto("/login")
 
-  await instant(page, async () => {
+  await instantAfterPrefetch(page, async () => {
     // The brand link; its name is the app title, which changes when you rebrand.
     await page.locator('a[href="/"]').first().click()
     await page.waitForURL((url) => url.pathname === "/")
