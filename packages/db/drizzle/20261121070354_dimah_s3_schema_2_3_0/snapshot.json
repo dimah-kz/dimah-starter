@@ -3,55 +3,33 @@
   "version": "10",
   "dialect": "postgres",
   "id": "7458af5e-d506-42ee-a3ed-adf82d179270",
-  "prevIds": [
-    "c100095b-c807-497c-b466-830cc55360a9"
-  ],
+  "prevIds": ["c100095b-c807-497c-b466-830cc55360a9"],
   "footprints": [
     {
       "statementType": "rename_column",
-      "statementTarget": [
-        "column",
-        "storage",
-        "storage_object",
-        "filename"
-      ],
+      "statementTarget": ["column", "storage", "storage_object", "filename"],
       "writes": [
         "s|col|storage.storage_object.filename",
         "n|col|storage.storage_object.filename",
         "s|col|storage.storage_object.name",
         "n|col|storage.storage_object.name"
       ],
-      "reads": [
-        "n|tbl|storage.storage_object",
-        "n|sch|storage"
-      ]
+      "reads": ["n|tbl|storage.storage_object", "n|sch|storage"]
     },
     {
       "statementType": "rename_column",
-      "statementTarget": [
-        "column",
-        "storage",
-        "storage_object",
-        "e_tag"
-      ],
+      "statementTarget": ["column", "storage", "storage_object", "e_tag"],
       "writes": [
         "s|col|storage.storage_object.e_tag",
         "n|col|storage.storage_object.e_tag",
         "s|col|storage.storage_object.etag",
         "n|col|storage.storage_object.etag"
       ],
-      "reads": [
-        "n|tbl|storage.storage_object",
-        "n|sch|storage"
-      ]
+      "reads": ["n|tbl|storage.storage_object", "n|sch|storage"]
     },
     {
       "statementType": "drop_unique",
-      "statementTarget": [
-        "table",
-        "storage",
-        "storage_folder"
-      ],
+      "statementTarget": ["table", "storage", "storage_folder"],
       "writes": [
         "s|uq|storage.storage_folder.storage_folder_scope_path_uk",
         "n|uq|storage.storage_folder.storage_folder_scope_path_uk",
@@ -65,9 +43,7 @@
         "e|col|storage.storage_folder.scope",
         "e|col|storage.storage_folder.path"
       ],
-      "sharedWrites": [
-        "e|uniqueness|storage.storage_folder.path.scope"
-      ]
+      "sharedWrites": ["e|uniqueness|storage.storage_folder.path.scope"]
     },
     {
       "statementType": "drop_index",
@@ -100,9 +76,7 @@
         "private_dimah_s3_settings",
         "value"
       ],
-      "writes": [
-        "s|colprop|public.private_dimah_s3_settings.value.default"
-      ],
+      "writes": ["s|colprop|public.private_dimah_s3_settings.value.default"],
       "reads": [
         "n|tbl|public.private_dimah_s3_settings",
         "n|sch|public",
@@ -112,12 +86,7 @@
     },
     {
       "statementType": "alter_column",
-      "statementTarget": [
-        "column",
-        "storage",
-        "storage_object",
-        "route"
-      ],
+      "statementTarget": ["column", "storage", "storage_object", "route"],
       "writes": [
         "s|colprop|storage.storage_object.route.type",
         "s|colprop|storage.storage_object.route.default"
@@ -131,12 +100,7 @@
     },
     {
       "statementType": "alter_column",
-      "statementTarget": [
-        "column",
-        "storage",
-        "storage_object",
-        "acl"
-      ],
+      "statementTarget": ["column", "storage", "storage_object", "acl"],
       "writes": [
         "s|colprop|storage.storage_object.acl.type",
         "s|colprop|storage.storage_object.acl.default"
