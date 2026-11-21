@@ -108,7 +108,7 @@ flowchart LR
 
 ## Quick start
 
-**You need:** Node.js ≥ 22, pnpm 12, a PostgreSQL database (or Docker) and, for uploads, an S3-compatible bucket.
+**You need:** Node.js ≥ 22.12, pnpm 12, a PostgreSQL database (or Docker) and, for uploads, an S3-compatible bucket.
 
 ```bash
 pnpm install
