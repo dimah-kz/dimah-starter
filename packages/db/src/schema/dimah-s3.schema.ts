@@ -20,18 +20,18 @@ export const storageObject = storageSchema.table(
     scope: varchar("scope", { length: 255 }).notNull(),
     bucket: varchar("bucket", { length: 255 }).notNull(),
     key: varchar("key", { length: 1024 }).notNull(),
-    route: varchar("route", { length: 255 }).notNull(),
+    route: varchar("route", { length: 64 }).notNull(),
     folderId: varchar("folder_id", { length: 255 }),
-    filename: varchar("filename", { length: 255 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
     searchName: varchar("search_name", { length: 1024 }).notNull(),
     contentType: varchar("content_type", { length: 255 }),
     size: bigint("size", { mode: "bigint" }),
     declaredSize: bigint("declared_size", { mode: "bigint" }),
-    eTag: varchar("e_tag", { length: 255 }),
+    eTag: varchar("etag", { length: 255 }),
     status: varchar("status", { length: 16 }).notNull(),
     s3Metadata: json("s3_metadata"),
     attributes: json("attributes"),
-    acl: varchar("acl", { length: 255 }),
+    acl: varchar("acl", { length: 16 }),
     uploadId: text("upload_id"),
     uploadToken: varchar("upload_token", { length: 64 }),
     expiresAt: timestamp("expires_at"),
@@ -53,10 +53,10 @@ export const storageObject = storageSchema.table(
       table.status,
       table.updatedAt
     ),
-    index("storage_object_scope_filename_idx").on(
+    index("storage_object_scope_name_idx").on(
       table.scope,
       table.status,
-      table.filename
+      table.searchName
     ),
     index("storage_object_scope_size_idx").on(
       table.scope,
@@ -83,18 +83,18 @@ export const storageFolder = storageSchema.table(
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
   (table) => [
-    unique("storage_folder_scope_path_uk").on(table.scope, table.path),
     unique("storage_folder_scope_parent_name_uk").on(
       table.scope,
       table.parentId,
       table.name
     ),
+    index("storage_folder_scope_path_idx").on(table.scope, table.path),
   ]
 )
 
 export const private_dimah_s3_settings = pgTable("private_dimah_s3_settings", {
   key: varchar("key", { length: 255 }).primaryKey().notNull(),
-  version: text("value").notNull().default("2.2.0"),
+  version: text("value").notNull().default("2.3.0"),
 })
 
 export const relations = defineRelations({

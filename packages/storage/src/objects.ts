@@ -72,8 +72,7 @@ async function deleteScopeObjects(
   do {
     let page
     try {
-      page = await s3.db.objects.list({
-        scope,
+      page = await s3.db.objects.list(scope, {
         route,
         limit: DELETE_MANY_MAX_KEYS,
         cursor,

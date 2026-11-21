@@ -51,7 +51,7 @@ export function AvatarUploadField({
 
   const hasImage = Boolean(objectKey || externalImage)
 
-  const onChange = async (result: { key: string }) => {
+  const onUploaded = async (result: { key: string }) => {
     const outcome = await setAction(result.key).catch(() => null)
     if (!outcome?.success) {
       toast.add({
@@ -103,7 +103,7 @@ export function AvatarUploadField({
         objectKey={objectKey}
         label={labels.upload}
         shape={shape}
-        onChange={(result) => void onChange(result)}
+        onUploaded={(result) => void onUploaded(result)}
         className={
           externalImage
             ? "[&_button]:bg-transparent [&_button>svg]:invisible"

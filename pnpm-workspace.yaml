@@ -20,11 +20,11 @@ catalog:
   dotenv: ^18.0.10
 
   # Storage
-  "@dimah-s3/core": 2.0.0-beta.9
-  "@dimah-s3/db": 2.0.0-beta.9
-  "@dimah-s3/react": 2.0.0-beta.9
-  "@dimah-s3/server": 2.0.0-beta.9
-  "@dimah-s3/ui": 2.0.0-beta.9
+  "@dimah-s3/core": 2.0.0-beta.12
+  "@dimah-s3/db": 2.0.0-beta.12
+  "@dimah-s3/react": 2.0.0-beta.12
+  "@dimah-s3/server": 2.0.0-beta.12
+  "@dimah-s3/ui": 2.0.0-beta.12
 
   # UI
   tailwindcss: ^4.3.5

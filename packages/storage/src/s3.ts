@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { DimahS3DB, db } from "@dimah-s3/db"
+import { DimahS3Db, db } from "@dimah-s3/db"
 import { drizzleAdapter } from "@dimah-s3/db/adapters/drizzle"
 import { dimahS3, s3Error } from "@dimah-s3/server"
 import { auth } from "@repo/auth"
@@ -46,13 +46,19 @@ export const s3 = dimahS3({
   plugins: [
     db({
       // Tables in the `storage` PostgreSQL schema; `scripts/dimah-s3.ts` generates them.
-      client: DimahS3DB.names
+      client: DimahS3Db.names
         .schema("storage")
         .client(drizzleAdapter({ db: drizzleDb, provider: "postgresql" })),
       resolveScope: ({ locals, route }) =>
         toCallerScope(toRouteOwner(route), locals),
-      // Refuses `PATCH /db/object` and the folder endpoints: nothing uses them.
-      authorize: ({ operation }) => operation !== "update",
+      // Nothing renames objects or uses folders. `"update"` is `PATCH /db/object`;
+      // folder calls have their own operations. A flat list stays allowed: cleanup
+      // lists a scope with no folder.
+      authorize: ({ operation }) =>
+        operation !== "update" &&
+        operation !== "folder.create" &&
+        operation !== "folder.update" &&
+        operation !== "folder.delete",
       quota: scopeQuota,
     }),
   ],

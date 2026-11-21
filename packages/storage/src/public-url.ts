@@ -12,7 +12,7 @@ function publicBaseUrl(): string | null {
  */
 export function toPublicUrl(key: string): string | null {
   const baseUrl = publicBaseUrl()
-  return baseUrl ? buildPublicObjectUrl({ baseUrl, key }) : null
+  return baseUrl ? buildPublicObjectUrl({ baseURL: baseUrl, key }) : null
 }
 
 /**

@@ -174,20 +174,20 @@ settings:
 catalogs:
   default:
     '@dimah-s3/core':
-      specifier: 2.0.0-beta.9
-      version: 2.0.0-beta.9
+      specifier: 2.0.0-beta.12
+      version: 2.0.0-beta.12
     '@dimah-s3/db':
-      specifier: 2.0.0-beta.9
-      version: 2.0.0-beta.9
+      specifier: 2.0.0-beta.12
+      version: 2.0.0-beta.12
     '@dimah-s3/react':
-      specifier: 2.0.0-beta.9
-      version: 2.0.0-beta.9
+      specifier: 2.0.0-beta.12
+      version: 2.0.0-beta.12
     '@dimah-s3/server':
-      specifier: 2.0.0-beta.9
-      version: 2.0.0-beta.9
+      specifier: 2.0.0-beta.12
+      version: 2.0.0-beta.12
     '@dimah-s3/ui':
-      specifier: 2.0.0-beta.9
-      version: 2.0.0-beta.9
+      specifier: 2.0.0-beta.12
+      version: 2.0.0-beta.12
     '@eslint/js':
       specifier: ^10.0.1
       version: 10.0.1
@@ -347,16 +347,16 @@ importers:
     dependencies:
       '@dimah-s3/core':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9
+        version: 2.0.0-beta.12
       '@dimah-s3/react':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
+        version: 2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
       '@dimah-s3/server':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0)
+        version: 2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0)
       '@dimah-s3/ui':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@base-ui/react@1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@dimah-s3/core@2.0.0-beta.9)(@dimah-s3/react@2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(class-variance-authority@0.7.1)(cn@0.5.2)(lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 2.0.0-beta.12(@base-ui/react@1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@dimah-s3/core@2.0.0-beta.12)(@dimah-s3/react@2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(class-variance-authority@0.7.1)(cn@0.5.2)(lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@fuma-translate/react':
         specifier: 'catalog:'
         version: 1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -661,16 +661,16 @@ importers:
         version: 3.1175.0
       '@dimah-s3/core':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9
+        version: 2.0.0-beta.12
       '@dimah-s3/db':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0)(@dimah-s3/server@2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0))(drizzle-orm@1.0.0-rc.6(@types/pg@8.23.1)(pg@8.23.1)(zod@4.6.7))(kysely@0.29.9)
+        version: 2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0)(@dimah-s3/server@2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0))(drizzle-orm@1.0.0-rc.6(@types/pg@8.23.1)(pg@8.23.1)(zod@4.6.7))(kysely@0.29.9)
       '@dimah-s3/react':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
+        version: 2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
       '@dimah-s3/server':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0)
+        version: 2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0)
       '@fuma-translate/react':
         specifier: 'catalog:'
         version: 1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -719,13 +719,13 @@ importers:
         version: 1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@dimah-s3/core':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9
+        version: 2.0.0-beta.12
       '@dimah-s3/react':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
+        version: 2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
       '@dimah-s3/ui':
         specifier: 'catalog:'
-        version: 2.0.0-beta.9(@base-ui/react@1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@dimah-s3/core@2.0.0-beta.9)(@dimah-s3/react@2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(class-variance-authority@0.7.1)(cn@0.5.2)(lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 2.0.0-beta.12(@base-ui/react@1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@dimah-s3/core@2.0.0-beta.12)(@dimah-s3/react@2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(class-variance-authority@0.7.1)(cn@0.5.2)(lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@fuma-translate/react':
         specifier: 'catalog:'
         version: 1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -1272,20 +1272,20 @@ packages:
   '@date-fns/tz@1.5.0':
     resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
 
-  '@dimah-s3/core@2.0.0-beta.9':
-    resolution: {integrity: sha512-peU+Q00mEPZEPPykUqnvu8JSIAG4brgMryrxv88DTmZfYZ2AKas1/+zSCl9zuLj1b2LbzwvZQVpqmbssdYhWgw==}
+  '@dimah-s3/core@2.0.0-beta.12':
+    resolution: {integrity: sha512-1qrwTJoL4OfVmPn3FWjsZtCVNAADyWwnpBSUTJUsj/JGoivzdd56W65DtFCNmAeM7+Svr02rahl6R8TGUMdZzw==}
+    engines: {node: '>=22'}
 
-  '@dimah-s3/db@2.0.0-beta.9':
-    resolution: {integrity: sha512-MqW+KUpPB302RIDTAwidSZaaPaspE/HwAWFI/JMg24Ii5vQbGjjQUK5L7Yb6fZXLU0CJSzWsvnbf5NuZTfcGcQ==}
+  '@dimah-s3/db@2.0.0-beta.12':
+    resolution: {integrity: sha512-rTGp82KvmPA8jbBNk4Ii5Hr84g7SXBUZaar+PJc7MnIWm+jji2jBSSbBoE+K9JOjMMJvadJBsUNMdLTyK55QNQ==}
+    engines: {node: '>=22'}
     peerDependencies:
-      '@aws-sdk/client-s3': '>=3'
-      '@dimah-s3/server': 2.0.0-beta.9
+      '@aws-sdk/client-s3': ^3.0.0
+      '@dimah-s3/server': 2.0.0-beta.12
       '@prisma/client': ^6.0.0 || ^7.0.0
       drizzle-orm: '>=1.0.0-rc.5 <2.0.0'
-      kysely: ^0.29.5
+      kysely: ^0.29.8
     peerDependenciesMeta:
-      '@aws-sdk/client-s3':
-        optional: true
       '@prisma/client':
         optional: true
       drizzle-orm:
@@ -1293,28 +1293,33 @@ packages:
       kysely:
         optional: true
 
-  '@dimah-s3/react@2.0.0-beta.9':
-    resolution: {integrity: sha512-yPvy2jdxSXSDgF2HSqBq6hpLFM6HpEJiPGq9W+GYZ3G96aaDbxsRGsMUIGwzg8T8fPgC6P/XhLCBFF3pKaxRtA==}
+  '@dimah-s3/react@2.0.0-beta.12':
+    resolution: {integrity: sha512-24eBvmuWZTZebykf76kChuSnGCkUe1HHonj5iv+qTCwhp4se7ALzLtQWuUQPNaEcJfYKDuw3U64cr37LLDL+UA==}
+    engines: {node: '>=22'}
     peerDependencies:
+      '@dimah-s3/core': 2.0.0-beta.12
       '@fuma-translate/react': ^1.0.2
-      react: '>=19.2'
+      react: ^19.2.0
 
-  '@dimah-s3/server@2.0.0-beta.9':
-    resolution: {integrity: sha512-P7f+faRGpKXteK8O1WUf9+j/TZSnHjRXe21Sy8H8kg3BuPtfuxicMN2ZWnJNVDbnGD8kkYJzR85xXbNmrQLLmQ==}
+  '@dimah-s3/server@2.0.0-beta.12':
+    resolution: {integrity: sha512-ohwNyb/Sl4esD84YfrmbeyCEe9eAmwhtcUddGYxm5cYCoRFfirbav1p7XZljFIg1fMrA3Jl035YDlD0jpHCOKQ==}
+    engines: {node: '>=22'}
     peerDependencies:
-      '@aws-sdk/client-s3': '>=3'
+      '@aws-sdk/client-s3': ^3.0.0
 
-  '@dimah-s3/ui@2.0.0-beta.9':
-    resolution: {integrity: sha512-80dd7hiSNUe657DGAljLMreyiIxS3nhvpYhaBbKfGijrfsBIrgMbht0LEBvEtwfQVNtJNI9gsf7kpo3cGRgWBQ==}
+  '@dimah-s3/ui@2.0.0-beta.12':
+    resolution: {integrity: sha512-vQPdBUVrN1GDtiSA1LizInJ8K6COsLLzztUsQMvV/lIjfkNj7lTIZraZQqH8feWbUIYTO9i3PmqUM2eKTVruLA==}
+    engines: {node: '>=22'}
     peerDependencies:
-      '@base-ui/react': '>=1.0.0'
-      '@dimah-s3/core': 2.0.0-beta.9
-      '@dimah-s3/react': 2.0.0-beta.9
+      '@base-ui/react': ^1.0.0
+      '@dimah-s3/core': 2.0.0-beta.12
+      '@dimah-s3/react': 2.0.0-beta.12
       '@fuma-translate/react': ^1.0.2
-      class-variance-authority: '>=0.7.0'
-      cn: '>=0.1.0'
-      lucide-react: '>=0.400.0'
-      react: '>=19.2'
+      class-variance-authority: ^0.7.0
+      cn: ^0.5.2
+      lucide-react: '>=0.400.0 <2'
+      react: ^19.2.0
+      react-dom: ^19.2.0
 
   '@dotenvx/dotenvx@1.75.1':
     resolution: {integrity: sha512-/BITOC9dmS/edY2zQwZNicQ059O6RKabtQfyEafV0nGtfYRNHYy1DIPiYVcov40+tob9hfmBnbR963dS+EQ1DQ==}
@@ -3495,14 +3500,6 @@ packages:
       vitest:
         optional: true
       vue:
-        optional: true
-
-  better-call@1.4.5:
-    resolution: {integrity: sha512-GVOWfn3pjEfUXn6GrfGf2h7tPAqj1oMLFBWBEswJrSkDKcLk6TIcjV0zexibcZZ0c5N1mkLMsPFopXWzWj/gDQ==}
-    peerDependencies:
-      zod: ^4.0.0
-    peerDependenciesMeta:
-      zod:
         optional: true
 
   better-call@1.4.6:
@@ -6802,21 +6799,21 @@ snapshots:
 
   '@date-fns/tz@1.5.0': {}
 
-  '@dimah-s3/core@2.0.0-beta.9':
+  '@dimah-s3/core@2.0.0-beta.12':
     dependencies:
       '@better-fetch/fetch': 1.3.3
       '@noble/hashes': 2.4.0
-      better-call: 1.4.5(zod@4.6.7)
+      better-call: 1.4.6(zod@4.6.7)
       zod: 4.6.7
 
-  '@dimah-s3/db@2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0)(@dimah-s3/server@2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0))(drizzle-orm@1.0.0-rc.6(@types/pg@8.23.1)(pg@8.23.1)(zod@4.6.7))(kysely@0.29.9)':
+  '@dimah-s3/db@2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0)(@dimah-s3/server@2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0))(drizzle-orm@1.0.0-rc.6(@types/pg@8.23.1)(pg@8.23.1)(zod@4.6.7))(kysely@0.29.9)':
     dependencies:
-      '@dimah-s3/core': 2.0.0-beta.9
-      '@dimah-s3/server': 2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0)
+      '@aws-sdk/client-s3': 3.1175.0
+      '@dimah-s3/core': 2.0.0-beta.12
+      '@dimah-s3/server': 2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0)
       fumadb: 0.7.3(drizzle-orm@1.0.0-rc.6(@types/pg@8.23.1)(pg@8.23.1)(zod@4.6.7))
       zod: 4.6.7
     optionalDependencies:
-      '@aws-sdk/client-s3': 3.1175.0
       drizzle-orm: 1.0.0-rc.6(@types/pg@8.23.1)(pg@8.23.1)(zod@4.6.7)
       kysely: 0.29.9
     transitivePeerDependencies:
@@ -6825,37 +6822,36 @@ snapshots:
       - prisma
       - typeorm
 
-  '@dimah-s3/react@2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)':
+  '@dimah-s3/react@2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)':
     dependencies:
-      '@dimah-s3/core': 2.0.0-beta.9
+      '@dimah-s3/core': 2.0.0-beta.12
       '@fuma-translate/react': 1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react: 19.3.1
       react-dropzone: 20.2.1(@types/react@19.3.0)(react@19.3.1)
     transitivePeerDependencies:
       - '@types/react'
 
-  '@dimah-s3/server@2.0.0-beta.9(@aws-sdk/client-s3@3.1175.0)':
+  '@dimah-s3/server@2.0.0-beta.12(@aws-sdk/client-s3@3.1175.0)':
     dependencies:
       '@aws-sdk/client-s3': 3.1175.0
       '@aws-sdk/s3-presigned-post': 3.1175.0
       '@aws-sdk/s3-request-presigner': 3.1175.0
-      '@dimah-s3/core': 2.0.0-beta.9
-      better-call: 1.4.5(zod@4.6.7)
+      '@dimah-s3/core': 2.0.0-beta.12
+      better-call: 1.4.6(zod@4.6.7)
       zod: 4.6.7
 
-  '@dimah-s3/ui@2.0.0-beta.9(@base-ui/react@1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@dimah-s3/core@2.0.0-beta.9)(@dimah-s3/react@2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(class-variance-authority@0.7.1)(cn@0.5.2)(lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@dimah-s3/ui@2.0.0-beta.12(@base-ui/react@1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@dimah-s3/core@2.0.0-beta.12)(@dimah-s3/react@2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1))(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(class-variance-authority@0.7.1)(cn@0.5.2)(lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@base-ui/react': 1.9.0(@date-fns/tz@1.5.0)(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@dimah-s3/core': 2.0.0-beta.9
-      '@dimah-s3/react': 2.0.0-beta.9(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
+      '@dimah-s3/core': 2.0.0-beta.12
+      '@dimah-s3/react': 2.0.0-beta.12(@dimah-s3/core@2.0.0-beta.12)(@fuma-translate/react@1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@types/react@19.3.0)(react@19.3.1)
       '@fuma-translate/react': 1.0.2(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       class-variance-authority: 0.7.1
       cn: 0.5.2
       lucide-react: 1.77.0(@types/react@19.3.0)(react@19.3.1)
       react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
       react-file-icon: 1.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-    transitivePeerDependencies:
-      - react-dom
 
   '@dotenvx/dotenvx@1.75.1':
     dependencies:
@@ -8747,15 +8743,6 @@ snapshots:
       vitest: 5.1.1(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(jsdom@31.0.1(@noble/hashes@2.4.0))(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
     transitivePeerDependencies:
       - '@opentelemetry/api'
-
-  better-call@1.4.5(zod@4.6.7):
-    dependencies:
-      '@better-auth/utils': 0.5.1
-      '@better-fetch/fetch': 1.3.3
-      rou3: 0.9.2
-      set-cookie-parser: 3.2.3
-    optionalDependencies:
-      zod: 4.6.7
 
   better-call@1.4.6(zod@4.6.7):
     dependencies:

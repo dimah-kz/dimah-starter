@@ -28,4 +28,4 @@ The Server Action that saves the key — reference `apps/web/src/app/action/dash
 ## Operations
 
 - **Purge:** `pnpm storage:purge` deletes uploads that never confirmed and prunes old soft-deleted rows. Schedule it hourly; `.github/workflows/storage-purge.yml` does that once enabled.
-- **After upgrading dimah-s3:** keep every `@dimah-s3/*` package on the same version in the `catalog`. Run `pnpm --filter @repo/db storage:generate`, then `db:generate`. Before `db:migrate`, give each new required column a backfill in the generated migration, or it fails on a database that has rows.
+- **After upgrading dimah-s3:** keep every `@dimah-s3/*` package on the same version in the `catalog`. Run `pnpm --filter @repo/db storage:generate`, then `db:generate`. Before `db:migrate`, read the SQL. A new required column needs a backfill for the rows already there, and a renamed column must stay a rename (`filename` → `name`, `e_tag` → `etag` in schema 2.3.0). A drop and add loses those rows.
