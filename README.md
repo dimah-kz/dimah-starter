@@ -13,12 +13,11 @@
 
 ## Quick start
 
-Needs Node.js ≥ 22.12, pnpm 12 and PostgreSQL (or Docker).
+Needs Node.js ≥ 22.12, pnpm 12 and a PostgreSQL database.
 
 ```bash
 pnpm install
-cp .env.example .env              # set BETTER_AUTH_SECRET (openssl rand -base64 32)
-docker compose up -d --wait       # local Postgres, or point DATABASE_URL at yours
+cp .env.example .env              # set DATABASE_URL and BETTER_AUTH_SECRET
 pnpm --filter @repo/db db:migrate
 pnpm dev                          # http://localhost:3000
 ```
@@ -34,7 +33,7 @@ Sign up, verify the email (without Resend, the link is in the server log), then:
 UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
 ```
 
-With the Compose database: `docker compose exec postgres psql -U postgres -d dimah_starter -c "…"`. Sign in again to see **Platform management**; later admins are promoted from `/dashboard/admin/users`.
+Sign in again to see **Platform management**; later admins are promoted from `/dashboard/admin/users`.
 
 </details>
 
