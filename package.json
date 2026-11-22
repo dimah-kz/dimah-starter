@@ -2,7 +2,7 @@
   "name": "dimah-starter",
   "version": "0.0.1",
   "private": true,
-  "description": "Server-first Next.js 16 starter for multi-tenant SaaS: auth, orgs, roles and admin on Cache Components and Better Auth.",
+  "description": "Next.js 16 SaaS starter: multi-tenant orgs, RBAC, admin panel, RTL i18n. Server-first on Cache Components, Better Auth and Drizzle.",
   "keywords": [
     "nextjs",
     "nextjs-starter",
