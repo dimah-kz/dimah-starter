@@ -87,20 +87,30 @@ export async function removeOrganizationMemberAction(input) {
 ## Project structure
 
 ```
-apps/web/          Next.js app: landing page, auth, dashboard, admin
-packages/
-  api/             oRPC product router (in-process caller + /api/rpc)
-  auth/            Better Auth config, roles and permissions
-  db/              Drizzle schema, client and migrations
-  email/           Resend + React Email
-  i18n/            Messages, locales, formatters
-  storage/         dimah-s3 upload routes and object cleanup
-  ui/              shadcn/ui, ReUI and Dimah components
-tooling/           Shared ESLint, TypeScript and Vitest configs
-docs/agents/       Task guides for contributors and AI agents
+dimah-starter
+├── apps
+│   └── web                   # Next.js 16, React 19, React Compiler
+│       ├── src/app
+│       │   ├── (marketing)   # landing page, SEO, share image
+│       │   ├── (auth)        # sign-in, sign-up, invitations
+│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
+│       │   └── action        # every write is a Server Action
+│       └── next.config.ts    # Cache Components, Partial Prefetching
+├── packages
+│   ├── auth                  # Better Auth: organizations, roles, permissions
+│   ├── db                    # Drizzle ORM, Postgres, migrations
+│   ├── api                   # oRPC router, in-process or over HTTP
+│   ├── storage               # S3 uploads straight from the browser
+│   ├── email                 # Resend, React Email
+│   ├── i18n                  # next-intl, English and Persian, RTL
+│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
+├── tooling                   # shared ESLint, TypeScript, Vitest configs
+├── docs/agents               # where the next file goes, for people and agents
+├── pnpm-workspace.yaml       # one version catalog for every package
+└── turbo.json                # cached lint, typecheck, test, build
 ```
 
-Logic lives in `packages/`, routes and feature UI in `apps/web`. A second app (mobile, extension) sits beside it in `apps/` and reuses the packages.
+Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
 
 ## Scripts
 
