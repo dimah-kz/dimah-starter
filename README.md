@@ -7,79 +7,9 @@
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Quick start](#quick-start) · [Structure](#project-structure) · [Guides](#guides) · [Deploy](#deploy)
+**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Features](#features) · [How it works](#how-it-works) · [Structure](#project-structure) · [Quick start](#quick-start) · [Deploy](#deploy)
 
 [![Dimah Starter — a server-first starter for multi-tenant SaaS](./.github/assets/cover.png)](https://starter.dimah.dev)
-
-## Quick start
-
-You need Node.js 22.12+, pnpm 12 and a PostgreSQL database.
-
-```bash
-git clone https://github.com/dimah-kz/dimah-starter.git my-saas
-cd my-saas
-pnpm install
-cp .env.example .env                # set DATABASE_URL and BETTER_AUTH_SECRET
-pnpm --filter @repo/db db:migrate   # create the tables
-pnpm dev                            # http://localhost:3000
-```
-
-Open the app and sign up. Until you add a Resend key, verification and reset emails are printed in the terminal running `pnpm dev`.
-
-<details>
-<summary>Make yourself platform admin</summary>
-
-After you sign up and verify your email, run this once against your database:
-
-```sql
-UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
-```
-
-Sign in again and **Platform management** appears in the sidebar. Promote later admins from `/dashboard/admin/users`.
-
-</details>
-
-## Environment variables
-
-Only the first two are needed to run locally. Each one is explained in [`.env.example`](./.env.example).
-
-| Variable                                   | Used for                                                                           |
-| ------------------------------------------ | ---------------------------------------------------------------------------------- |
-| `DATABASE_URL`                             | **Required.** PostgreSQL connection string                                         |
-| `BETTER_AUTH_SECRET`                       | **Required.** Signs sessions; 32+ characters (`openssl rand -base64 32`)           |
-| `BETTER_AUTH_URL`                          | Public URL of the app. Defaults to `http://localhost:3000`; required in production |
-| `RESEND_API_KEY`, `EMAIL_FROM`             | Sending email                                                                      |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google sign-in                                                                     |
-| `DIMAH_S3_SECRET`, `S3_*`                  | Uploads (avatars, organization logos) to R2, S3 or MinIO                           |
-| `GOOGLE_SITE_VERIFICATION`                 | Google Search Console                                                              |
-
-## Project structure
-
-```
-dimah-starter
-├── apps
-│   └── web                   # Next.js 16, React 19, React Compiler
-│       ├── src/app
-│       │   ├── (marketing)   # landing page, SEO, share image
-│       │   ├── (auth)        # sign-in, sign-up, invitations
-│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
-│       │   └── action        # every write is a Server Action
-│       └── next.config.ts    # Cache Components, Partial Prefetching
-├── packages
-│   ├── auth                  # Better Auth: organizations, roles, permissions
-│   ├── db                    # Drizzle ORM, Postgres, migrations
-│   ├── api                   # oRPC router, in-process or over HTTP
-│   ├── storage               # S3 uploads straight from the browser
-│   ├── email                 # Resend, React Email
-│   ├── i18n                  # next-intl, English and Persian, RTL
-│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
-├── tooling                   # shared ESLint, TypeScript, Vitest configs
-├── docs/agents               # where the next file goes, for people and agents
-├── pnpm-workspace.yaml       # one version catalog for every package
-└── turbo.json                # cached lint, typecheck, test, build
-```
-
-Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
 
 ## Features
 
@@ -125,6 +55,76 @@ export async function removeOrganizationMemberAction(input) {
 ```
 
 Partial Prefetching is on as well: links prefetch the next page's shell, so navigation shows it at once while signed-in data streams in. The caching rules are in [nextjs.md](./docs/agents/nextjs.md).
+
+## Project structure
+
+```
+dimah-starter
+├── apps
+│   └── web                   # Next.js 16, React 19, React Compiler
+│       ├── src/app
+│       │   ├── (marketing)   # landing page, SEO, share image
+│       │   ├── (auth)        # sign-in, sign-up, invitations
+│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
+│       │   └── action        # every write is a Server Action
+│       └── next.config.ts    # Cache Components, Partial Prefetching
+├── packages
+│   ├── auth                  # Better Auth: organizations, roles, permissions
+│   ├── db                    # Drizzle ORM, Postgres, migrations
+│   ├── api                   # oRPC router, in-process or over HTTP
+│   ├── storage               # S3 uploads straight from the browser
+│   ├── email                 # Resend, React Email
+│   ├── i18n                  # next-intl, English and Persian, RTL
+│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
+├── tooling                   # shared ESLint, TypeScript, Vitest configs
+├── docs/agents               # where the next file goes, for people and agents
+├── pnpm-workspace.yaml       # one version catalog for every package
+└── turbo.json                # cached lint, typecheck, test, build
+```
+
+Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
+
+## Quick start
+
+You need Node.js 22.12+, pnpm 12 and a PostgreSQL database.
+
+```bash
+git clone https://github.com/dimah-kz/dimah-starter.git my-saas
+cd my-saas
+pnpm install
+cp .env.example .env                # set DATABASE_URL and BETTER_AUTH_SECRET
+pnpm --filter @repo/db db:migrate   # create the tables
+pnpm dev                            # http://localhost:3000
+```
+
+Open the app and sign up. Until you add a Resend key, verification and reset emails are printed in the terminal running `pnpm dev`.
+
+### Environment variables
+
+Only the first two are needed to run locally. Each one is explained in [`.env.example`](./.env.example).
+
+| Variable                                   | Used for                                                                           |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `DATABASE_URL`                             | **Required.** PostgreSQL connection string                                         |
+| `BETTER_AUTH_SECRET`                       | **Required.** Signs sessions; 32+ characters (`openssl rand -base64 32`)           |
+| `BETTER_AUTH_URL`                          | Public URL of the app. Defaults to `http://localhost:3000`; required in production |
+| `RESEND_API_KEY`, `EMAIL_FROM`             | Sending email                                                                      |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google sign-in                                                                     |
+| `DIMAH_S3_SECRET`, `S3_*`                  | Uploads (avatars, organization logos) to R2, S3 or MinIO                           |
+| `GOOGLE_SITE_VERIFICATION`                 | Google Search Console                                                              |
+
+<details>
+<summary>Make yourself platform admin</summary>
+
+After you sign up and verify your email, run this once against your database:
+
+```sql
+UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
+```
+
+Sign in again and **Platform management** appears in the sidebar. Promote later admins from `/dashboard/admin/users`.
+
+</details>
 
 ## Scripts
 
