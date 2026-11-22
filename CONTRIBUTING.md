@@ -9,7 +9,7 @@ Thanks for helping improve Dimah Starter. Bug reports, fixes and documentation i
 
 ## Setup
 
-Follow [Quick start](./README.md#quick-start). `docker compose up -d --wait` gives you a local PostgreSQL that matches `.env.example`.
+Follow [Quick start](./README.md#quick-start).
 
 ## How the code is organized
 
