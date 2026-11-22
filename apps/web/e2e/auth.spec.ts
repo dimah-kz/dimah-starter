@@ -21,14 +21,35 @@ test("sign up opens instantly from sign in", async ({ page }) => {
   })
 })
 
-/** Where each sign-in form (email, Google) sends the visitor afterwards. */
+/**
+ * Where each sign-in form (email, Google) sends the visitor afterwards.
+ * `goto` resolves on `load`, which can beat Next's Suspense reveal: until
+ * `$RV` runs, the shell's target and the streamed target are both in the
+ * document, and the streamed one sits under `[hidden]`.
+ */
 async function redirectTargets(page: Page) {
-  // `goto` resolves on `load`, after the streamed page replaced its fallback.
-  return page
-    .locator('input[name="redirectTo"]')
-    .evaluateAll((inputs) => [
-      ...new Set(inputs.map((input) => (input as HTMLInputElement).value)),
-    ])
+  const inputs = page.locator('input[name="redirectTo"]')
+  let targets: string[] | null = null
+
+  await expect
+    .poll(async () => {
+      targets = await inputs.evaluateAll((nodes) => {
+        const revealed = nodes.filter(
+          (node) => node.closest("[hidden]") == null
+        )
+        if (revealed.length === 0 || revealed.length !== nodes.length) {
+          return null
+        }
+
+        return [
+          ...new Set(revealed.map((node) => (node as HTMLInputElement).value)),
+        ]
+      })
+      return targets
+    })
+    .not.toBeNull()
+
+  return targets ?? []
 }
 
 test.describe("redirect after sign in", () => {
