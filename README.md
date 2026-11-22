@@ -7,7 +7,7 @@
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Quick start](#quick-start) · [How it works](#how-it-works) · [Production](#production)
+**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Quick start](#quick-start) · [Structure](#project-structure) · [How it works](#how-it-works) · [Production](#production)
 
 [![Dimah Starter — a server-first starter for multi-tenant SaaS](./.github/assets/cover.png)](https://starter.dimah.dev)
 
@@ -36,6 +36,34 @@ UPDATE auth."user" SET role = 'admin' WHERE email = 'you@example.com';
 Sign in again to see **Platform management**; later admins are promoted from `/dashboard/admin/users`.
 
 </details>
+
+## Project structure
+
+```
+dimah-starter
+├── apps
+│   └── web                   # Next.js 16, React 19, React Compiler
+│       ├── src/app
+│       │   ├── (marketing)   # landing page, SEO, share image
+│       │   ├── (auth)        # sign-in, sign-up, invitations
+│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
+│       │   └── action        # every write is a Server Action
+│       └── next.config.ts    # Cache Components, Partial Prefetching
+├── packages
+│   ├── auth                  # Better Auth: organizations, roles, permissions
+│   ├── db                    # Drizzle ORM, Postgres, migrations
+│   ├── api                   # oRPC router, in-process or over HTTP
+│   ├── storage               # S3 uploads straight from the browser
+│   ├── email                 # Resend, React Email
+│   ├── i18n                  # next-intl, English and Persian, RTL
+│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
+├── tooling                   # shared ESLint, TypeScript, Vitest configs
+├── docs/agents               # where the next file goes, for people and agents
+├── pnpm-workspace.yaml       # one version catalog for every package
+└── turbo.json                # cached lint, typecheck, test, build
+```
+
+Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
 
 ## Features
 
@@ -83,34 +111,6 @@ export async function removeOrganizationMemberAction(input) {
 ```
 
 `cacheComponents` and `partialPrefetching` are on in [`next.config.ts`](./apps/web/next.config.ts): links prefetch each route's shell, so navigation paints at once and signed-in parts stream in (Playwright checks it with `instant()`). React Compiler and Turbopack are on too. The rules (what to cache, which tag to expire) are in [nextjs.md](./docs/agents/nextjs.md).
-
-## Project structure
-
-```
-dimah-starter
-├── apps
-│   └── web                   # Next.js 16, React 19, React Compiler
-│       ├── src/app
-│       │   ├── (marketing)   # landing page, SEO, share image
-│       │   ├── (auth)        # sign-in, sign-up, invitations
-│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
-│       │   └── action        # every write is a Server Action
-│       └── next.config.ts    # Cache Components, Partial Prefetching
-├── packages
-│   ├── auth                  # Better Auth: organizations, roles, permissions
-│   ├── db                    # Drizzle ORM, Postgres, migrations
-│   ├── api                   # oRPC router, in-process or over HTTP
-│   ├── storage               # S3 uploads straight from the browser
-│   ├── email                 # Resend, React Email
-│   ├── i18n                  # next-intl, English and Persian, RTL
-│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
-├── tooling                   # shared ESLint, TypeScript, Vitest configs
-├── docs/agents               # where the next file goes, for people and agents
-├── pnpm-workspace.yaml       # one version catalog for every package
-└── turbo.json                # cached lint, typecheck, test, build
-```
-
-Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
 
 ## Scripts
 
