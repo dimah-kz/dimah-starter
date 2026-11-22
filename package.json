@@ -2,7 +2,7 @@
   "name": "dimah-starter",
   "version": "0.0.1",
   "private": true,
-  "description": "Open-source, server-first Next.js 16 starter for multi-tenant SaaS: Better Auth, organizations and roles, admin panel, S3 uploads, Drizzle + Postgres, oRPC, and i18n with RTL.",
+  "description": "Server-first Next.js 16 starter for multi-tenant SaaS: auth, orgs, roles and admin on Cache Components and Better Auth.",
   "keywords": [
     "nextjs",
     "nextjs-starter",

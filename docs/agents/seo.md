@@ -30,9 +30,9 @@ Do **not** set `openGraph` / `twitter` objects per page: Next derives their titl
 
 Generated images render with [Takumi](https://takumi.kane.tw) through `renderImage` in `apps/web/src/components/og/render-image.ts`. It lays out Persian and mixed-direction text correctly; `next/og` reverses Persian word order, so ESLint blocks `next/og` and direct `takumi-js` imports everywhere else.
 
-- **`OgCard`** (`og-card.tsx`) is the 1200×630 card: brand, title, description, tags and the site host. It reads right to left for an RTL locale and clamps the title and description at three lines each. `OgAccent` is the gradient text of the landing page headline.
+- **`OgCard`** (`og-card.tsx`) is the 1200×630 card in the light theme: an eyebrow, the title, a description, the brand and the site host, with an optional `art` column on the end side (the home card draws a dashboard sketch there). It reads right to left for an RTL locale and clamps the title at three lines and the description at two. `OgAccent` is the gradient text of the landing page headline.
 - **Font:** Vazirmatn (variable, `fonts/`, SIL OFL) is always loaded and covers Persian, Arabic and Latin at any `fontWeight`. A locale in another script needs its own font file passed in `fonts`; Takumi draws no glyph for a character no font has and does not fail.
-- **Colors** live at the top of `og-card.tsx`. Images can't read CSS variables, so change them with `globals.css` when you rebrand.
+- **Colors** live in `ogColors` at the top of `og-card.tsx`. Images can't read CSS variables, so change them with `globals.css` when you rebrand.
 - **Render inside `'use cache'`.** Takumi renders on a native thread, which Cache Components counts as request-time work. A cached function lets the build prerender the image; without it the route renders on every request.
 
 A page with its own image puts `opengraph-image.tsx` beside its `page.tsx`:
