@@ -2,7 +2,7 @@
 
 Read when you add or change product data operations — the domain of your SaaS, not auth.
 
-oRPC 2 beta. Auth, users, organizations and roles stay on `auth.api` ([better-auth.md](./better-auth.md)); procedures do not wrap Better Auth.
+oRPC 2 beta. Keep every `@orpc/*` package on the same version in the `catalog`; betas can break APIs, so read the release notes before a bump. Auth, users, organizations and roles stay on `auth.api` ([better-auth.md](./better-auth.md)); procedures do not wrap Better Auth.
 
 ## Layout
 

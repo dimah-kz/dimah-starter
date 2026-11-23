@@ -13,8 +13,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@orpc/client": "2.0.0-beta.50",
-    "@orpc/server": "2.0.0-beta.50",
+    "@orpc/client": "catalog:",
+    "@orpc/server": "catalog:",
     "@repo/auth": "workspace:*",
     "zod": "^4.6.7"
   },

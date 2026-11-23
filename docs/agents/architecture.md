@@ -36,7 +36,7 @@ A feature is removable: its route folder, its folder under `app/action/`, and it
 
 ## Versions
 
-A dependency used by more than one workspace package, or released in lockstep with one (`@dimah-s3/*`, `@next/playwright` with `next`), lives in the `catalog` of `pnpm-workspace.yaml` and is referenced as `catalog:`. Bump it there. A single-package dependency or a `peerDependencies` range stays in that package's `package.json`.
+A dependency used by more than one workspace package, or released in lockstep with one (`@dimah-s3/*`, `@orpc/*`, `@next/playwright` with `next`), lives in the `catalog` of `pnpm-workspace.yaml` and is referenced as `catalog:`. Bump it there. A single-package dependency or a `peerDependencies` range stays in that package's `package.json`.
 
 ## New package
 
