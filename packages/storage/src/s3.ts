@@ -1,12 +1,11 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { DimahS3Db, db } from "@dimah-s3/db"
-import { drizzleAdapter } from "@dimah-s3/db/adapters/drizzle"
-import { dimahS3, s3Error } from "@dimah-s3/server"
-import { auth } from "@repo/auth"
+import { db } from "@dimah-s3/db"
+import { dimahS3 } from "@dimah-s3/server"
 import { db as drizzleDb } from "@repo/db"
-import "./locals"
+import { storageDbClient } from "./db-client"
 import { routes, toRouteOwner } from "./routes"
 import { toCallerScope } from "./scope"
+import { sessionGuard } from "./session-guard"
 
 const configuredBucket = process.env.S3_BUCKET?.trim()
 
@@ -31,24 +30,13 @@ export const s3 = dimahS3({
     requestChecksumCalculation: "WHEN_REQUIRED",
   }),
   bucket,
-  // Reads the session once per call. Route guards and `resolveScope` use `locals`.
-  guard: async ({ request, locals }) => {
+  guard: (context) => {
     if (!configuredBucket) throw new Error("[storage] S3_BUCKET is not set")
-    const session = await auth.api.getSession({ headers: request.headers })
-    if (!session) throw s3Error("UNAUTHORIZED")
-    return {
-      locals: {
-        userId: session.user.id,
-        organizationId: session.session.activeOrganizationId,
-      },
-    }
+    return sessionGuard(context)
   },
   plugins: [
     db({
-      // Tables in the `storage` PostgreSQL schema; `scripts/dimah-s3.ts` generates them.
-      client: DimahS3Db.names
-        .schema("storage")
-        .client(drizzleAdapter({ db: drizzleDb, provider: "postgresql" })),
+      client: storageDbClient(drizzleDb),
       resolveScope: ({ locals, route }) =>
         toCallerScope(toRouteOwner(route), locals),
       // Nothing renames objects or uses folders. `"update"` is `PATCH /db/object`;

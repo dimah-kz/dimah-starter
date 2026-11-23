@@ -60,8 +60,8 @@ export async function deleteRouteObjects(input: {
 
 /**
  * Deletes the active `route` objects of `scope` except `keep`, one page per
- * `deleteMany`. A failed batch is logged and the sweep
- * goes on; a failed listing ends it.
+ * `deleteMany`. A failed batch is logged and the sweep goes on; a failed
+ * listing ends it.
  */
 async function deleteScopeObjects(
   filter: { scope: string; route: RouteName; keep?: string },
@@ -81,20 +81,12 @@ async function deleteScopeObjects(
       console.error("[storage] list failed", error)
       return
     }
-    const keysByRoute = new Map<RouteName, string[]>()
-    for (const object of page.objects) {
-      if (object.key === keep) continue
-      const objectRoute = object.route as RouteName
-      const keys = keysByRoute.get(objectRoute) ?? []
-      keys.push(object.key)
-      keysByRoute.set(objectRoute, keys)
-    }
-    for (const [objectRoute, keys] of keysByRoute) {
+    const keys = page.objects
+      .map((object) => object.key)
+      .filter((key) => key !== keep)
+    if (keys.length > 0) {
       try {
-        const { failed } = await s3.api.deleteMany(
-          { route: objectRoute, keys },
-          options
-        )
+        const { failed } = await s3.api.deleteMany({ route, keys }, options)
         if (failed.length > 0) console.error("[storage] delete failed", failed)
       } catch (error) {
         console.error("[storage] delete failed", error)

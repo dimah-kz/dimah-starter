@@ -1,16 +1,19 @@
 # @repo/storage
 
-[dimah-s3](https://s3.dimah.dev) 2.0 beta (`2.0.0-beta.12`). The browser uploads straight to the bucket; this package owns the routes, who may call them, and the object rows.
+[dimah-s3](https://s3.dimah.dev) 2 (the version is in the `catalog` of `pnpm-workspace.yaml`). The browser uploads straight to the bucket; this package owns the routes, who may call them, and the object rows.
 
-| File                  | Owns                                                                                               |
-| --------------------- | -------------------------------------------------------------------------------------------------- |
-| `s3.ts`               | S3 client, the session guard (one read per call, into `locals`), the `db()` plugin over `@repo/db` |
-| `scope.ts`            | Owner → scope: `user:{id}` or `org:{id}`                                                           |
-| `routes/index.ts`     | Flat route map and `routeOwners` (every route names its owner)                                     |
-| `routes/<group>/*.ts` | One file per route, grouped like `@repo/api`                                                       |
-| `objects.ts`          | `toOwnedPublicUrl`, `deleteRouteObjects`                                                           |
-| `public-url.ts`       | `toPublicUrl` / `fromPublicUrl` over `S3_PUBLIC_BASE_URL`                                          |
-| `s3-client.tsx`       | `S3ClientProvider`. Route names are inferred from `s3`                                             |
+| File                  | Owns                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------ |
+| `s3.ts`               | The instance: S3 client, bucket, guard, the `db()` plugin with scopes, `authorize` and the quota |
+| `session-guard.ts`    | Instance guard: one session read per call, into `locals`                                         |
+| `db-client.ts`        | `@dimah-s3/db` client over Drizzle, in the `storage` PostgreSQL schema (`s3.ts` and the CLI)     |
+| `scope.ts`            | Owner → scope: `user:{id}` or `org:{id}`                                                         |
+| `routes/index.ts`     | Flat route map and `routeOwners` (every route names its owner)                                   |
+| `routes/<group>/*.ts` | One file per route, grouped like `@repo/api`                                                     |
+| `objects.ts`          | `toOwnedPublicUrl`, `deleteRouteObjects`                                                         |
+| `public-url.ts`       | `toPublicUrl` / `fromPublicUrl` over `S3_PUBLIC_BASE_URL`                                        |
+| `s3-client.tsx`       | `S3ClientProvider`. Route names are inferred from `s3`                                           |
+| `translations/`       | Persian strings for the dimah-s3 UI, in the order of `Translations` from `@dimah-s3/react`       |
 
 Exports: `s3` (for the `/api/s3` handler), `toOwnedPublicUrl`, `deleteRouteObjects`, `fromPublicUrl`, `type RouteName`; `@repo/storage/s3-client` exports `S3ClientProvider`.
 
@@ -37,7 +40,8 @@ Remove is the same without `keep`. Cleanup runs after the write, so the record n
 
 1. Add `routes/<group>/<name>.ts` and spread the group into `routes/index.ts`.
 2. Name its owner in `routeOwners` (a missing owner is a type error).
-3. Use it from `useUpload({ route })`. The client picks the name up from `s3`.
+3. Add cases to `routes/routes.test.ts`: who may upload, read, and delete, and where the key lands. It runs the real guards on the in-memory S3 of `@dimah-s3/server/testing`, with `@repo/auth` mocked.
+4. Use it from `useUpload({ route })`. The client picks the name up from `s3`.
 
 ## Environment
 
@@ -47,7 +51,7 @@ Importing the package never throws: without `S3_BUCKET`, every storage call fail
 
 ## Production
 
-- Rows live in the `storage` PostgreSQL schema (schema 2.3.0, `@repo/db`). `scripts/dimah-s3.ts` runs the FumaDB CLI of `@dimah-s3/db` with the same `storage` schema as `s3.ts`: after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`. `@dimah-s3/db` does not upgrade an existing database itself, so read the generated migration first. A new required column needs a backfill for the rows already there, as `20261114234530_dimah_s3_search_name` does for `search_name`. A renamed column must stay a rename: `20261121070354_dimah_s3_schema_2_3_0` turns `filename` into `name` and `e_tag` into `etag` without dropping the rows.
+- Rows live in the `storage` PostgreSQL schema (schema 2.3.0, `@repo/db`). `scripts/dimah-s3.ts` runs the FumaDB CLI of `@dimah-s3/db` over the same client as `s3.ts` (`db-client.ts`): after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`. When the generated file does not change, there is nothing to migrate (2.0.0 keeps schema 2.3.0). `@dimah-s3/db` does not upgrade an existing database itself, so read a generated migration first. A new required column needs a backfill for the rows already there, as `20261114234530_dimah_s3_search_name` does for `search_name`. A renamed column must stay a rename: `20261121070354_dimah_s3_schema_2_3_0` turns `filename` into `name` and `e_tag` into `etag` without dropping the rows.
 - Deletes are soft: the object leaves S3, the row stays as `deleted`.
 - An upload that never confirms leaves a `pending` row, and can leave an object or an unfinished multipart upload. Schedule `pnpm storage:purge` hourly to clean them up.
 - An `AbortIncompleteMultipartUpload` lifecycle rule on the bucket is a good backstop.

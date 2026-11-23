@@ -31,6 +31,7 @@ A package gets tests with a `vitest.config.ts` (`nodeConfig()` or `reactConfig({
 | oRPC procedure      | `call(procedure, input, { context })` or `createRouterClient`; mock `@repo/auth`                 | `packages/api/src/base.test.ts`                                           |
 | Server Action       | `vi.mock` `next/headers`, `next/cache`, `next-intl/server`, `@repo/auth`; assert calls and tags  | `apps/web/src/app/action/dashboard/account/update-profile-action.test.ts` |
 | Client Component    | `renderWithIntl` (`@/test/render`) + Testing Library + `user-event`; fake timers for debounce    | `apps/web/src/components/list/list-search.test.tsx`                       |
+| Storage route       | `createTestInstance` from `@dimah-s3/server/testing` with the real guard and routes; mock auth   | `packages/storage/src/routes/routes.test.ts`                              |
 | Email               | Mock `./deliver`, render the captured React element                                              | `packages/email/src/messages.test.ts`                                     |
 | Translations        | `packages/i18n/src/load-messages.test.ts` checks every locale has the same keys and placeholders | —                                                                         |
 

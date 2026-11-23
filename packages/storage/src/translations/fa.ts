@@ -2,26 +2,31 @@ import type { Translations } from "@dimah-s3/react"
 
 /**
  * Persian strings for dimah-s3. Keys are the English source plus a context
- * note — see `Translations` in `@dimah-s3/react`.
+ * note, in the order of `Translations` in `@dimah-s3/react`. After an
+ * upgrade, typecheck lists the keys to add or drop.
  */
 export const fa = {
+  ", (list separator)": "، ",
   "1 file(object list usage)": "۱ فایل",
   "1 result(object list search)": "۱ نتیجه",
   "A file checksum is required(API error)": "جمع‌آزمایی فایل لازم است",
   "A file with this name already exists(API error)":
     "فایلی با این نام از قبل وجود دارد",
+  "A folder cannot move into itself.(object list move)":
+    "پوشه را نمی‌توان به درون خودش منتقل کرد.",
   "A folder with this name already exists(API error)":
     "پوشه‌ای با این نام از قبل وجود دارد",
   "A folder with this name already exists(object list new folder)":
     "پوشه‌ای با این نام از قبل وجود دارد",
-  ", (list separator)": "، ",
   "Accepted {types}.(dropzone hint)": "پذیرفته می‌شود: {types}.",
-  "Actions for {name}(object list menu)": "عملیات برای {name}",
   "Access denied(API error)": "دسترسی غیرمجاز",
+  "Actions for {name}(object list menu)": "عملیات برای {name}",
   "All {count} files uploaded(upload status)": "هر {count} فایل آپلود شد",
   "An uploaded part was not found(API error)": "بخش آپلودشده پیدا نشد",
   "Another change happened at the same time. Try again.(API error)":
     "هم‌زمان تغییر دیگری انجام شد. دوباره تلاش کنید.",
+  'Are you sure you want to delete "{name}" and everything in it? This action cannot be undone.(dialog description)':
+    "آیا مطمئن هستید که می‌خواهید «{name}» و همه محتوای آن را حذف کنید؟ این عمل قابل بازگشت نیست.",
   'Are you sure you want to delete "{name}"? This action cannot be undone.(dialog description)':
     "آیا مطمئن هستید که می‌خواهید «{name}» را حذف کنید؟ این عمل قابل بازگشت نیست.",
   "Ascending(object list sort)": "صعودی",
@@ -41,21 +46,26 @@ export const fa = {
   "Copy link(object list menu)": "کپی پیوند",
   "Could not copy link(object list menu)": "پیوند کپی نشد",
   "Could not create link(object list menu)": "پیوند ساخته نشد",
-  "Could not delete the selection(object list selection)":
-    "موارد انتخاب‌شده حذف نشدند",
+  'Could not delete "{name}"(toast)': "«{name}» حذف نشد",
   "Could not delete {count} files(toast)": "{count} فایل حذف نشد",
+  "Could not delete {count} folders(toast)": "{count} پوشه حذف نشد",
   "Could not load files(object list)": "فایل‌ها بارگذاری نشدند",
+  'Could not move "{name}"(object list move)': "«{name}» منتقل نشد",
+  "Could not move {count} items(object list move)": "{count} مورد منتقل نشد",
   "Could not reach storage ({code})(API error)":
     "اتصال به ذخیره‌سازی برقرار نشد ({code})",
   "Could not reach storage(API error)": "اتصال به ذخیره‌سازی برقرار نشد",
   "Create folder(object list new folder)": "ساخت پوشه",
   "Delete failed(toast)": "حذف ناموفق بود",
   "Delete file?(dialog title)": "فایل حذف شود؟",
+  "Delete folder?(dialog title)": "پوشه حذف شود؟",
   "Delete {count} files?(dialog title)": "{count} فایل حذف شود؟",
+  "Delete {count} items?(dialog title)": "{count} مورد حذف شود؟",
   "Delete {name}(attachment action)": "حذف {name}",
   "Delete(button)": "حذف",
   "Delete(dialog confirm)": "حذف",
   "Deleted {count} files(toast)": "{count} فایل حذف شد",
+  "Deleted {count} folders(toast)": "{count} پوشه حذف شد",
   "Deleting is disabled(API error)": "حذف غیرفعال است",
   "Deleting…(delete status)": "در حال حذف…",
   "Descending(object list sort)": "نزولی",
@@ -114,14 +124,18 @@ export const fa = {
   "Files(object list)": "فایل‌ها",
   "Finishing…(upload status)": "در حال نهایی‌سازی…",
   "Folder actions(object list menu)": "عملیات پوشه",
+  "Folder deleted(toast)": "پوشه حذف شد",
   "Folder is not empty(API error)": "پوشه خالی نیست",
   "Folder limit reached(API error)": "به سقف تعداد پوشه رسیده‌اید",
   "Folder name is invalid(API error)": "نام پوشه نامعتبر است",
   "Folder name(object list new folder)": "نام پوشه",
   "Folder name(object list rename)": "نام پوشه",
-  "Folder path(object list)": "مسیر پوشه",
   "Folder not found(API error)": "پوشه پیدا نشد",
+  "Folder path(object list)": "مسیر پوشه",
   "Folders above(object list)": "پوشه‌های بالاتر",
+  "Folders are deleted with everything in them. This action cannot be undone.(dialog description)":
+    "پوشه‌ها همراه با همه محتوایشان حذف می‌شوند. این عمل قابل بازگشت نیست.",
+  "Folders(object list move)": "پوشه‌ها",
   "Fonts(file type group)": "فونت‌ها",
   "GB(file size unit)": "گیگابایت",
   "Grid view(object list)": "نمای شبکه‌ای",
@@ -133,12 +147,24 @@ export const fa = {
   "List view(object list)": "نمای فهرستی",
   "Load more(object list)": "نمایش بیشتر",
   "Loading files(object list)": "در حال بارگذاری فایل‌ها",
+  "Loading folders(object list move)": "در حال بارگذاری پوشه‌ها",
   "MB(file size unit)": "مگابایت",
   "Maximum files reached.(dropzone hint)": "به بیشترین تعداد فایل رسیده‌اید.",
   "Modified(object list sort)": "تاریخ تغییر",
+  'Move "{name}"(object list move)': "انتقال «{name}»",
+  "Move here(object list move)": "انتقال به اینجا",
+  "Move to…(object list menu)": "انتقال به…",
+  "Move {count} items(object list move)": "انتقال {count} مورد",
+  "Move(object list selection)": "انتقال",
+  'Moved "{name}" to "{folder}"(object list move)':
+    "«{name}» به «{folder}» منتقل شد",
+  'Moved {count} items to "{folder}"(object list move)':
+    "{count} مورد به «{folder}» منتقل شد",
+  "Moving(object list move)": "در حال انتقال",
   "Name(object list sort)": "نام",
   "Network error(API error)": "خطای شبکه",
   "New folder(object list)": "پوشه جدید",
+  "No folders here(object list move)": "اینجا پوشه‌ای نیست",
   "No results(object list)": "نتیجه‌ای نیست",
   "Not found(API error)": "پیدا نشد",
   "Nothing in this folder matches “{search}”.(object list)":
@@ -149,8 +175,11 @@ export const fa = {
     "چیزی با «{search}» هم‌خوانی ندارد.",
   "Nothing to delete(object list selection)": "چیزی برای حذف نیست",
   "Object key is invalid(API error)": "کلید شیء نامعتبر است",
+  "Open a folder, then move here.(object list move)":
+    "پوشه‌ای را باز کنید و سپس به اینجا منتقل کنید.",
   "PB(file size unit)": "پتابایت",
   "Pause(upload control)": "مکث",
+  "Paused(upload status)": "متوقف شده",
   "Preparing…(upload status)": "در حال آماده‌سازی…",
   "Progress for {name}(progress)": "پیشرفت {name}",
   "Remove {name}(attachment action)": "برداشتن {name}",
@@ -158,6 +187,9 @@ export const fa = {
   "Request format is not supported(API error)": "قالب درخواست پشتیبانی نمی‌شود",
   "Request is too large(API error)": "درخواست خیلی بزرگ است",
   "Requested range is not available(API error)": "بازه درخواستی در دسترس نیست",
+  "Resume {name}(attachment action)": "ادامه {name}",
+  "Resume(toast action)": "ادامه",
+  "Resume(upload control)": "ادامه",
   "Retry failed uploads(upload control)": "تلاش دوباره برای آپلودهای ناموفق",
   "Retry {name}(attachment action)": "تلاش دوباره {name}",
   "Retry(object list)": "تلاش دوباره",
@@ -199,18 +231,20 @@ export const fa = {
   "Too many files (max {maxFiles})(API error)":
     "تعداد فایل‌ها زیاد است (حداکثر {maxFiles})",
   "Too many files(API error)": "تعداد فایل‌ها زیاد است",
+  "Try again(object list move)": "تلاش دوباره",
   "Unauthorized(API error)": "احراز هویت نشده",
   "Unknown file route(API error)": "مسیر فایل ناشناخته است",
   "Up to {size}.(dropzone hint)": "تا {size}.",
   "Upload complete(toast)": "آپلود کامل شد",
   "Upload complete(upload status)": "آپلود کامل شد",
   "Upload failed(API error)": "آپلود ناموفق بود",
-  "Upload failed(upload status)": "آپلود ناموفق بود",
   "Upload failed(toast)": "آپلود ناموفق بود",
+  "Upload failed(upload status)": "آپلود ناموفق بود",
   "Upload file(button)": "آپلود فایل",
   "Upload files(button)": "آپلود فایل‌ها",
   "Upload finished with errors(toast)": "آپلود با خطا تمام شد",
   "Upload part is out of range(API error)": "بخش آپلود خارج از محدوده است",
+  "Upload paused(toast)": "آپلود متوقف شد",
   "Upload progress(upload progress)": "پیشرفت آپلود",
   "Upload session has expired(API error)": "نشست آپلود منقضی شده است",
   "Upload session is invalid(API error)": "نشست آپلود نامعتبر است",
