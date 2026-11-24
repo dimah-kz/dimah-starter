@@ -19,13 +19,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "1.7.27",
-    "@better-auth/i18n": "1.7.27",
-    "@better-auth/passkey": "1.7.27",
+    "@better-auth/drizzle-adapter": "1.7.28",
+    "@better-auth/i18n": "1.7.28",
+    "@better-auth/passkey": "1.7.28",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
     "@repo/i18n": "workspace:*",
-    "better-auth": "1.7.27",
+    "better-auth": "1.7.28",
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {
@@ -33,7 +33,7 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@types/node": "catalog:",
-    "auth": "1.7.27",
+    "auth": "1.7.28",
     "eslint": "catalog:",
     "next": "catalog:",
     "typescript": "catalog:",
