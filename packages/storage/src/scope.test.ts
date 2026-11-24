@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 import { routeOwners, toRouteOwner } from "./routes"
-import { toCallerScope, toScope } from "./scope"
+import { isAllowedDbOperation, toCallerScope, toScope } from "./scope"
 
 // The `logo` route checks permissions through `@repo/auth`.
 vi.mock("@repo/auth", () => ({ auth: {} }))
@@ -23,6 +23,31 @@ describe("toCallerScope", () => {
   it("is null without an owner, so the upload is refused", () => {
     expect(toCallerScope("organization", { userId: "u1" })).toBeNull()
     expect(toCallerScope("user", {})).toBeNull()
+  })
+})
+
+describe("isAllowedDbOperation", () => {
+  it.each([
+    "upload",
+    "confirm",
+    "multipart",
+    "download",
+    "delete",
+    "list",
+    "read",
+    "record",
+  ] as const)("allows %s", (operation) => {
+    expect(isAllowedDbOperation(operation)).toBe(true)
+  })
+
+  it.each([
+    "update",
+    "folder.create",
+    "folder.update",
+    "folder.delete",
+    "plugin",
+  ] as const)("refuses %s: no renames, folders, or db plugins", (operation) => {
+    expect(isAllowedDbOperation(operation)).toBe(false)
   })
 })
 

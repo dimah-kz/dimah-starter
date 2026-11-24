@@ -8,9 +8,10 @@ Read when you add an upload, change who may upload or read a file, or save or re
 
 - **A route is a file:** `packages/storage/src/routes/<group>/<name>.ts`, spread into `routes/index.ts` through its group's `index.ts`.
 - **Every route names an owner** in `routeOwners`: `user` or `organization`. The owner decides the scope: `user:{id}` or `org:{id}`. A missing owner is a type error.
-- **The instance guard** (`session-guard.ts`) reads the session once into `locals`. `@dimah-s3/db` resolves the caller's scope from `locals`, so a key from another scope is `OBJECT_NOT_FOUND`.
+- **The instance guard** (`session-guard.ts`) counts each call against the `storage` rate limit (300 a minute per IP, in `packages/auth/src/rate-limit.ts`, then `TOO_MANY_REQUESTS`) and reads the session once into `locals`. `@dimah-s3/db` resolves the caller's scope from `locals`, so a key from another scope is `OBJECT_NOT_FOUND`.
 - **Access rules live on the route:** a route guard throws `s3Error("FORBIDDEN")`. Reference: `routes/profile/logo.ts` — members read it, and upload or delete needs `organization:update`.
 - **Quotas:** each scope holds at most 10 files and 20 MiB (`scopeQuota` in `s3.ts`).
+- **db operations:** `isAllowedDbOperation` in `scope.ts` names every `ScopeOperation` of `@dimah-s3/db` as allowed or refused. Renames, folders, and plugins on db (such as `@dimah-s3/share`) are refused. An operation a dimah-s3 upgrade adds is a type error until you decide it there.
 - **Test the rules:** `routes/routes.test.ts` runs the session guard and every route on the in-memory S3 of `@dimah-s3/server/testing`. Add a case for each new route or guard rule.
 
 ## Save an uploaded file
@@ -29,4 +30,4 @@ The Server Action that saves the key — reference `apps/web/src/app/action/dash
 ## Operations
 
 - **Purge:** `pnpm storage:purge` deletes uploads that never confirmed and prunes old soft-deleted rows. Schedule it hourly; `.github/workflows/storage-purge.yml` does that once enabled.
-- **After upgrading dimah-s3:** keep every `@dimah-s3/*` package on the same version in the `catalog`. Typecheck lists the Persian strings to add or drop in `translations/fa.ts`. Run `pnpm --filter @repo/db storage:generate`, then `db:generate`; no diff means no migration. Before `db:migrate`, read the SQL. A new required column needs a backfill for the rows already there, and a renamed column must stay a rename (`filename` → `name`, `e_tag` → `etag` in schema 2.3.0). A drop and add loses those rows.
+- **After upgrading dimah-s3:** keep every `@dimah-s3/*` package on the same version in the `catalog`. Typecheck lists the Persian strings to add or drop in `translations/fa.ts`, and any new `ScopeOperation` to decide in `scope.ts`. Run `pnpm --filter @repo/db storage:generate`, then `db:generate`; no diff means no migration. Before `db:migrate`, read the SQL. A new required column needs a backfill for the rows already there, and a renamed column must stay a rename (`filename` → `name`, `e_tag` → `etag` in schema 2.3.0). A drop and add loses those rows.

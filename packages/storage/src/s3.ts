@@ -4,7 +4,7 @@ import { dimahS3 } from "@dimah-s3/server"
 import { db as drizzleDb } from "@repo/db"
 import { storageDbClient } from "./db-client"
 import { routes, toRouteOwner } from "./routes"
-import { toCallerScope } from "./scope"
+import { isAllowedDbOperation, toCallerScope } from "./scope"
 import { sessionGuard } from "./session-guard"
 
 const configuredBucket = process.env.S3_BUCKET?.trim()
@@ -39,14 +39,7 @@ export const s3 = dimahS3({
       client: storageDbClient(drizzleDb),
       resolveScope: ({ locals, route }) =>
         toCallerScope(toRouteOwner(route), locals),
-      // Nothing renames objects or uses folders. `"update"` is `PATCH /db/object`;
-      // folder calls have their own operations. A flat list stays allowed: cleanup
-      // lists a scope with no folder.
-      authorize: ({ operation }) =>
-        operation !== "update" &&
-        operation !== "folder.create" &&
-        operation !== "folder.update" &&
-        operation !== "folder.delete",
+      authorize: ({ operation }) => isAllowedDbOperation(operation),
       quota: scopeQuota,
     }),
   ],

@@ -34,6 +34,10 @@ const rules = {
   // HTTP calls to the product API (`/api/rpc`). In-process calls from Server
   // Actions do not count.
   api: [{ by: "ip", max: 300 }],
+  // Calls to storage (`/api/s3`): presigns, confirms, downloads, deletes.
+  // In-process `s3.api` calls from Server Actions carry the caller's headers
+  // and count too; a cleanup is one or two.
+  storage: [{ by: "ip", max: 300 }],
 } as const satisfies Record<string, readonly Bucket[]>
 
 /**

@@ -5,9 +5,9 @@
 | File                  | Owns                                                                                             |
 | --------------------- | ------------------------------------------------------------------------------------------------ |
 | `s3.ts`               | The instance: S3 client, bucket, guard, the `db()` plugin with scopes, `authorize` and the quota |
-| `session-guard.ts`    | Instance guard: one session read per call, into `locals`                                         |
+| `session-guard.ts`    | Instance guard: the `storage` rate limit, then one session read per call, into `locals`          |
 | `db-client.ts`        | `@dimah-s3/db` client over Drizzle, in the `storage` PostgreSQL schema (`s3.ts` and the CLI)     |
-| `scope.ts`            | Owner → scope: `user:{id}` or `org:{id}`                                                         |
+| `scope.ts`            | Owner → scope: `user:{id}` or `org:{id}`, and the db operations a caller may run                 |
 | `routes/index.ts`     | Flat route map and `routeOwners` (every route names its owner)                                   |
 | `routes/<group>/*.ts` | One file per route, grouped like `@repo/api`                                                     |
 | `objects.ts`          | `toOwnedPublicUrl`, `deleteRouteObjects`                                                         |
@@ -24,7 +24,7 @@ Exports: `s3` (for the `/api/s3` handler), `toOwnedPublicUrl`, `deleteRouteObjec
 - `avatar` — the signed-in user (`user:{id}`)
 - `logo` — the active organization (`org:{id}`). Members can read it; upload and delete need `organization:update`.
 
-`@dimah-s3/db` binds every upload to the caller's scope, so a key from another scope is `OBJECT_NOT_FOUND`. Each scope is capped at 10 files and 20 MiB (`scopeQuota` in `s3.ts`). `authorize` refuses `update` (`PATCH /db/object`) and `folder.create`, `folder.update`, and `folder.delete`: nothing renames objects or uses folders. A listing with no folder stays allowed, including a `recursive` one, because cleanup lists a whole scope. Keys are `{route}/{ownerId}/{uuid}/{name}` and never reused, so public URLs are cached as immutable.
+`@dimah-s3/db` binds every upload to the caller's scope, so a key from another scope is `OBJECT_NOT_FOUND`. Each scope is capped at 10 files and 20 MiB (`scopeQuota` in `s3.ts`). `authorize` (`isAllowedDbOperation` in `scope.ts`) refuses `update` (`PATCH /db/object`), `folder.create`, `folder.update`, `folder.delete`, and `plugin`: nothing renames objects, uses folders, or runs a plugin built on db such as share links. It names every operation, so one a dimah-s3 upgrade adds fails typecheck until it is decided. A listing with no folder stays allowed, including a `recursive` one, because cleanup lists a whole scope. Keys are `{route}/{ownerId}/{uuid}/{name}` and never reused, so public URLs are cached as immutable.
 
 ## Saving an image
 
@@ -51,7 +51,7 @@ Importing the package never throws: without `S3_BUCKET`, every storage call fail
 
 ## Production
 
-- Rows live in the `storage` PostgreSQL schema (schema 2.3.0, `@repo/db`). `scripts/dimah-s3.ts` runs the FumaDB CLI of `@dimah-s3/db` over the same client as `s3.ts` (`db-client.ts`): after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`. When the generated file does not change, there is nothing to migrate (2.0.0 keeps schema 2.3.0). `@dimah-s3/db` does not upgrade an existing database itself, so read a generated migration first. A new required column needs a backfill for the rows already there, as `20261114234530_dimah_s3_search_name` does for `search_name`. A renamed column must stay a rename: `20261121070354_dimah_s3_schema_2_3_0` turns `filename` into `name` and `e_tag` into `etag` without dropping the rows.
+- Rows live in the `storage` PostgreSQL schema (schema 2.3.0, `@repo/db`). `scripts/dimah-s3.ts` runs the FumaDB CLI of `@dimah-s3/db` over the same client as `s3.ts` (`db-client.ts`): after upgrading dimah-s3, run `pnpm --filter @repo/db storage:generate`, then `db:generate` and `db:migrate`. When the generated file does not change, there is nothing to migrate (2.3.0 keeps schema 2.3.0). `@dimah-s3/db` does not upgrade an existing database itself, so read a generated migration first. A new required column needs a backfill for the rows already there, as `20261114234530_dimah_s3_search_name` does for `search_name`. A renamed column must stay a rename: `20261121070354_dimah_s3_schema_2_3_0` turns `filename` into `name` and `e_tag` into `etag` without dropping the rows.
 - Deletes are soft: the object leaves S3, the row stays as `deleted`.
 - An upload that never confirms leaves a `pending` row, and can leave an object or an unfinished multipart upload. Schedule `pnpm storage:purge` hourly to clean them up.
 - An `AbortIncompleteMultipartUpload` lifecycle rule on the bucket is a good backstop.

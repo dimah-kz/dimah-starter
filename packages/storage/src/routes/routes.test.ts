@@ -10,7 +10,8 @@ const auth = vi.hoisted(() => ({
   getSession: vi.fn(),
   hasPermission: vi.fn(),
 }))
-vi.mock("@repo/auth", () => ({ auth: { api: auth } }))
+const consumeRateLimit = vi.hoisted(() => vi.fn(async () => true))
+vi.mock("@repo/auth", () => ({ auth: { api: auth }, consumeRateLimit }))
 
 // A 1×1 PNG: `verifyContent` checks the bytes against the declared type.
 const png = Uint8Array.from(
@@ -54,6 +55,22 @@ describe("storage routes", () => {
       instance.upload({ route: "avatar", ...image }),
       "UNAUTHORIZED"
     )
+  })
+
+  it("refuses a call over the storage rate limit before reading the session", async () => {
+    signIn({ userId: "u1" })
+    auth.getSession.mockClear()
+    consumeRateLimit.mockResolvedValueOnce(false)
+
+    await expectS3Error(
+      instance.upload({ route: "avatar", ...image }),
+      "TOO_MANY_REQUESTS"
+    )
+    expect(consumeRateLimit).toHaveBeenCalledWith(
+      "storage",
+      expect.any(Headers)
+    )
+    expect(auth.getSession).not.toHaveBeenCalled()
   })
 
   describe("avatar", () => {

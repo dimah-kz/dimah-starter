@@ -24,11 +24,11 @@ catalog:
   "@orpc/server": 2.0.0-beta.53
 
   # Storage
-  "@dimah-s3/core": 2.0.0
-  "@dimah-s3/db": 2.0.0
-  "@dimah-s3/react": 2.0.0
-  "@dimah-s3/server": 2.0.0
-  "@dimah-s3/ui": 2.0.0
+  "@dimah-s3/core": 2.3.0
+  "@dimah-s3/db": 2.3.0
+  "@dimah-s3/react": 2.3.0
+  "@dimah-s3/server": 2.3.0
+  "@dimah-s3/ui": 2.3.0
 
   # UI
   tailwindcss: ^4.3.5

@@ -61,6 +61,7 @@ Better Auth limits its own HTTP routes (`/api/auth`) with counters in `auth.rate
 - **Sign-up and Google sign-in:** per IP.
 - **Two-factor code:** per IP, on top of Better Auth's own lock per account.
 - **Passkey sign-in:** per IP, when the challenge is made; each challenge verifies once.
+- **Product API and storage:** `/api/rpc` (`api`) and `/api/s3` (`storage`), per IP.
 
 A new unauthenticated flow that sends mail or checks a password gets a rule. Behind more than one proxy, set `advanced.ipAddress` so the IP is the client's.
 
