@@ -10,9 +10,9 @@ catalog:
   next: 16.4.6
   react: 19.3.1
   react-dom: 19.3.1
-  "@types/react": ^19.3.1
+  "@types/react": ^19.3.3
   "@types/react-dom": ^19.3.0
-  "@types/node": ^26.6.6
+  "@types/node": ^26.6.11
 
   # Data
   drizzle-orm: 1.0.0-rc.6
@@ -24,22 +24,22 @@ catalog:
   "@orpc/server": 2.0.0-beta.53
 
   # Storage
-  "@dimah-s3/core": 2.3.0
-  "@dimah-s3/db": 2.3.0
-  "@dimah-s3/react": 2.3.0
-  "@dimah-s3/server": 2.3.0
-  "@dimah-s3/ui": 2.3.0
+  "@dimah-s3/core": 2.4.0
+  "@dimah-s3/db": 2.4.0
+  "@dimah-s3/react": 2.4.0
+  "@dimah-s3/server": 2.4.0
+  "@dimah-s3/ui": 2.4.0
 
   # UI
   tailwindcss: ^4.3.5
   "@tailwindcss/turbopack": ^4.3.5
   cn: ^0.5.2
-  lucide-react: ^1.79.0
+  lucide-react: ^1.82.0
   "@fuma-translate/react": 1.0.2
 
   # Testing
-  vitest: ^5.1.1
-  vite: ^8.3.8
+  vitest: ^5.1.2
+  vite: ^8.4.0
   jsdom: ^31.0.1
   "@testing-library/dom": ^10.4.2
   "@testing-library/react": ^16.3.3
@@ -48,10 +48,10 @@ catalog:
   # Tooling
   typescript: ^7.0.2
   turbo: ^2.11.13
-  eslint: ^10.15.0
+  eslint: ^10.16.0
   "@eslint/js": ^10.0.1
   "@next/eslint-plugin-next": ^16.4.6
-  eslint-config-prettier: ^10.1.8
+  eslint-config-prettier: ^10.1.9
   eslint-plugin-react: ^7.37.5
   eslint-plugin-react-hooks: ^7.1.1
   eslint-plugin-turbo: ^2.11.13

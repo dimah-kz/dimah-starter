@@ -49,7 +49,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@vitest/coverage-v8": "^5.1.1",
+    "@vitest/coverage-v8": "^5.1.2",
     "jsdom": "catalog:",
     "prettier": "catalog:",
     "prettier-plugin-packagejson": "catalog:",
