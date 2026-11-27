@@ -1,29 +1,46 @@
 # Dimah Starter
 
-**Server-first Next.js 16 starter for multi-tenant SaaS.** Built on Cache Components and Better Auth: sign-in, organizations with roles, an admin panel, uploads and English/Persian (RTL) work from the first run, so you start on your product instead of auth.
+**Server-first Next.js 16 starter for multi-tenant SaaS.** Sign-in, organizations, an admin panel, uploads and English/Persian (RTL) work from the first run.
 
 [![CI](https://github.com/dimah-kz/dimah-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/dimah-kz/dimah-starter/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Features](#features) · [How it works](#how-it-works) · [Structure](#project-structure) · [Quick start](#quick-start) · [Deploy](#deploy)
+**[Live demo](https://starter.dimah.dev)** · **[Use this template](https://github.com/dimah-kz/dimah-starter/generate)** · [Stack](#stack) · [Features](#features) · [How it works](#how-it-works) · [Structure](#project-structure) · [Quick start](#quick-start) · [Deploy](#deploy)
 
 [![Dimah Starter — a server-first starter for multi-tenant SaaS](./.github/assets/cover.png)](https://starter.dimah.dev)
 
+## Stack
+
+|             |                                                                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **App**     | [Next.js 16](https://nextjs.org), React 19, React Compiler, Cache Components                                                                                  |
+| **Auth**    | [Better Auth](https://www.better-auth.com)                                                                                                                    |
+| **Data**    | [Drizzle ORM](https://orm.drizzle.team), PostgreSQL                                                                                                           |
+| **API**     | [oRPC](https://orpc.dev)                                                                                                                                      |
+| **UI**      | [Tailwind CSS 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com), [ReUI](https://reui.io), [Base UI](https://base-ui.com), [Lucide](https://lucide.dev) |
+| **i18n**    | [next-intl](https://next-intl.dev)                                                                                                                            |
+| **Email**   | [Resend](https://resend.com), [React Email](https://react.email)                                                                                              |
+| **Uploads** | [dimah-s3](https://s3.dimah.dev)                                                                                                                              |
+| **Theme**   | [next-themes](https://github.com/pacocoursey/next-themes)                                                                                                     |
+| **SEO**     | [Takumi](https://takumi.kane.tw)                                                                                                                              |
+| **Tests**   | [Vitest](https://vitest.dev), [Playwright](https://playwright.dev), Testing Library                                                                           |
+| **Repo**    | pnpm, [Turborepo](https://turbo.build), TypeScript, ESLint, Prettier                                                                                          |
+
 ## Features
 
-| Area              | What you get                                                                                                        |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| **Auth**          | Email and password, Google, passkeys, two-factor (authenticator app, backup codes), email verification, rate limits |
-| **Organizations** | Create and switch organizations, invite by email, owner / admin / member roles, organization logo                   |
-| **Admin panel**   | Search and filter users, ban and unban, platform roles, all organizations                                           |
-| **Account**       | Profile and avatar, email and password change, connected accounts, active sessions, theme, language                 |
-| **Uploads**       | Browser-to-bucket uploads with [dimah-s3](https://s3.dimah.dev), upload quotas, cleanup of abandoned files          |
-| **i18n**          | [next-intl](https://next-intl.dev), English and Persian, a layout that mirrors for right-to-left                    |
-| **Product API**   | Typed [oRPC](https://orpc.dev) router for your own domain logic                                                     |
-| **SEO**           | Metadata, share images that render Persian ([Takumi](https://takumi.kane.tw)), sitemap, robots, JSON-LD             |
-| **Quality**       | Strict TypeScript, ESLint, Prettier, Vitest, Playwright, GitHub Actions CI                                          |
+| Area              | What you get                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------ |
+| **Auth**          | Email and password, Google, passkeys, two-factor, email verification, rate limits               |
+| **Organizations** | Create and switch, invite by email, owner / admin / member, logo                                |
+| **Admin**         | Search users, ban, platform roles, all organizations                                             |
+| **Account**       | Profile, avatar, email and password, connected accounts, sessions, theme, language              |
+| **Uploads**       | Browser to bucket, quotas, cleanup of abandoned files                                            |
+| **i18n**          | English and Persian, right-to-left                                                               |
+| **API**           | Typed procedures for your domain                                                                 |
+| **SEO**           | Metadata, share images (including Persian), sitemap, robots, JSON-LD                             |
+| **Quality**       | Lint, typecheck, unit tests, end-to-end tests, CI                                                |
 
 ## How it works
 
@@ -63,23 +80,23 @@ dimah-starter
 ├── apps
 │   └── web                   # Next.js 16, React 19, React Compiler
 │       ├── src/app
-│       │   ├── (marketing)   # landing page, SEO, share image
-│       │   ├── (auth)        # sign-in, sign-up, invitations
-│       │   ├── dashboard     # tenant and admin pages: gate, then 'use cache'
-│       │   └── action        # every write is a Server Action
-│       └── next.config.ts    # Cache Components, Partial Prefetching
+│       │   ├── (marketing)   # landing, SEO
+│       │   ├── (auth)        # sign-in, sign-up
+│       │   ├── dashboard     # tenant, admin
+│       │   └── action        # Server Actions
+│       └── next.config.ts
 ├── packages
-│   ├── auth                  # Better Auth: organizations, roles, permissions
-│   ├── db                    # Drizzle ORM, Postgres, migrations
-│   ├── api                   # oRPC router, in-process or over HTTP
-│   ├── storage               # S3 uploads straight from the browser
+│   ├── auth                  # Better Auth
+│   ├── db                    # Drizzle ORM, PostgreSQL
+│   ├── api                   # oRPC
+│   ├── storage               # dimah-s3
 │   ├── email                 # Resend, React Email
-│   ├── i18n                  # next-intl, English and Persian, RTL
-│   └── ui                    # shadcn/ui on Base UI, Tailwind CSS 4
-├── tooling                   # shared ESLint, TypeScript, Vitest configs
-├── docs/agents               # where the next file goes, for people and agents
-├── pnpm-workspace.yaml       # one version catalog for every package
-└── turbo.json                # cached lint, typecheck, test, build
+│   ├── i18n                  # next-intl
+│   └── ui                    # Tailwind CSS 4, shadcn/ui, ReUI, Base UI
+├── tooling                   # ESLint, TypeScript, Vitest
+├── docs/agents
+├── pnpm-workspace.yaml
+└── turbo.json                # Turborepo
 ```
 
 Imports point one way: `apps/` uses `packages/`, never the reverse. A second app (mobile, extension) goes in `apps/` and reuses the same packages.
