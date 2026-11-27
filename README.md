@@ -13,34 +13,34 @@
 
 ## Stack
 
-|             |                                                                                                                                                                |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **App**     | [Next.js 16](https://nextjs.org), React 19, React Compiler, Cache Components                                                                                  |
-| **Auth**    | [Better Auth](https://www.better-auth.com)                                                                                                                    |
-| **Data**    | [Drizzle ORM](https://orm.drizzle.team), PostgreSQL                                                                                                           |
-| **API**     | [oRPC](https://orpc.dev)                                                                                                                                      |
+|             |                                                                                                                                                                      |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **App**     | [Next.js 16](https://nextjs.org), React 19, React Compiler, Cache Components                                                                                         |
+| **Auth**    | [Better Auth](https://www.better-auth.com)                                                                                                                           |
+| **Data**    | [Drizzle ORM](https://orm.drizzle.team), PostgreSQL                                                                                                                  |
+| **API**     | [oRPC](https://orpc.dev)                                                                                                                                             |
 | **UI**      | [Tailwind CSS 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com), [ReUI](https://reui.io), [Base UI](https://base-ui.com), [Lucide](https://lucide.dev) |
-| **i18n**    | [next-intl](https://next-intl.dev)                                                                                                                            |
-| **Email**   | [Resend](https://resend.com), [React Email](https://react.email)                                                                                              |
-| **Uploads** | [dimah-s3](https://s3.dimah.dev)                                                                                                                              |
-| **Theme**   | [next-themes](https://github.com/pacocoursey/next-themes)                                                                                                     |
-| **SEO**     | [Takumi](https://takumi.kane.tw)                                                                                                                              |
-| **Tests**   | [Vitest](https://vitest.dev), [Playwright](https://playwright.dev), Testing Library                                                                           |
-| **Repo**    | pnpm, [Turborepo](https://turbo.build), TypeScript, ESLint, Prettier                                                                                          |
+| **i18n**    | [next-intl](https://next-intl.dev)                                                                                                                                   |
+| **Email**   | [Resend](https://resend.com), [React Email](https://react.email)                                                                                                     |
+| **Uploads** | [dimah-s3](https://s3.dimah.dev)                                                                                                                                     |
+| **Theme**   | [next-themes](https://github.com/pacocoursey/next-themes)                                                                                                            |
+| **SEO**     | [Takumi](https://takumi.kane.tw)                                                                                                                                     |
+| **Tests**   | [Vitest](https://vitest.dev), [Playwright](https://playwright.dev), Testing Library                                                                                  |
+| **Repo**    | pnpm, [Turborepo](https://turbo.build), TypeScript, ESLint, Prettier                                                                                                 |
 
 ## Features
 
-| Area              | What you get                                                                                     |
-| ----------------- | ------------------------------------------------------------------------------------------------ |
-| **Auth**          | Email and password, Google, passkeys, two-factor, email verification, rate limits               |
-| **Organizations** | Create and switch, invite by email, owner / admin / member, logo                                |
-| **Admin**         | Search users, ban, platform roles, all organizations                                             |
-| **Account**       | Profile, avatar, email and password, connected accounts, sessions, theme, language              |
-| **Uploads**       | Browser to bucket, quotas, cleanup of abandoned files                                            |
-| **i18n**          | English and Persian, right-to-left                                                               |
-| **API**           | Typed procedures for your domain                                                                 |
-| **SEO**           | Metadata, share images (including Persian), sitemap, robots, JSON-LD                             |
-| **Quality**       | Lint, typecheck, unit tests, end-to-end tests, CI                                                |
+| Area              | What you get                                                                       |
+| ----------------- | ---------------------------------------------------------------------------------- |
+| **Auth**          | Email and password, Google, passkeys, two-factor, email verification, rate limits  |
+| **Organizations** | Create and switch, invite by email, owner / admin / member, logo                   |
+| **Admin**         | Search users, ban, platform roles, all organizations                               |
+| **Account**       | Profile, avatar, email and password, connected accounts, sessions, theme, language |
+| **Uploads**       | Browser to bucket, quotas, cleanup of abandoned files                              |
+| **i18n**          | English and Persian, right-to-left                                                 |
+| **API**           | Typed procedures for your domain                                                   |
+| **SEO**           | Metadata, share images (including Persian), sitemap, robots, JSON-LD               |
+| **Quality**       | Lint, typecheck, unit tests, end-to-end tests, CI                                  |
 
 ## How it works
 
