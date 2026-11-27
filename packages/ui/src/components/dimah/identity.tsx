@@ -1,19 +1,19 @@
 import * as React from "react"
+import { mergeProps } from "@base-ui/react/merge-props"
+import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
 
 function getInitials(value: string) {
   const parts = value.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return "?"
+  const first = Array.from(parts[0] ?? "")[0]
+  if (!first) return "?"
+  if (parts.length === 1) return first.toUpperCase()
 
-  if (parts.length === 1) {
-    return (Array.from(parts[0]!)[0] ?? "?").toUpperCase()
-  }
-
-  const first = Array.from(parts[0]!)[0]
-  const last = Array.from(parts[parts.length - 1]!)[0]
-  return `${first ?? ""}${last ?? ""}`.toUpperCase()
+  const last = Array.from(parts[parts.length - 1] ?? "")[0]
+  return `${first}${last ?? ""}`.toUpperCase()
 }
 
 const identityVariants = cva(
@@ -32,18 +32,40 @@ const identityVariants = cva(
   }
 )
 
+type IdentitySize = NonNullable<VariantProps<typeof identityVariants>["size"]>
+
+const IdentityContext = React.createContext<IdentitySize>("default")
+
+interface IdentityProps
+  extends
+    useRender.ComponentProps<"div">,
+    VariantProps<typeof identityVariants> {}
+
 function Identity({
   className,
   size = "default",
+  render,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof identityVariants>) {
+}: IdentityProps) {
+  const resolvedSize = size ?? "default"
+
   return (
-    <div
-      data-slot="identity"
-      data-size={size}
-      className={cn(identityVariants({ size }), className)}
-      {...props}
-    />
+    <IdentityContext.Provider value={resolvedSize}>
+      {useRender({
+        defaultTagName: "div",
+        props: mergeProps<"div">(
+          {
+            className: cn(identityVariants({ size: resolvedSize, className })),
+          },
+          props
+        ),
+        render,
+        state: {
+          slot: "identity",
+          size: resolvedSize,
+        },
+      })}
+    </IdentityContext.Provider>
   )
 }
 
@@ -60,50 +82,64 @@ function IdentityAvatar({
   name?: string
   alt?: string
 }) {
+  const identitySize = React.useContext(IdentityContext)
+
   return (
-    <Avatar
-      size={size}
-      className={cn(
-        size == null &&
-          "group-data-[size=lg]/identity:size-10 group-data-[size=sm]/identity:size-6 group-data-[size=sm]/identity:**:data-[slot=avatar-fallback]:text-xs",
-        className
-      )}
-      {...props}
-    >
+    <Avatar size={size ?? identitySize} className={className} {...props}>
       {children ?? (
         <>
           {src ? <AvatarImage src={src} alt={alt ?? name ?? ""} /> : null}
-          <AvatarFallback>{getInitials(name ?? "")}</AvatarFallback>
+          <AvatarFallback>{getInitials(name ?? alt ?? "")}</AvatarFallback>
         </>
       )}
     </Avatar>
   )
 }
 
-function IdentityContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="identity-content"
-      className={cn(
-        "flex max-w-full min-w-0 flex-1 flex-col gap-0.5 overflow-hidden group-data-[size=sm]/identity:gap-0",
-        className
-      )}
-      {...props}
-    />
-  )
+function IdentityContent({
+  className,
+  render,
+  ...props
+}: useRender.ComponentProps<"div">) {
+  return useRender({
+    defaultTagName: "div",
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "flex max-w-full min-w-0 flex-1 flex-col gap-0.5 overflow-hidden group-data-[size=sm]/identity:gap-0",
+          className
+        ),
+      },
+      props
+    ),
+    render,
+    state: {
+      slot: "identity-content",
+    },
+  })
 }
 
-function IdentityAddon({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="identity-addon"
-      className={cn(
-        "inline-flex shrink-0 items-center justify-center [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[size=lg]/identity:[&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/identity:[&_svg:not([class*='size-'])]:size-3",
-        className
-      )}
-      {...props}
-    />
-  )
+function IdentityAddon({
+  className,
+  render,
+  ...props
+}: useRender.ComponentProps<"span">) {
+  return useRender({
+    defaultTagName: "span",
+    props: mergeProps<"span">(
+      {
+        className: cn(
+          "inline-flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 group-data-[size=lg]/identity:[&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/identity:[&_svg:not([class*='size-'])]:size-3",
+          className
+        ),
+      },
+      props
+    ),
+    render,
+    state: {
+      slot: "identity-addon",
+    },
+  })
 }
 
 function isIdentityAddon(
@@ -112,15 +148,23 @@ function isIdentityAddon(
   return React.isValidElement(node) && node.type === IdentityAddon
 }
 
-function getIdentityLineLabel(children: React.ReactNode) {
+function lineLabel(children: React.ReactNode) {
   const parts: string[] = []
   React.Children.forEach(children, (node) => {
-    if (typeof node === "string" && node.trim()) parts.push(node)
+    if (typeof node !== "string" && typeof node !== "number") return
+    const text = String(node).trim()
+    if (text) parts.push(text)
   })
   return parts.length > 0 ? parts.join(" ") : undefined
 }
 
-function renderIdentityLine(children: React.ReactNode) {
+// An addon stays visible beside the label. Plain text truncates on the line.
+function splitLine(children: React.ReactNode) {
+  const nodes = React.Children.toArray(children)
+  if (!nodes.some(isIdentityAddon)) {
+    return { hasAddon: false as const, children }
+  }
+
   const result: React.ReactNode[] = []
   let label: React.ReactNode[] = []
   let labelIndex = 0
@@ -128,14 +172,15 @@ function renderIdentityLine(children: React.ReactNode) {
   const flushLabel = () => {
     if (label.length === 0) return
     result.push(
-      <span key={`label-${labelIndex++}`} className="min-w-0 truncate">
+      <span key={`label-${labelIndex}`} className="min-w-0 truncate">
         {label}
       </span>
     )
+    labelIndex += 1
     label = []
   }
 
-  for (const node of React.Children.toArray(children)) {
+  for (const node of nodes) {
     if (isIdentityAddon(node)) {
       flushLabel()
       result.push(node)
@@ -145,48 +190,70 @@ function renderIdentityLine(children: React.ReactNode) {
   }
   flushLabel()
 
-  return result
+  return { hasAddon: true as const, children: result }
+}
+
+function IdentityLine({
+  lineSlot,
+  className,
+  children,
+  title,
+  render,
+  ...props
+}: useRender.ComponentProps<"span"> & {
+  lineSlot: "identity-title" | "identity-description"
+}) {
+  const line = splitLine(children)
+
+  return useRender({
+    defaultTagName: "span",
+    props: mergeProps<"span">(
+      {
+        className: cn(
+          "max-w-full min-w-0 text-start",
+          line.hasAddon
+            ? "flex w-full items-center gap-1 group-data-[size=sm]/identity:gap-0.5"
+            : "block w-full truncate",
+          className
+        ),
+        title: title ?? lineLabel(children),
+        children: line.children,
+      },
+      props
+    ),
+    render,
+    state: {
+      slot: lineSlot,
+    },
+  })
 }
 
 function IdentityTitle({
   className,
-  children,
-  title,
   ...props
-}: React.ComponentProps<"span">) {
+}: useRender.ComponentProps<"span">) {
   return (
-    <span
-      data-slot="identity-title"
-      title={title ?? getIdentityLineLabel(children)}
+    <IdentityLine
+      lineSlot="identity-title"
       className={cn(
-        "flex max-w-full min-w-0 items-center gap-1 text-start text-sm/tight font-medium group-data-[size=lg]/identity:text-base/tight group-data-[size=sm]/identity:gap-0.5 group-data-[size=sm]/identity:text-xs/tight",
+        "text-sm/tight font-medium group-data-[size=lg]/identity:text-base/tight group-data-[size=sm]/identity:text-xs/tight",
         className
       )}
       {...props}
-    >
-      {renderIdentityLine(children)}
-    </span>
+    />
   )
 }
 
 function IdentityDescription({
   className,
-  children,
-  title,
   ...props
-}: React.ComponentProps<"span">) {
+}: useRender.ComponentProps<"span">) {
   return (
-    <span
-      data-slot="identity-description"
-      title={title ?? getIdentityLineLabel(children)}
-      className={cn(
-        "flex max-w-full min-w-0 items-center gap-1 text-start text-xs/tight text-muted-foreground group-data-[size=sm]/identity:gap-0.5",
-        className
-      )}
+    <IdentityLine
+      lineSlot="identity-description"
+      className={cn("text-xs/tight text-muted-foreground", className)}
       {...props}
-    >
-      {renderIdentityLine(children)}
-    </span>
+    />
   )
 }
 
@@ -197,4 +264,6 @@ export {
   IdentityTitle,
   IdentityDescription,
   IdentityAddon,
+  identityVariants,
 }
+export type { IdentityProps }
